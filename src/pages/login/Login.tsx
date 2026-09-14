@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { IconBrandGoogle, IconLeaf } from "@tabler/icons-react";
-import { handleLoginWithGoogle } from "@/services/auth";
+import { handleLogin } from "@/services/auth-service";
 
 export default function Login() {
   return (
@@ -25,7 +25,7 @@ export default function Login() {
             variant="outline"
             size="lg"
             className="h-12 w-full gap-2.5 rounded-full border-border bg-background text-base shadow-none hover:bg-muted"
-            onClick={handleLoginWithGoogle}
+            onClick={handleLogin}
           >
             <IconBrandGoogle className="size-5" />
             Continuar com Google

@@ -16,13 +16,12 @@ function setAccessToken(token: string | null) {
   accessToken = token;
 }
 
-export function handleLoginWithGoogle() {
+export function handleLogin() {
   window.location.href = `${import.meta.env.VITE_API_URL}/auth`;
 }
 
-export async function handleRefreshToken() {
+export async function handleRefresh() {
   const { data } = await api.post("/auth/refresh");
-  console.log(data);
 
   const { accessToken } = data;
 
@@ -30,7 +29,7 @@ export async function handleRefreshToken() {
   return accessToken;
 }
 
-export async function logout() {
+export async function handleLogout() {
   try {
     await api.post("/auth/logout");
   } finally {
