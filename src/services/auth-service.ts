@@ -4,6 +4,7 @@ export type User = {
   id: string;
   name: string;
   email: string;
+  avatarUrl: string;
 };
 
 let accessToken: string | null = null;
@@ -12,12 +13,12 @@ export function getAccessToken() {
   return accessToken;
 }
 
-function setAccessToken(token: string | null) {
+export function setAccessToken(token: string | null) {
   accessToken = token;
 }
 
 export function handleLogin() {
-  window.location.href = `${import.meta.env.VITE_API_URL}/auth`;
+  window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;
 }
 
 export async function handleRefresh() {
@@ -36,4 +37,9 @@ export async function handleLogout() {
     setAccessToken(null);
     window.location.href = "/";
   }
+}
+
+export async function getUser() {
+  const { data } = await api.get("/auth/me");
+  return data;
 }

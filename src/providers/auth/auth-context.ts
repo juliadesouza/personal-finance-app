@@ -1,4 +1,5 @@
 import { useContext, createContext } from "react";
+import type { User } from "@/services/auth-service";
 
 export const AUTH_STATUS = {
   LOADING: "loading",
@@ -8,6 +9,7 @@ export const AUTH_STATUS = {
 
 export type AuthContextValue = {
   status: string;
+  user: User | null;
   handleLogout: () => Promise<void>;
 };
 

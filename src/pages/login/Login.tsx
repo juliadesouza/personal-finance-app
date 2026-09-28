@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { IconBrandGoogle, IconLeaf } from "@tabler/icons-react";
 import { handleLogin } from "@/services/auth-service";
+import { Logo } from "@/components/common/Logo";
 
 export default function Login() {
   return (
@@ -43,9 +44,7 @@ export default function Login() {
         <div className="absolute -bottom-28 -left-20 size-96 rounded-full bg-primary/10" />
         <div className="absolute -bottom-20 left-30 size-64 rounded-full bg-primary/20" />
         <div className="relative flex flex-col items-center gap-6 px-12 text-center">
-          <div className="flex size-20 items-center justify-center rounded-[1.75rem] bg-primary text-primary-foreground shadow-sm">
-            <IconLeaf className="size-9" />
-          </div>
+          <Logo size="xl" />
           <p className="max-w-xs text-2xl font-medium tracking-tight text-secondary-foreground">
             Lúmen, o app que entende a sua lógica de gastar.
           </p>
