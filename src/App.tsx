@@ -3,6 +3,7 @@ import Login from "./pages/login/Login";
 import Dashboard from "./pages/dashboard/Dashboard";
 import { Layout } from "./components/layout/Layout";
 import { AuthProvider } from "./providers/auth/auth-provider";
+import Expenses from "./pages/expenses/Expenses";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/dashboard" element={<Layout />}>
             <Route index element={<Dashboard />} />
+            <Route path="expenses" element={<Expenses />} />
           </Route>
         </Routes>
       </AuthProvider>

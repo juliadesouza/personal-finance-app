@@ -13,7 +13,7 @@ export function Layout() {
     <SidebarProvider>
     <main className="flex h-screen w-full">
       <AppSidebar />
-      <div className="flex w-full px-2 py-4">
+      <div className="flex w-full pl-2 pr-8 py-4 gap-4">
         <SidebarTrigger className="cursor-pointer" />
         <Outlet />
       </div>

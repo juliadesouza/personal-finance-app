@@ -13,16 +13,19 @@ import {
 import { Logo } from "./Logo"
 import { LayoutDashboard, BanknoteArrowDown, BanknoteArrowUp, Wallet, Goal, PiggyBank, ChartColumn, LogOut } from "lucide-react"
 import { AppAvatar } from "./AppAvatar";
+import { useNavigate } from "react-router";
 
 
   
   export function AppSidebar() {
+    const navigate = useNavigate();
     const { open: isOpen } = useSidebar();
+    
     return (
       <Sidebar collapsible="icon">
       <SidebarHeader>
         <SidebarMenu>
-        <SidebarMenuItem><Logo />{isOpen && <span className="text-2xl font-bold ml-2">Lúmen</span>}</SidebarMenuItem>
+        <SidebarMenuItem><Logo />{isOpen && <span className="text-2xl font-bold ml-2 text-primary font-cursive">Lúmen</span>}</SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
@@ -40,7 +43,7 @@ import { AppAvatar } from "./AppAvatar";
       <SidebarGroupLabel>Transactions</SidebarGroupLabel>
           <SidebarMenu>   
             <SidebarMenuItem>
-              <SidebarMenuButton className="cursor-pointer">
+              <SidebarMenuButton className="cursor-pointer" onClick={()=>navigate("/dashboard/expenses")}>
                 <BanknoteArrowDown />
                 <span>Expenses</span>
               </SidebarMenuButton>
@@ -76,7 +79,7 @@ import { AppAvatar } from "./AppAvatar";
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton className="cursor-pointer">
-                < ChartColumn />
+                <ChartColumn />
                 <span>Charts</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -86,7 +89,7 @@ import { AppAvatar } from "./AppAvatar";
       <SidebarFooter>
     <SidebarMenu>
       <SidebarMenuItem>
-          <AppAvatar/>
+          <AppAvatar collapsed={!isOpen}/>
       </SidebarMenuItem>
     </SidebarMenu>
   </SidebarFooter>
