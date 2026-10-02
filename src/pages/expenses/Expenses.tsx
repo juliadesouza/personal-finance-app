@@ -6,6 +6,7 @@ import { Table, TableHeader, TableRow, TableHead, TableCell, TableBody } from "@
 import { SearchIcon, MoreHorizontalIcon, FilterIcon } from "lucide-react";
 import { useState } from "react";
 import { AddExpense } from "@/components/expenses/AddExpense";
+import PageHeader from "@/components/common/PageHeader";
 
 export default function Expenses() {
   const [showFilters, setShowFilters] = useState(false);
@@ -45,10 +46,7 @@ export default function Expenses() {
  
   return (
     <section className="w-full">
-        <header className="mb-8">
-            <h1 className="text-2xl font-bold tracking-wide mb-0.5">Expenses</h1>
-            <p className="text-sm text-muted-foreground">Track your daily expenses.</p>
-        </header>
+        <PageHeader title="Expenses" description="Track your daily expenses." />
       <main>
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-2 flex-1 mr-2">

@@ -1,0 +1,74 @@
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { CircleSmall } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import { EllipsisIcon } from "lucide-react";
+import React, { cloneElement } from "react";
+import AddSetting from "./AddSetting";
+import { type AddSettingProps } from "./AddSetting";
+
+interface SettingsCardProps {
+  title: string;
+  icon: React.ReactNode;
+  items: {
+    id: string;
+    name: string;
+    color: string;
+  }[];
+  type: AddSettingProps["type"];
+}
+
+export default function SettingsCard({
+  title,
+  icon,
+  items,
+  type,
+}: SettingsCardProps) {
+  return (
+    <div className="flex flex-col border rounded-lg px-4 pt-4">
+      <div className="flex items-center justify-between gap-2 border-b pb-2">
+        <div className="flex items-center gap-2">
+          <div className="flex items-center justify-center bg-sidebar p-1.5 rounded-md">
+            {cloneElement(
+              icon as React.ReactElement<React.SVGProps<SVGSVGElement>>,
+              { className: "size-4.5 text-primary" },
+            )}
+          </div>
+          <h2 className="text-md font-medium">{title}</h2>
+        </div>
+        <AddSetting type={type} />
+      </div>
+      <Table>
+        <TableBody>
+          {items.map(({ id, name, color }) => (
+            <TableRow key={id}>
+              <TableCell className="flex items-center gap-2">
+                <CircleSmall fill={color} color={color} className="size-4" />
+                <span>{name}</span>
+              </TableCell>
+              <TableCell className="w-fit text-right">
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="cursor-pointer flex items-center justify-end text-right ml-auto">
+                    <EllipsisIcon className="size-4" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem>Edit</DropdownMenuItem>
+                    <DropdownMenuItem variant="destructive">
+                      Delete
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
+}

@@ -11,7 +11,7 @@ import {
     useSidebar,
   } from "@/components/ui/sidebar"
 import { Logo } from "./Logo"
-import { LayoutDashboard, BanknoteArrowDown, BanknoteArrowUp, Wallet, Goal, PiggyBank, ChartColumn, LogOut } from "lucide-react"
+import { LayoutDashboard, ReceiptText, BanknoteArrowUp, Wallet, Goal, PiggyBank, ChartColumn, Settings } from "lucide-react"
 import { AppAvatar } from "./AppAvatar";
 import { useNavigate } from "react-router";
 
@@ -44,7 +44,7 @@ import { useNavigate } from "react-router";
           <SidebarMenu>   
             <SidebarMenuItem>
               <SidebarMenuButton className="cursor-pointer" onClick={()=>navigate("/dashboard/expenses")}>
-                <BanknoteArrowDown />
+                <ReceiptText />
                 <span>Expenses</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -81,6 +81,17 @@ import { useNavigate } from "react-router";
               <SidebarMenuButton className="cursor-pointer">
                 <ChartColumn />
                 <span>Charts</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+      </SidebarGroup>
+      <SidebarGroup>
+      <SidebarGroupLabel>System</SidebarGroupLabel>
+          <SidebarMenu>   
+            <SidebarMenuItem>
+              <SidebarMenuButton className="cursor-pointer" onClick={()=>navigate("/dashboard/settings")}>
+                <Settings />
+                <span>Settings</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
