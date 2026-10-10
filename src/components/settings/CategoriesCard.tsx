@@ -6,27 +6,45 @@ import { TagIcon } from "lucide-react";
 import type { CategoryData } from "@/types/category";
 
 export default function CategoriesCard() {
-  const { query, mutation } = useCategories();
+  const { query, createMutation, deleteMutation } = useCategories();
   const { data, isPending } = query;
 
   useEffect(() => {
-    toast.add({
-      type: "error",
-      title: "The categories could not be loaded.",
-    });
+    query.isError &&
+      toast.add({
+        type: "error",
+        title: "The categories could not be loaded.",
+      });
   }, [query.isError]);
 
   useEffect(() => {
-    toast.add({ type: "success", title: "The category was created." });
-  }, [mutation.isSuccess]);
+    createMutation.isSuccess &&
+      toast.add({ type: "success", title: "The category was created." });
+  }, [createMutation.isSuccess]);
+
+  useEffect(() => {
+    deleteMutation.isSuccess &&
+      toast.add({ type: "success", title: "The category was deleted." });
+  }, [deleteMutation.isSuccess]);
 
   const handleAdd = async (category: CategoryData) => {
     try {
-      await mutation.mutateAsync(category);
+      await createMutation.mutateAsync(category);
     } catch {
       toast.add({
         type: "error",
         title: "The category could not be created.",
+      });
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteMutation.mutateAsync(id);
+    } catch {
+      toast.add({
+        type: "error",
+        title: "The category could not be deleted.",
       });
     }
   };
@@ -40,6 +58,7 @@ export default function CategoriesCard() {
         icon={<TagIcon />}
         type="category"
         onAdd={handleAdd}
+        onDelete={handleDelete}
       />
     </>
   );

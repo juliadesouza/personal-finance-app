@@ -68,18 +68,8 @@ export default function AddSetting({ type, onAdd }: AddSettingProps) {
               Fill in the details of the {TYPES_MAP[type].toLowerCase()}.
             </DialogDescription>
           </DialogHeader>
-          <FieldGroup>
-            <Field>
-              <Label htmlFor="title">Title</Label>
-              <Input
-                id="title"
-                name="title"
-                placeholder={PLACEHOLDERS_MAP[type]}
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </Field>
-            <Field>
+          <FieldGroup className="flex flex-row items-center gap-2">
+            <Field className="flex-1">
               <Label htmlFor="description">Color</Label>
               <Input
                 id="color"
@@ -88,6 +78,16 @@ export default function AddSetting({ type, onAdd }: AddSettingProps) {
                 type="color"
                 value={color}
                 onChange={(e) => setColor(e.target.value)}
+              />
+            </Field>
+            <Field className="flex-5">
+              <Label htmlFor="title">Title</Label>
+              <Input
+                id="title"
+                name="title"
+                placeholder={PLACEHOLDERS_MAP[type]}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
               />
             </Field>
           </FieldGroup>

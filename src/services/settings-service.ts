@@ -10,3 +10,8 @@ export async function createCategory({ title, color }: CategoryData) {
   const { data } = await api.put("/settings/categories", { title, color });
   return data;
 }
+
+export async function deleteCategory(id: number) {
+  const { data } = await api.delete(`/settings/categories/${id}`);
+  return data;
+}

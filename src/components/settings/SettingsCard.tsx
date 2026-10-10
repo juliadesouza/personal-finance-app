@@ -1,20 +1,11 @@
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import { CircleSmall } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
-import { EllipsisIcon } from "lucide-react";
+import { CircleSmall, Trash } from "lucide-react";
 import React, { cloneElement } from "react";
 import AddSetting from "./AddSetting";
 import { type AddSettingProps } from "./AddSetting";
 import { Skeleton } from "../ui/skeleton";
 import { type CategoryData } from "@/types/category";
-
+import { Button } from "../ui/button";
 interface SettingsCardProps {
   title: string;
   icon: React.ReactNode;
@@ -26,6 +17,7 @@ interface SettingsCardProps {
   type: AddSettingProps["type"];
   isPending: boolean;
   onAdd: (data: CategoryData) => Promise<void>;
+  onDelete: (id: number) => Promise<void>;
 }
 
 export default function SettingsCard({
@@ -35,6 +27,7 @@ export default function SettingsCard({
   type,
   isPending,
   onAdd,
+  onDelete,
 }: SettingsCardProps) {
   return (
     <div className="flex flex-col border rounded-lg px-4 pt-4 pb-4">
@@ -61,23 +54,25 @@ export default function SettingsCard({
         <Table>
           <TableBody>
             {items.map(({ id, title: name, color }) => (
-              <TableRow key={id}>
-                <TableCell className="flex items-center gap-2">
-                  <CircleSmall fill={color} color={color} className="size-4" />
-                  <span>{name}</span>
+              <TableRow key={id} className="hover:bg-transparent">
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <CircleSmall
+                      fill={color}
+                      color={color}
+                      className="size-4"
+                    />
+                    <span>{name}</span>
+                  </div>
                 </TableCell>
-                <TableCell className="w-fit text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger className="cursor-pointer flex items-center justify-end text-right ml-auto">
-                      <EllipsisIcon className="size-4" />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem>Edit</DropdownMenuItem>
-                      <DropdownMenuItem variant="destructive">
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                <TableCell className="text-end">
+                  <Button
+                    variant="ghost"
+                    className="cursor-pointer h-fit w-fit p-1 m-0 b-1"
+                    onClick={() => onDelete(Number(id))}
+                  >
+                    <Trash className="size-4" />
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
