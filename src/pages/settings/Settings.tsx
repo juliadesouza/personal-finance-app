@@ -1,60 +1,10 @@
 import PageHeader from "@/components/common/PageHeader";
 import SettingsCard from "@/components/settings/SettingsCard";
-import { CreditCardIcon, Tag, TagIcon, TargetIcon } from "lucide-react";
-
-const categories = [
-  {
-    id: "asuahsuahs",
-    name: "Category 1",
-    color: "red",
-  },
-  {
-    id: "asuahsuahs2",
-    name: "Category 2",
-    color: "blue",
-  },
-  {
-    id: "asuahsuahs3",
-    name: "Category 3",
-    color: "green",
-  },
-];
-
-const purposes = [
-  {
-    id: "asuahsuahs1",
-    name: "Purpose 1",
-    color: "pink",
-  },
-  {
-    id: "asuahsuahs2",
-    name: "Purpose 2",
-    color: "purple",
-  },
-  {
-    id: "asuahsuahs3",
-    name: "Purpose 3",
-    color: "yellow",
-  },
-];
-
-const paymentMethods = [
-  {
-    id: "asuahsuahs1",
-    name: "Payment Method 1",
-    color: "red",
-  },
-  {
-    id: "asuahsuahs2",
-    name: "Payment Method 2",
-    color: "blue",
-  },
-  {
-    id: "asuahsuahs3",
-    name: "Payment Method 3",
-    color: "green",
-  },
-];
+import { TagIcon, CreditCardIcon } from "lucide-react";
+import { useCategories } from "@/hooks/use-categories";
+import { useEffect } from "react";
+import { toast } from "@/components/ui/toast";
+import CategoriesCard from "@/components/settings/CategoriesCard";
 
 export default function Settings() {
   return (
@@ -63,25 +13,15 @@ export default function Settings() {
         title="Settings"
         description="Manage your account settings."
       />
-      <div className="grid grid-cols-3 gap-4">
-        <SettingsCard
-          title="Categories"
-          icon={<TagIcon />}
-          items={categories}
-          type="category"
-        />
-        <SettingsCard
-          title="Purposes"
-          icon={<TargetIcon />}
-          items={purposes}
-          type="purpose"
-        />
-        <SettingsCard
+      <div className="grid grid-cols-2 gap-4">
+        <CategoriesCard />
+        {/* <SettingsCard
           title="Payment Methods"
           icon={<CreditCardIcon />}
           items={paymentMethods}
           type="payment-method"
-        />
+          onAdd={handleAddPaymentMethod}
+        /> */}
       </div>
     </main>
   );

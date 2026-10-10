@@ -13,20 +13,44 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Field, FieldGroup } from "@/components/ui/field";
 import { PlusIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import type { CategoryData } from "@/types/category";
 
 export interface AddSettingProps {
-  type: "category" | "purpose" | "payment-method";
+  type: "category" | "payment-method";
+  onAdd: (data: CategoryData) => Promise<void>;
 }
 
 const TYPES_MAP = {
   category: "Category",
-  purpose: "Purpose",
   "payment-method": "Payment Method",
 };
 
-export default function AddSetting({ type }: AddSettingProps) {
+const PLACEHOLDERS_MAP = {
+  category: "Clothing...",
+  "payment-method": "Credit card...",
+};
+
+export default function AddSetting({ type, onAdd }: AddSettingProps) {
+  const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState("");
+  const [color, setColor] = useState("");
+
+  const handleAdd = async () => {
+    try {
+      await onAdd({ title, color } as CategoryData);
+    } finally {
+      setOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    setTitle("");
+    setColor("");
+  }, [open]);
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <form>
         <DialogTrigger
           render={
@@ -50,7 +74,9 @@ export default function AddSetting({ type }: AddSettingProps) {
               <Input
                 id="title"
                 name="title"
-                placeholder="Ex: Food, Extra, Credit Card"
+                placeholder={PLACEHOLDERS_MAP[type]}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
               />
             </Field>
             <Field>
@@ -60,6 +86,8 @@ export default function AddSetting({ type }: AddSettingProps) {
                 name="color"
                 placeholder="Ex: #000000"
                 type="color"
+                value={color}
+                onChange={(e) => setColor(e.target.value)}
               />
             </Field>
           </FieldGroup>
@@ -71,7 +99,11 @@ export default function AddSetting({ type }: AddSettingProps) {
                 </Button>
               }
             />
-            <Button type="submit" className="cursor-pointer flex-1">
+            <Button
+              type="submit"
+              className="cursor-pointer flex-1"
+              onClick={handleAdd}
+            >
               Confirm
             </Button>
           </DialogFooter>

@@ -25,11 +25,11 @@ export default function Login() {
           <Button
             variant="outline"
             size="lg"
-            className="h-12 w-full gap-2.5 rounded-full border-border bg-background text-base shadow-none hover:bg-muted"
+            className="h-12 w-full gap-2.5 rounded-full border-border bg-background text-base shadow-none hover:bg-muted cursor-pointer"
             onClick={handleLogin}
           >
             <IconBrandGoogle className="size-5" />
-            Continuar com Google
+            Logar com Google
           </Button>
 
           <p className="text-center text-xs leading-relaxed text-muted-foreground">

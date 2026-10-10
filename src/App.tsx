@@ -5,11 +5,13 @@ import { Layout } from "./components/layout/Layout";
 import { AuthProvider } from "./providers/auth/auth-provider";
 import Expenses from "./pages/expenses/Expenses";
 import Settings from "./pages/settings/Settings";
+import { Toaster } from "./components/ui/toast";
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <Toaster />
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/dashboard" element={<Layout />}>
