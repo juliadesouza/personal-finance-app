@@ -1,5 +1,9 @@
 export interface CategoryData {
-  id: number;
+  title: string;
+  color: string;
+}
+
+export interface PaymentMethodData {
   title: string;
   color: string;
 }

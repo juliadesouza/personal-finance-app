@@ -4,7 +4,7 @@ import React, { cloneElement } from "react";
 import AddSetting from "./AddSetting";
 import { type AddSettingProps } from "./AddSetting";
 import { Skeleton } from "../ui/skeleton";
-import { type CategoryData } from "@/types/category";
+import { type CategoryData, type PaymentMethodData } from "@/types/category";
 import { Button } from "../ui/button";
 interface SettingsCardProps {
   title: string;
@@ -16,7 +16,7 @@ interface SettingsCardProps {
   }[];
   type: AddSettingProps["type"];
   isPending: boolean;
-  onAdd: (data: CategoryData) => Promise<void>;
+  onAdd: (data: CategoryData | PaymentMethodData) => Promise<void>;
   onDelete: (id: number) => Promise<void>;
 }
 

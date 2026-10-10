@@ -14,11 +14,11 @@ import { Label } from "@/components/ui/label";
 import { Field, FieldGroup } from "@/components/ui/field";
 import { PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import type { CategoryData } from "@/types/category";
+import type { CategoryData, PaymentMethodData } from "@/types/category";
 
 export interface AddSettingProps {
   type: "category" | "payment-method";
-  onAdd: (data: CategoryData) => Promise<void>;
+  onAdd: (data: CategoryData | PaymentMethodData) => Promise<void>;
 }
 
 const TYPES_MAP = {
