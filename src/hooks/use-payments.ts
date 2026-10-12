@@ -4,7 +4,7 @@ import {
   createPayment,
   deletePayment,
 } from "@/services/settings-service";
-import { type PaymentMethodData } from "@/types/category";
+import { type PaymentMethodData } from "@/types/setting";
 
 export function usePayments() {
   const queryClient = useQueryClient();
@@ -23,5 +23,5 @@ export function usePayments() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["payments"] }),
   });
 
-  return { query, createMutation, deleteMutation };
+  return { ...query, createMutation, deleteMutation };
 }

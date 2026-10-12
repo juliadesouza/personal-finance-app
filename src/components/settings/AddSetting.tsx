@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Field, FieldGroup } from "@/components/ui/field";
 import { PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import type { CategoryData, PaymentMethodData } from "@/types/category";
+import type { CategoryData, PaymentMethodData } from "@/types/setting";
 
 export interface AddSettingProps {
   type: "category" | "payment-method";

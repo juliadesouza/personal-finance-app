@@ -1,8 +1,21 @@
-export interface Expense {
-  id: string;
+export interface ExpenseData {
+  title: string;
   amount: number;
-  date: Date;
+  date: string;
+  categoryId: number;
+  purposeId: number;
+  paymentMethodId: number;
+  installments: number;
+}
+
+export interface Expense {
+  id: number;
+  title: string;
+  amount: number;
+  date: string;
   category: string;
+  payment: string;
   purpose: string;
-  paymentMethod: string;
+  installmentsTotal: number;
+  installmentNumber: number;
 }

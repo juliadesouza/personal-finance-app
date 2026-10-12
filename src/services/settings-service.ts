@@ -1,4 +1,4 @@
-import type { CategoryData, PaymentMethodData } from "@/types/category";
+import type { CategoryData, PaymentMethodData } from "@/types/setting";
 import { api } from "./api";
 
 export async function getCategories() {
@@ -28,5 +28,10 @@ export async function createPayment({ title, color }: PaymentMethodData) {
 
 export async function deletePayment(id: number) {
   const { data } = await api.delete(`/settings/payment-methods/${id}`);
+  return data;
+}
+
+export async function getPurposes() {
+  const { data } = await api.get("/settings/purposes");
   return data;
 }

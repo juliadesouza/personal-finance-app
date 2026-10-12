@@ -4,7 +4,7 @@ import {
   createCategory,
   deleteCategory,
 } from "@/services/settings-service";
-import { type CategoryData } from "@/types/category";
+import { type CategoryData } from "@/types/setting";
 
 export function useCategories() {
   const queryClient = useQueryClient();
@@ -25,5 +25,5 @@ export function useCategories() {
       queryClient.invalidateQueries({ queryKey: ["categories"] }),
   });
 
-  return { query, createMutation, deleteMutation };
+  return { ...query, createMutation, deleteMutation };
 }

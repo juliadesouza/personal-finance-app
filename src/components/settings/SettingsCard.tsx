@@ -4,7 +4,7 @@ import React, { cloneElement } from "react";
 import AddSetting from "./AddSetting";
 import { type AddSettingProps } from "./AddSetting";
 import { Skeleton } from "../ui/skeleton";
-import { type CategoryData, type PaymentMethodData } from "@/types/category";
+import { type CategoryData, type PaymentMethodData } from "@/types/setting";
 import { Button } from "../ui/button";
 interface SettingsCardProps {
   title: string;

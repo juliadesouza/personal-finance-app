@@ -2,20 +2,20 @@ import { toast } from "@/components/ui/toast";
 import { useEffect } from "react";
 import SettingsCard from "./SettingsCard";
 import { TagIcon } from "lucide-react";
-import type { PaymentMethodData } from "@/types/category";
+import type { PaymentMethodData } from "@/types/setting";
 import { usePayments } from "@/hooks/use-payments";
 
 export default function PaymentMethodsCard() {
-  const { query, createMutation, deleteMutation } = usePayments();
-  const { data, isPending } = query;
+  const { data, isPending, isError, createMutation, deleteMutation } =
+    usePayments();
 
   useEffect(() => {
-    query.isError &&
+    isError &&
       toast.add({
         type: "error",
         title: "The payment methods could not be loaded.",
       });
-  }, [query.isError]);
+  }, [isError]);
 
   useEffect(() => {
     createMutation.isSuccess &&

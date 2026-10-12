@@ -3,19 +3,19 @@ import { toast } from "@/components/ui/toast";
 import { useEffect } from "react";
 import SettingsCard from "./SettingsCard";
 import { TagIcon } from "lucide-react";
-import type { CategoryData } from "@/types/category";
+import type { CategoryData } from "@/types/setting";
 
 export default function CategoriesCard() {
-  const { query, createMutation, deleteMutation } = useCategories();
-  const { data, isPending } = query;
+  const { data, isPending, isError, createMutation, deleteMutation } =
+    useCategories();
 
   useEffect(() => {
-    query.isError &&
+    isError &&
       toast.add({
         type: "error",
         title: "The categories could not be loaded.",
       });
-  }, [query.isError]);
+  }, [isError]);
 
   useEffect(() => {
     createMutation.isSuccess &&
