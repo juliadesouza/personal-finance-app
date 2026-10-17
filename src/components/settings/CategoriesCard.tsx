@@ -10,21 +10,24 @@ export default function CategoriesCard() {
     useCategories();
 
   useEffect(() => {
-    isError &&
+    if (isError) {
       toast.add({
         type: "error",
         title: "The categories could not be loaded.",
       });
+    }
   }, [isError]);
 
   useEffect(() => {
-    createMutation.isSuccess &&
+    if (createMutation.isSuccess) {
       toast.add({ type: "success", title: "The category was created." });
+    }
   }, [createMutation.isSuccess]);
 
   useEffect(() => {
-    deleteMutation.isSuccess &&
+    if (deleteMutation.isSuccess) {
       toast.add({ type: "success", title: "The category was deleted." });
+    }
   }, [deleteMutation.isSuccess]);
 
   const handleAdd = async (category: CategoryData) => {

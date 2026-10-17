@@ -13,8 +13,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Field, FieldGroup } from "@/components/ui/field";
 import { PlusIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { CategoryData, PaymentMethodData } from "@/types/setting";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export interface AddSettingProps {
   type: "category" | "payment-method";
@@ -31,35 +34,40 @@ const PLACEHOLDERS_MAP = {
   "payment-method": "Credit card...",
 };
 
+const settingSchema = z.object({ title: z.string(), color: z.string() });
+
+type SettingSchema = z.infer<typeof settingSchema>;
+
 export default function AddSetting({ type, onAdd }: AddSettingProps) {
   const [open, setOpen] = useState(false);
-  const [title, setTitle] = useState("");
-  const [color, setColor] = useState("");
 
-  const handleAdd = async () => {
+  const { register, handleSubmit } = useForm<SettingSchema>({
+    resolver: zodResolver(settingSchema),
+  });
+
+  const handleAdd = async (data: SettingSchema) => {
     try {
-      await onAdd({ title, color } as CategoryData);
+      await onAdd(data);
     } finally {
       setOpen(false);
     }
   };
 
-  useEffect(() => {
-    setTitle("");
-    setColor("");
-  }, [open]);
+  const handleOpenChange = (isOpen: boolean) => {
+    setOpen(isOpen);
+  };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <form>
-        <DialogTrigger
-          render={
-            <Button variant="ghost" className="cursor-pointer">
-              <PlusIcon className="size-4" />
-            </Button>
-          }
-        />
-        <DialogContent className="sm:max-w-md">
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogTrigger
+        render={
+          <Button variant="ghost" className="cursor-pointer">
+            <PlusIcon className="size-4" />
+          </Button>
+        }
+      />
+      <DialogContent className="sm:max-w-md">
+        <form onSubmit={handleSubmit(handleAdd)}>
           <DialogHeader>
             <DialogTitle className="text-lg font-medium">
               New {TYPES_MAP[type].toLowerCase()}
@@ -68,30 +76,27 @@ export default function AddSetting({ type, onAdd }: AddSettingProps) {
               Fill in the details of the {TYPES_MAP[type].toLowerCase()}.
             </DialogDescription>
           </DialogHeader>
-          <FieldGroup className="flex flex-row items-center gap-2">
+
+          <FieldGroup className="flex flex-row items-center gap-2 mt-4">
             <Field className="flex-1">
               <Label htmlFor="description">Color</Label>
               <Input
+                {...register("color")}
                 id="color"
-                name="color"
                 placeholder="Ex: #000000"
                 type="color"
-                value={color}
-                onChange={(e) => setColor(e.target.value)}
               />
             </Field>
             <Field className="flex-5">
               <Label htmlFor="title">Title</Label>
               <Input
+                {...register("title")}
                 id="title"
-                name="title"
                 placeholder={PLACEHOLDERS_MAP[type]}
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
               />
             </Field>
           </FieldGroup>
-          <DialogFooter className="flex items-center justify-between gap-2">
+          <DialogFooter className="flex items-center justify-between gap-2 mt-4">
             <DialogClose
               render={
                 <Button variant="outline" className="cursor-pointer flex-1">
@@ -99,16 +104,12 @@ export default function AddSetting({ type, onAdd }: AddSettingProps) {
                 </Button>
               }
             />
-            <Button
-              type="submit"
-              className="cursor-pointer flex-1"
-              onClick={handleAdd}
-            >
+            <Button type="submit" className="cursor-pointer flex-1">
               Confirm
             </Button>
           </DialogFooter>
-        </DialogContent>
-      </form>
+        </form>
+      </DialogContent>
     </Dialog>
   );
 }
