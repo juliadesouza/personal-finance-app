@@ -1,4 +1,4 @@
-import type { ExpenseData } from "@/types/expense";
+import type { ExpenseData, ExpenseFilters } from "@/types/expense";
 import { api } from "./api";
 
 export async function createExpense(expense: ExpenseData) {
@@ -6,8 +6,8 @@ export async function createExpense(expense: ExpenseData) {
   return data;
 }
 
-export async function getExpenses() {
-  const { data } = await api.get("/expenses");
+export async function getExpenses(filters: ExpenseFilters) {
+  const { data } = await api.get("/expenses", { params: filters });
   return data;
 }
 

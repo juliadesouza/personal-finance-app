@@ -21,67 +21,88 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SelectPayment } from "./SelectPayment";
 import { SelectCategory } from "./SelectCategory";
 import { SelectPurpose } from "./SelectPurpose";
-import { useExpenses } from "@/hooks/use-expenses";
+import { useCreateExpense } from "@/hooks/use-expenses";
 import { toast } from "../ui/toast";
+import z from "zod";
+import { useForm, Controller } from "react-hook-form";
+import type { ExpenseData } from "@/types/expense";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const expenseSchema = z.object({
+  title: z.string().trim().min(1, "Title is required"),
+  amount: z.coerce.number().positive("Amount must be greater than zero"),
+  date: z.string().min(1, "Date is required"),
+  categoryId: z.coerce.number().positive("Select a category"),
+  paymentMethodId: z.coerce.number().positive("Select a payment method"),
+  purposeId: z.coerce.number().positive("Select a purpose"),
+  installments: z.coerce.number().int().min(1).max(12),
+});
+
+const defaultValues = {
+  title: "",
+  amount: undefined,
+  date: "",
+  categoryId: undefined,
+  paymentMethodId: undefined,
+  purposeId: undefined,
+  installments: 1,
+};
+
+type ExpenseFormInput = z.input<typeof expenseSchema>;
+type ExpenseSchema = z.output<typeof expenseSchema>;
 
 export function AddExpense() {
   const [open, setOpen] = useState(false);
-  const [title, setTitle] = useState("");
-  const [amount, setAmount] = useState<number>();
-  const [date, setDate] = useState("");
-  const [categoryId, setCategoryId] = useState<string>("");
-  const [paymentId, setPaymentId] = useState<string>("");
-  const [purposeId, setPurposeId] = useState<string>("");
-  const [installments, setInstallments] = useState("1");
 
-  const { createMutation } = useExpenses();
+  const { register, handleSubmit, control, reset } = useForm<
+    ExpenseFormInput,
+    undefined,
+    ExpenseSchema
+  >({
+    resolver: zodResolver(expenseSchema),
+    defaultValues,
+  });
+  const createMutation = useCreateExpense();
 
-  useEffect(() => {
-    if (createMutation.isError) {
-      toast.add({
-        type: "error",
-        description: "The expense could not be created.",
-      });
-    }
-  }, [createMutation.isError]);
+  const handleOpenChange = () => {
+    setOpen((curr) => !curr);
+    reset(defaultValues);
+  };
 
-  useEffect(() => {
-    if (createMutation.isSuccess) {
-      toast.add({
-        type: "success",
-        description: "The expense was created.",
-      });
-      setOpen(false);
-    }
-  }, [createMutation.isSuccess]);
+  const handleAdd = (data: ExpenseSchema) => {
+    createMutation.mutate(data as ExpenseData, {
+      onSuccess: () => {
+        toast.add({
+          type: "success",
+          description: "The expense was created.",
+        });
 
-  const handleAdd = async () => {
-    createMutation.mutate({
-      title,
-      amount: Number(amount),
-      date,
-      categoryId: Number(categoryId),
-      paymentMethodId: Number(paymentId),
-      purposeId: Number(purposeId),
-      installments: Number(installments),
+        setOpen(false);
+      },
+      onError: () => {
+        toast.add({
+          type: "error",
+          description: "The expense could not be created.",
+        });
+      },
     });
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <form>
-        <DialogTrigger
-          render={
-            <Button>
-              <PlusIcon /> Add Expense
-            </Button>
-          }
-        />
-        <DialogContent className="sm:max-w-md">
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogTrigger
+        render={
+          <Button>
+            <PlusIcon /> Add Expense
+          </Button>
+        }
+      />
+      <DialogContent className="sm:max-w-md">
+        <form onSubmit={handleSubmit(handleAdd)}>
           <DialogHeader>
             <DialogTitle className="text-lg font-medium">
               New expense
@@ -90,15 +111,13 @@ export function AddExpense() {
               Fill in the details of the expense to add it to your records.
             </DialogDescription>
           </DialogHeader>
-          <FieldGroup>
+          <FieldGroup className="mt-8 mb-8">
             <Field>
               <Label htmlFor="title">Title</Label>
               <Input
                 id="title"
-                name="title"
                 placeholder="Ex: restaurant"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                {...register("title")}
               />
             </Field>
             <div className="flex items-center gap-2">
@@ -106,73 +125,87 @@ export function AddExpense() {
                 <Label htmlFor="amount">Amount</Label>
                 <Input
                   id="amount"
-                  name="amount"
                   placeholder="0.00"
                   type="number"
-                  value={amount}
-                  onChange={(e) => setAmount(Number(e.target.value))}
+                  {...register("amount")}
                 />
               </Field>
               <Field>
                 <Label htmlFor="amount">Date</Label>
-                <Input
-                  id="date"
-                  name="date"
-                  type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                />
+                <Input id="date" type="date" {...register("date")} />
               </Field>
             </div>
             <div className="flex items-center gap-2">
               <Field>
                 <Label htmlFor="payment-method">Payment Method</Label>
-                <SelectPayment
-                  value={paymentId}
-                  onChange={(id: string) => setPaymentId(id)}
+                <Controller
+                  name="paymentMethodId"
+                  control={control}
+                  render={({ field }) => (
+                    <SelectPayment
+                      value={field.value ? String(field.value) : ""}
+                      onChange={(value) => field.onChange(Number(value))}
+                    />
+                  )}
                 />
               </Field>
               <Field>
                 <Label htmlFor="installments">Installments</Label>
-                <Select
-                  id="installments"
-                  name="paymentMethod"
-                  value={installments}
-                  onValueChange={(newValue) => {
-                    if (newValue !== null) {
-                      setInstallments(newValue);
-                    }
-                  }}
-                >
-                  <SelectTrigger className="flex-1">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Array.from({ length: 12 }).map((_, index) => (
-                      <SelectItem
-                        key={`installments-${index + 1}`}
-                        value={index + 1}
-                      >
-                        {index + 1}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Controller
+                  name="installments"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      value={String(field.value)}
+                      onValueChange={(value) => {
+                        if (value !== null) {
+                          field.onChange(Number(value));
+                        }
+                      }}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Array.from({ length: 12 }, (_, index) => (
+                          <SelectItem
+                            key={`installments-${index + 1}`}
+                            value={String(index + 1)}
+                          >
+                            {index + 1}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
               </Field>
             </div>
             <div className="flex items-center gap-2">
               <Field>
                 <Label htmlFor="category">Category</Label>
-                <SelectCategory
-                  value={categoryId}
-                  onChange={(id: string) => setCategoryId(id)}
+                <Controller
+                  name="categoryId"
+                  control={control}
+                  render={({ field }) => (
+                    <SelectCategory
+                      value={field.value ? String(field.value) : ""}
+                      onChange={(value) => field.onChange(Number(value))}
+                    />
+                  )}
                 />
               </Field>
               <Field>
                 <Label htmlFor="purpose">Purpose</Label>
-                <SelectPurpose
-                  value={purposeId}
-                  onChange={(id: string) => setPurposeId(id)}
+                <Controller
+                  name="purposeId"
+                  control={control}
+                  render={({ field }) => (
+                    <SelectPurpose
+                      value={field.value ? String(field.value) : ""}
+                      onChange={(value) => field.onChange(Number(value))}
+                    />
+                  )}
                 />
               </Field>
             </div>
@@ -185,16 +218,12 @@ export function AddExpense() {
                 </Button>
               }
             />
-            <Button
-              type="submit"
-              className="cursor-pointer flex-1"
-              onClick={handleAdd}
-            >
+            <Button type="submit" className="cursor-pointer flex-1">
               Confirm
             </Button>
           </DialogFooter>
-        </DialogContent>
-      </form>
+        </form>
+      </DialogContent>
     </Dialog>
   );
 }

@@ -34,15 +34,18 @@ const PLACEHOLDERS_MAP = {
   "payment-method": "Credit card...",
 };
 
-const settingSchema = z.object({ title: z.string(), color: z.string() });
+const settingSchema = z.object({ title: z.string().min(3), color: z.string() });
 
 type SettingSchema = z.infer<typeof settingSchema>;
+
+const defaultValues = { title: "", color: "" };
 
 export default function AddSetting({ type, onAdd }: AddSettingProps) {
   const [open, setOpen] = useState(false);
 
-  const { register, handleSubmit } = useForm<SettingSchema>({
+  const { register, handleSubmit, reset } = useForm<SettingSchema>({
     resolver: zodResolver(settingSchema),
+    defaultValues,
   });
 
   const handleAdd = async (data: SettingSchema) => {
@@ -55,6 +58,7 @@ export default function AddSetting({ type, onAdd }: AddSettingProps) {
 
   const handleOpenChange = (isOpen: boolean) => {
     setOpen(isOpen);
+    reset(defaultValues);
   };
 
   return (

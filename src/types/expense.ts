@@ -1,4 +1,4 @@
-export interface ExpenseData {
+export type ExpenseData = {
   title: string;
   amount: number;
   date: string;
@@ -6,16 +6,27 @@ export interface ExpenseData {
   purposeId: number;
   paymentMethodId: number;
   installments: number;
-}
+};
 
-export interface Expense {
+export type Expense = {
   id: number;
   title: string;
   amount: number;
   date: string;
-  category: string;
-  payment: string;
-  purpose: string;
+  category: { title: string; color: string };
+  payment: { title: string; color: string };
+  purpose: { title: string; color: string };
   installmentsTotal: number;
   installmentNumber: number;
-}
+};
+
+export type ExpenseFilters = {
+  month?: number;
+  year?: number;
+  search?: string;
+};
+
+export type ExpenseDate = {
+  year: string;
+  months: string[];
+};
