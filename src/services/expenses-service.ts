@@ -15,3 +15,8 @@ export async function getDates() {
   const { data } = await api.get("/expenses/dates");
   return data;
 }
+
+export async function deleteExpense(id: number) {
+  const { data } = await api.delete(`/expenses/${id}`);
+  return data;
+}

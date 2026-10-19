@@ -3,6 +3,7 @@ import {
   createExpense,
   getDates,
   getExpenses,
+  deleteExpense,
 } from "@/services/expenses-service";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { ExpenseFilters } from "@/types/expense";
@@ -18,11 +19,28 @@ export function useExpenses(
   filters: ExpenseFilters = {},
   options: { enabled?: boolean } = {},
 ) {
-  return useQuery({
+  const queryClient = useQueryClient();
+
+  const expenses = useQuery({
     queryKey: expensesKeys.list(filters),
     queryFn: () => getExpenses(filters),
     enabled: options.enabled ?? true,
   });
+
+  const createMutation = useMutation({
+    mutationKey: ["create-expense"],
+    mutationFn: createExpense,
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: expensesKeys.all }),
+  });
+
+  const deleteMutation = useMutation({
+    mutationKey: ["delete-expense"],
+    mutationFn: deleteExpense,
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: expensesKeys.all }),
+  });
+  return { ...expenses, createMutation, deleteMutation };
 }
 
 export function useExpenseDates() {
@@ -30,16 +48,5 @@ export function useExpenseDates() {
     queryKey: expensesKeys.dates(),
     queryFn: getDates,
     staleTime: 5 * 60 * 1000,
-  });
-}
-
-export function useCreateExpense() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationKey: ["create-expense"],
-    mutationFn: createExpense,
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: expensesKeys.all }),
   });
 }

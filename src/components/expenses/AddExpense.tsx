@@ -25,7 +25,7 @@ import { useState } from "react";
 import { SelectPayment } from "./SelectPayment";
 import { SelectCategory } from "./SelectCategory";
 import { SelectPurpose } from "./SelectPurpose";
-import { useCreateExpense } from "@/hooks/use-expenses";
+import { useExpenses } from "@/hooks/use-expenses";
 import { toast } from "../ui/toast";
 import z from "zod";
 import { useForm, Controller } from "react-hook-form";
@@ -66,7 +66,7 @@ export function AddExpense() {
     resolver: zodResolver(expenseSchema),
     defaultValues,
   });
-  const createMutation = useCreateExpense();
+  const { createMutation } = useExpenses();
 
   const handleOpenChange = () => {
     setOpen((curr) => !curr);

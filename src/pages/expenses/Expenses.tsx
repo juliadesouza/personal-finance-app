@@ -32,7 +32,7 @@ import PageHeader from "@/components/common/PageHeader";
 import type { ExpenseDate, Expense } from "@/types/expense";
 import { useExpenses, useExpenseDates } from "@/hooks/use-expenses";
 import useDebouncedValue from "@/hooks/use-debounced-value";
-import { cn } from "@/utils/clsx";
+import { toast } from "@/components/ui/toast";
 
 type DateOption = { year: string; months: string[] };
 type Period = { year: string; month: string };
@@ -74,7 +74,7 @@ export default function Expenses() {
   const period = selected ?? getDefaultPeriod(dateOptions);
   const months = dateOptions.find((d) => d.year === period.year)?.months ?? [];
 
-  const { data: expenses } = useExpenses(
+  const { data: expenses, deleteMutation } = useExpenses(
     {
       year: period.year === ALL ? undefined : Number(period.year),
       month: period.month === ALL ? undefined : Number(period.month),
@@ -89,6 +89,21 @@ export default function Expenses() {
 
   const handleMonthChange = (month: string | null) => {
     if (month) setSelected({ year: period.year, month });
+  };
+
+  const handleDelete = (id: number) => {
+    deleteMutation.mutate(id, {
+      onSuccess: () =>
+        toast.add({
+          type: "success",
+          description: "The expense was deleted.",
+        }),
+      onError: () =>
+        toast.add({
+          type: "error",
+          description: "The expense could not be deleted.",
+        }),
+    });
   };
 
   return (
@@ -170,7 +185,7 @@ export default function Expenses() {
                   <TableCell>R$ {expense.amount}</TableCell>
                   <TableCell>
                     <span
-                      className="px-2 py-1 rounded-full text-white"
+                      className="px-2 py-1 rounded-full"
                       style={{ backgroundColor: expense.category.color }}
                     >
                       {expense.category.title}
@@ -179,7 +194,7 @@ export default function Expenses() {
                   <TableCell>
                     {" "}
                     <span
-                      className="px-2 py-1 rounded-full text-white"
+                      className="px-2 py-1 rounded-full"
                       style={{ backgroundColor: expense.purpose.color }}
                     >
                       {expense.purpose.title}
@@ -188,7 +203,7 @@ export default function Expenses() {
                   <TableCell>
                     {" "}
                     <span
-                      className="px-2 py-1 rounded-full text-white"
+                      className="px-2 py-1 rounded-full"
                       style={{ backgroundColor: expense.payment.color }}
                     >
                       {expense.payment.title}
@@ -213,7 +228,10 @@ export default function Expenses() {
                       />
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem variant="destructive">
+                        <DropdownMenuItem
+                          variant="destructive"
+                          onClick={() => handleDelete(expense.id)}
+                        >
                           Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>
