@@ -1,27 +1,27 @@
-export interface CategoryData {
+export type CategoryData = {
   title: string;
   color: string;
-}
+};
 
-export interface Category {
+export type Category = {
   id: number;
   title: string;
   color: string;
-}
+};
 
-export interface PaymentMethodData {
+export type PaymentMethodData = {
   title: string;
   color: string;
-}
+};
 
-export interface PaymentMethod {
+export type PaymentMethod = {
   id: number;
   title: string;
   color: string;
-}
+};
 
-export interface Purpose {
+export type Purpose = {
   id: number;
   title: string;
   color: string;
-}
+};

@@ -7,9 +7,9 @@ const sizes = {
   xl: { icon: "size-10", padding: "p-3", radius: "rounded-[1rem]" },
 } as const;
 
-interface LogoProps {
+type LogoProps = {
   size?: keyof typeof sizes;
-}
+};
 
 export function Logo({ size = "md" }: LogoProps) {
   const { icon, padding, radius } = sizes[size];

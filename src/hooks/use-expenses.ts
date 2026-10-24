@@ -7,17 +7,17 @@ import {
   updateExpense,
 } from "@/services/expenses-service";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { ExpenseFilters } from "@/types/expense";
+import type { FilterExpense } from "@/types/expense";
 
 export const expensesKeys = {
   all: ["expenses"] as const,
-  list: (filters: ExpenseFilters) =>
+  list: (filters: FilterExpense) =>
     [...expensesKeys.all, "list", filters] as const,
   dates: () => [...expensesKeys.all, "dates"] as const,
 };
 
 export function useExpenses(
-  filters: ExpenseFilters = {},
+  filters: FilterExpense = {},
   options: { enabled?: boolean } = {},
 ) {
   const queryClient = useQueryClient();

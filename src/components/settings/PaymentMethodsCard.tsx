@@ -10,21 +10,24 @@ export default function PaymentMethodsCard() {
     usePayments();
 
   useEffect(() => {
-    isError &&
+    if (isError) {
       toast.add({
         type: "error",
         title: "The payment methods could not be loaded.",
       });
+    }
   }, [isError]);
 
   useEffect(() => {
-    createMutation.isSuccess &&
+    if (createMutation.isSuccess) {
       toast.add({ type: "success", title: "The payment method was created." });
+    }
   }, [createMutation.isSuccess]);
 
   useEffect(() => {
-    deleteMutation.isSuccess &&
+    if (deleteMutation.isSuccess) {
       toast.add({ type: "success", title: "The payment method was deleted." });
+    }
   }, [deleteMutation.isSuccess]);
 
   const handleAdd = async (method: PaymentMethodData) => {

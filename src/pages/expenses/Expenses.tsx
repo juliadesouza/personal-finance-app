@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -29,35 +30,14 @@ import { SearchIcon, MoreHorizontalIcon } from "lucide-react";
 import { useState } from "react";
 import { AddExpense } from "@/components/expenses/AddExpense";
 import PageHeader from "@/components/common/PageHeader";
-import type { ExpenseDate, Expense } from "@/types/expense";
+import type { Expense } from "@/types/expense";
 import { useExpenses, useExpenseDates } from "@/hooks/use-expenses";
 import useDebouncedValue from "@/hooks/use-debounced-value";
 import { toast } from "@/components/ui/toast";
 import { EditExpense } from "@/components/expenses/EditExpense";
 import { getMonthLabel, formatCurrency } from "@/utils/format";
-type DateOption = { year: string; months: string[] };
-type Period = { year: string; month: string };
-
-const ALL = "all";
-
-function getDefaultPeriod(dates: DateOption[]): Period {
-  if (dates.length === 0) return { year: ALL, month: ALL };
-
-  const now = new Date();
-  const year = String(now.getFullYear());
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  const yearData = dates.find((d) => d.year === year);
-
-  if (!yearData) {
-    return { year: dates[0].year, month: dates[0].months[0] ?? ALL };
-  }
-  return {
-    year,
-    month: yearData.months.includes(month)
-      ? month
-      : (yearData.months[0] ?? ALL),
-  };
-}
+import { type Period, type Date } from "@/types/date";
+import { getDefaultPeriod, ALL } from "@/utils/format";
 
 export default function Expenses() {
   const [search, setSearch] = useState("");
@@ -67,7 +47,7 @@ export default function Expenses() {
   const { data: dates } = useExpenseDates();
 
   const debouncedSearch = useDebouncedValue(search.trim());
-  const dateOptions: ExpenseDate[] = dates ?? [];
+  const dateOptions: Date[] = dates ?? [];
   const period = selected ?? getDefaultPeriod(dateOptions);
   const months = dateOptions.find((d) => d.year === period.year)?.months ?? [];
 
@@ -91,6 +71,7 @@ export default function Expenses() {
   const handleEditModal = () => {
     setOpenEditModal((curr) => !curr);
   };
+
   const handleDelete = (id: number) => {
     deleteMutation.mutate(id, {
       onSuccess: () =>
@@ -152,7 +133,7 @@ export default function Expenses() {
 
             <InputGroup className="flex-1">
               <InputGroupInput
-                placeholder="Search by name, category or payment method..."
+                placeholder="Search by title, category or payment method..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -179,7 +160,7 @@ export default function Expenses() {
             </TableHeader>
             <TableBody>
               {expenses?.map((expense: Expense) => (
-                <>
+                <Fragment key={`expense-group-${expense.id}`}>
                   <EditExpense
                     id={expense.id}
                     open={openEditModal}
@@ -203,7 +184,6 @@ export default function Expenses() {
                       </span>
                     </TableCell>
                     <TableCell>
-                      {" "}
                       <span
                         className="px-2 py-1 rounded-full"
                         style={{ backgroundColor: expense.purpose.color }}
@@ -212,7 +192,6 @@ export default function Expenses() {
                       </span>
                     </TableCell>
                     <TableCell>
-                      {" "}
                       <span
                         className="px-2 py-1 rounded-full"
                         style={{ backgroundColor: expense.payment.color }}
@@ -255,7 +234,7 @@ export default function Expenses() {
                       </DropdownMenu>
                     </TableCell>
                   </TableRow>
-                </>
+                </Fragment>
               ))}
             </TableBody>
           </Table>

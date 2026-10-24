@@ -19,10 +19,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-export interface AddSettingProps {
+export type AddSettingProps = {
   type: "category" | "payment-method";
   onAdd: (data: CategoryData | PaymentMethodData) => Promise<void>;
-}
+};
 
 const TYPES_MAP = {
   category: "Category",

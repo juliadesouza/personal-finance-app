@@ -8,10 +8,10 @@ import {
 import type { Purpose } from "@/types/setting";
 import { usePurposes } from "@/hooks/use-purposes";
 
-interface SelectPurposesProps {
+type SelectPurposesProps = {
   value: string;
   onChange: (value: string) => void;
-}
+};
 
 export function SelectPurpose({ value, onChange }: SelectPurposesProps) {
   const { data: purposes } = usePurposes();

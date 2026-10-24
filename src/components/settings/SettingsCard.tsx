@@ -6,7 +6,8 @@ import { type AddSettingProps } from "./AddSetting";
 import { Skeleton } from "../ui/skeleton";
 import { type CategoryData, type PaymentMethodData } from "@/types/setting";
 import { Button } from "../ui/button";
-interface SettingsCardProps {
+
+type SettingsCardProps = {
   title: string;
   icon: React.ReactNode;
   items: {
@@ -18,7 +19,7 @@ interface SettingsCardProps {
   isPending: boolean;
   onAdd: (data: CategoryData | PaymentMethodData) => Promise<void>;
   onDelete: (id: number) => Promise<void>;
-}
+};
 
 export default function SettingsCard({
   title,

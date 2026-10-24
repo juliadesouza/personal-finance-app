@@ -1,13 +1,3 @@
-export type ExpenseData = {
-  title: string;
-  amount: number;
-  date: string;
-  categoryId: number;
-  purposeId: number;
-  paymentMethodId: number;
-  installments: number;
-};
-
 export type Expense = {
   id: number;
   title: string;
@@ -20,13 +10,23 @@ export type Expense = {
   installmentNumber: number;
 };
 
-export type ExpenseFilters = {
+export type ExpenseData = {
+  title: string;
+  amount: number;
+  date: string;
+  categoryId: number;
+  purposeId: number;
+  paymentMethodId: number;
+  installments: number;
+};
+
+export type FilterExpense = {
   month?: number;
   year?: number;
   search?: string;
 };
 
-export type ExpenseDate = {
-  year: string;
-  months: string[];
+export type UpdateExpense = {
+  id: number;
+  expense: ExpenseData;
 };

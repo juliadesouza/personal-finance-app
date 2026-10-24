@@ -8,10 +8,10 @@ import {
 import type { PaymentMethod } from "@/types/setting";
 import { usePayments } from "@/hooks/use-payments";
 
-interface SelectPaymentProps {
+type SelectPaymentProps = {
   value: string;
   onChange: (value: string) => void;
-}
+};
 
 export function SelectPayment({ value, onChange }: SelectPaymentProps) {
   const { data: payments } = usePayments();
