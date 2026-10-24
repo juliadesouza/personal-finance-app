@@ -33,16 +33,12 @@ import type { ExpenseDate, Expense } from "@/types/expense";
 import { useExpenses, useExpenseDates } from "@/hooks/use-expenses";
 import useDebouncedValue from "@/hooks/use-debounced-value";
 import { toast } from "@/components/ui/toast";
-
+import { EditExpense } from "@/components/expenses/EditExpense";
+import { getMonthLabel, formatCurrency } from "@/utils/format";
 type DateOption = { year: string; months: string[] };
 type Period = { year: string; month: string };
 
 const ALL = "all";
-
-const getMonthLabel = (month: string) =>
-  new Date(2000, Number(month) - 1, 1).toLocaleString("en-us", {
-    month: "long",
-  });
 
 function getDefaultPeriod(dates: DateOption[]): Period {
   if (dates.length === 0) return { year: ALL, month: ALL };
@@ -66,6 +62,7 @@ function getDefaultPeriod(dates: DateOption[]): Period {
 export default function Expenses() {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Period | null>(null);
+  const [openEditModal, setOpenEditModal] = useState(false);
 
   const { data: dates } = useExpenseDates();
 
@@ -91,6 +88,9 @@ export default function Expenses() {
     if (month) setSelected({ year: period.year, month });
   };
 
+  const handleEditModal = () => {
+    setOpenEditModal((curr) => !curr);
+  };
   const handleDelete = (id: number) => {
     deleteMutation.mutate(id, {
       onSuccess: () =>
@@ -179,65 +179,83 @@ export default function Expenses() {
             </TableHeader>
             <TableBody>
               {expenses?.map((expense: Expense) => (
-                <TableRow key={`expense-${expense.id}`}>
-                  <TableCell>{expense.date}</TableCell>
-                  <TableCell>{expense.title}</TableCell>
-                  <TableCell>R$ {expense.amount}</TableCell>
-                  <TableCell>
-                    <span
-                      className="px-2 py-1 rounded-full"
-                      style={{ backgroundColor: expense.category.color }}
-                    >
-                      {expense.category.title}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    {" "}
-                    <span
-                      className="px-2 py-1 rounded-full"
-                      style={{ backgroundColor: expense.purpose.color }}
-                    >
-                      {expense.purpose.title}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    {" "}
-                    <span
-                      className="px-2 py-1 rounded-full"
-                      style={{ backgroundColor: expense.payment.color }}
-                    >
-                      {expense.payment.title}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    {expense.installmentNumber}/{expense.installmentsTotal}
-                  </TableCell>
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger
-                        render={
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="size-8"
+                <>
+                  <EditExpense
+                    id={expense.id}
+                    open={openEditModal}
+                    onOpenChange={handleEditModal}
+                    title={expense.title}
+                    amount={expense.amount}
+                    categoryId={expense.category.id}
+                    paymentMethodId={expense.payment.id}
+                    purposeId={expense.purpose.id}
+                  />
+                  <TableRow key={`expense-${expense.id}`}>
+                    <TableCell>{expense.date}</TableCell>
+                    <TableCell>{expense.title}</TableCell>
+                    <TableCell>{formatCurrency(expense.amount)}</TableCell>
+                    <TableCell>
+                      <span
+                        className="px-2 py-1 rounded-full"
+                        style={{ backgroundColor: expense.category.color }}
+                      >
+                        {expense.category.title}
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      {" "}
+                      <span
+                        className="px-2 py-1 rounded-full"
+                        style={{ backgroundColor: expense.purpose.color }}
+                      >
+                        {expense.purpose.title}
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      {" "}
+                      <span
+                        className="px-2 py-1 rounded-full"
+                        style={{ backgroundColor: expense.payment.color }}
+                      >
+                        {expense.payment.title}
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      {expense.installmentNumber}/{expense.installmentsTotal}
+                    </TableCell>
+                    <TableCell>
+                      <DropdownMenu modal={false}>
+                        <DropdownMenuTrigger
+                          render={
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="size-8"
+                            >
+                              <MoreHorizontalIcon />
+                              <span className="sr-only">Open menu</span>
+                            </Button>
+                          }
+                        />
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            className="cursor-pointer"
+                            onClick={handleEditModal}
                           >
-                            <MoreHorizontalIcon />
-                            <span className="sr-only">Open menu</span>
-                          </Button>
-                        }
-                      />
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem
-                          variant="destructive"
-                          onClick={() => handleDelete(expense.id)}
-                        >
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
+                            Editar
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            className="cursor-pointer"
+                            variant="destructive"
+                            onClick={() => handleDelete(expense.id)}
+                          >
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                </>
               ))}
             </TableBody>
           </Table>

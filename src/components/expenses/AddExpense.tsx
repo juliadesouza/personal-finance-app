@@ -34,7 +34,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 const expenseSchema = z.object({
   title: z.string().trim().min(1, "Title is required"),
-  amount: z.coerce.number().positive("Amount must be greater than zero"),
+  amount: z.preprocess((val) => {
+    if (typeof val === "string") {
+      return Number(val.replace(",", "."));
+    }
+    return val;
+  }, z.number().positive("Amount must be greater than zero")),
   date: z.string().min(1, "Date is required"),
   categoryId: z.coerce.number().positive("Select a category"),
   paymentMethodId: z.coerce.number().positive("Select a payment method"),
@@ -127,6 +132,7 @@ export function AddExpense() {
                   id="amount"
                   placeholder="0.00"
                   type="number"
+                  step="0.01"
                   {...register("amount")}
                 />
               </Field>

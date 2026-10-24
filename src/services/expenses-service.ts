@@ -1,6 +1,11 @@
 import type { ExpenseData, ExpenseFilters } from "@/types/expense";
 import { api } from "./api";
 
+type UpdateExpenseType = {
+  id: number;
+  expense: ExpenseData;
+};
+
 export async function createExpense(expense: ExpenseData) {
   const { data } = await api.put("/expenses", { ...expense });
   return data;
@@ -18,5 +23,10 @@ export async function getDates() {
 
 export async function deleteExpense(id: number) {
   const { data } = await api.delete(`/expenses/${id}`);
+  return data;
+}
+
+export async function updateExpense({ id, expense }: UpdateExpenseType) {
+  const { data } = await api.patch(`/expenses/${id}`, { ...expense });
   return data;
 }

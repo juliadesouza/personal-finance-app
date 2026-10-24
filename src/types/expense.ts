@@ -13,9 +13,9 @@ export type Expense = {
   title: string;
   amount: number;
   date: string;
-  category: { title: string; color: string };
-  payment: { title: string; color: string };
-  purpose: { title: string; color: string };
+  category: { id: number; title: string; color: string };
+  payment: { id: number; title: string; color: string };
+  purpose: { id: number; title: string; color: string };
   installmentsTotal: number;
   installmentNumber: number;
 };
