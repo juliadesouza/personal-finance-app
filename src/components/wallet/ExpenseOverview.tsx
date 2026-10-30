@@ -47,9 +47,7 @@ export function ExpenseOverview({ expenses }: ExpenseOverviewProps) {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
-          <span className="text-lg text-primary font-semibold">
-            Expenses overview
-          </span>
+          <span className="text-lg font-normal">Expenses overview</span>
           <ShoppingBag className="text-muted-foreground size-5" />
         </CardTitle>
       </CardHeader>
@@ -65,7 +63,7 @@ export function ExpenseOverview({ expenses }: ExpenseOverviewProps) {
           ))}
         </div>
         <SegmentsProgressBar
-          segments={expenses.map((expense, i) => ({
+          segments={expenses?.map((expense, i) => ({
             label: expense.title,
             percentage: expense.percentage,
             color: COLORS[i],

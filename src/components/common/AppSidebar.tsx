@@ -17,7 +17,6 @@ import {
   BanknoteArrowUp,
   Wallet,
   Goal,
-  ChartColumn,
   Settings,
 } from "lucide-react";
 import { AppAvatar } from "./AppAvatar";
@@ -45,7 +44,10 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton className="cursor-pointer">
+              <SidebarMenuButton
+                className="cursor-pointer"
+                onClick={() => navigate("/dashboard")}
+              >
                 <LayoutDashboard className="size-4" />
                 <span>Dashboard</span>
               </SidebarMenuButton>
@@ -94,12 +96,6 @@ export function AppSidebar() {
               >
                 <Wallet />
                 <span>Wallet</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton className="cursor-pointer">
-                <ChartColumn />
-                <span>Charts</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>

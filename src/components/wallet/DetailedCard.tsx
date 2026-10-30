@@ -35,7 +35,7 @@ export function DetailedCard({
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
-          <span className="text-lg text-primary font-semibold">{title}</span>
+          <span className="text-lg font-normal">{title}</span>
           {icon}
         </CardTitle>
         <CardDescription className="text-xs text-muted-foreground">

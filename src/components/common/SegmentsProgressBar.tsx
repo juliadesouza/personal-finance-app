@@ -12,7 +12,7 @@ type SegmentsProgressBarProps = {
 };
 
 export function SegmentsProgressBar({
-  segments,
+  segments = [],
   className,
 }: SegmentsProgressBarProps) {
   const items = segments.reduce<(ProgressSegment & { start: number })[]>(

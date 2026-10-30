@@ -11,11 +11,7 @@ export function SummaryCard({ title, value, subtitle }: SummaryCardProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          <span className="text-md text-muted-foreground font-normal">
-            {title}
-          </span>
-        </CardTitle>
+        <CardTitle className="text-lg font-normal">{title}</CardTitle>
       </CardHeader>
       <CardContent>
         <span className="text-xl font-semibold">{formatCurrency(value)}</span>

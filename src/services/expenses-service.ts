@@ -29,3 +29,8 @@ export async function updateExpense({ id, expense }: UpdateExpense) {
   const { data } = await api.patch(`/expenses/${id}`, { ...expense });
   return data;
 }
+
+export async function getExpensesByCategory(filters: FilterExpense) {
+  const { data } = await api.get("/expenses/categories", { params: filters });
+  return data;
+}
