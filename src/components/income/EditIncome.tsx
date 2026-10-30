@@ -1,25 +1,33 @@
-import { useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogTrigger,
   DialogTitle,
   DialogDescription,
   DialogFooter,
   DialogClose,
 } from "../ui/dialog";
-import { Button } from "../ui/button";
-import { PlusIcon } from "lucide-react";
-import { Field, FieldGroup } from "../ui/field";
+import { FieldGroup, Field } from "../ui/field";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { useForm } from "react-hook-form";
-import { useIncomes } from "@/hooks/use-incomes";
-import { toast } from "../ui/toast";
-import type { IncomeData } from "@/types/income";
 import z from "zod";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
+import { Button } from "../ui/button";
+import { toast } from "../ui/toast";
+import { useIncome } from "@/hooks/use-income";
+import type { IncomeData } from "@/types/income";
+import { formatDateForInput } from "@/utils/format";
+
+type EditIncomeProps = {
+  id: number;
+  open: boolean;
+  title: string;
+  amount: number;
+  date: string;
+  onOpenChange: () => void;
+};
 
 const incomeSchema = z.object({
   title: z.string().trim().min(1, "Title is required"),
@@ -32,76 +40,76 @@ const incomeSchema = z.object({
   date: z.string().min(1, "Date is required"),
 });
 
-const defaultValues = {
-  title: "",
-  amount: undefined,
-  date: "",
-};
-
 type IncomeFormInput = z.input<typeof incomeSchema>;
 type IncomeSchema = z.output<typeof incomeSchema>;
 
-export function AddIncome() {
-  const [open, setOpen] = useState(false);
-
-  const { register, handleSubmit, reset } = useForm<
+export function EditIncome({
+  id,
+  open,
+  onOpenChange,
+  title,
+  amount,
+  date,
+}: EditIncomeProps) {
+  const { register, reset, handleSubmit } = useForm<
     IncomeFormInput,
-    undefined,
+    unknown,
     IncomeSchema
-  >({ resolver: zodResolver(incomeSchema), defaultValues });
-  const { createMutation } = useIncomes();
+  >({
+    resolver: zodResolver(incomeSchema),
+    defaultValues: {
+      title,
+      amount,
+      date: formatDateForInput(date),
+    },
+  });
 
-  const handleOpenChange = () => {
-    setOpen((curr) => !curr);
-    reset(defaultValues);
-  };
+  const { updateMutation } = useIncome();
 
-  const handleAdd = (data: IncomeSchema) => {
-    createMutation.mutate(data as IncomeData, {
-      onSuccess: () => {
-        toast.add({
-          type: "success",
-          description: "The income was created.",
-        });
+  useEffect(() => {
+    if (open) {
+      reset({ title, amount, date: formatDateForInput(date) });
+    }
+  }, [open, title, amount, date, reset]);
 
-        setOpen(false);
+  const handleEdit = (data: IncomeSchema) => {
+    updateMutation.mutate(
+      { id, income: data as IncomeData },
+      {
+        onSuccess: () => {
+          toast.add({
+            type: "success",
+            description: "The income was updated.",
+          });
+          onOpenChange();
+        },
+        onError: () => {
+          toast.add({
+            type: "error",
+            description: "The income could not be updated.",
+          });
+          onOpenChange();
+        },
       },
-      onError: () => {
-        toast.add({
-          type: "error",
-          description: "The income could not be created.",
-        });
-      },
-    });
+    );
   };
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger
-        render={
-          <Button>
-            <PlusIcon /> Add Income
-          </Button>
-        }
-      />
-      <DialogContent className="sm-max-w-md">
-        <form onSubmit={handleSubmit(handleAdd)}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-md">
+        <form onSubmit={handleSubmit(handleEdit)}>
           <DialogHeader>
             <DialogTitle className="text-lg font-medium">
-              New Income
+              Edit income
             </DialogTitle>
-            <DialogDescription>
-              Fill in the details of the income to add it to your records.
+            <DialogDescription className="mb-4">
+              Fill in the details of the income to edit it.
             </DialogDescription>
           </DialogHeader>
-          <FieldGroup className="mt-8 mb-8">
+          <FieldGroup>
             <Field>
               <Label htmlFor="title">Title</Label>
-              <Input
-                id="title"
-                placeholder="Ex: salary"
-                {...register("title")}
-              />
+              <Input id="title" {...register("title")} />
             </Field>
             <div className="flex items-center gap-2">
               <Field>
@@ -115,12 +123,12 @@ export function AddIncome() {
                 />
               </Field>
               <Field>
-                <Label htmlFor="amount">Date</Label>
+                <Label htmlFor="date">Date</Label>
                 <Input id="date" type="date" {...register("date")} />
               </Field>
             </div>
           </FieldGroup>
-          <DialogFooter>
+          <DialogFooter className="flex items-center justify-between gap-2 mt-4">
             <DialogClose
               render={
                 <Button variant="outline" className="cursor-pointer flex-1">

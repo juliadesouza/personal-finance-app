@@ -21,16 +21,18 @@ import { Button } from "../ui/button";
 import { toast } from "../ui/toast";
 import { useExpenses } from "@/hooks/use-expenses";
 import { type ExpenseData } from "@/types/expense";
+import { formatDateForInput } from "@/utils/format";
 
 type EditExpenseProps = {
   id: number;
-  open: boolean;
-  onOpenChange: () => void;
   title: string;
   amount: number;
+  date: string;
   categoryId: number;
   purposeId: number;
   paymentMethodId: number;
+  open: boolean;
+  onOpenChange: () => void;
 };
 
 const expenseSchema = z.object({
@@ -44,6 +46,7 @@ const expenseSchema = z.object({
   categoryId: z.coerce.number().positive("Select a category"),
   paymentMethodId: z.coerce.number().positive("Select a payment method"),
   purposeId: z.coerce.number().positive("Select a purpose"),
+  date: z.string().min(1, "Date is required"),
 });
 
 type ExpenseFormInput = z.input<typeof expenseSchema>;
@@ -51,13 +54,14 @@ type ExpenseSchema = z.output<typeof expenseSchema>;
 
 export function EditExpense({
   id,
-  open,
-  onOpenChange,
   title,
   amount,
+  date,
   categoryId,
   purposeId,
   paymentMethodId,
+  open,
+  onOpenChange,
 }: EditExpenseProps) {
   const { register, control, reset, handleSubmit } = useForm<
     ExpenseFormInput,
@@ -71,6 +75,7 @@ export function EditExpense({
       categoryId,
       paymentMethodId,
       purposeId,
+      date: formatDateForInput(date),
     },
   });
 
@@ -78,9 +83,25 @@ export function EditExpense({
 
   useEffect(() => {
     if (open) {
-      reset({ title, amount, categoryId, paymentMethodId, purposeId });
+      reset({
+        title,
+        amount,
+        categoryId,
+        paymentMethodId,
+        purposeId,
+        date: formatDateForInput(date),
+      });
     }
-  }, [open, title, amount, categoryId, paymentMethodId, purposeId, reset]);
+  }, [
+    open,
+    title,
+    amount,
+    date,
+    categoryId,
+    paymentMethodId,
+    purposeId,
+    reset,
+  ]);
 
   const handleEdit = (data: ExpenseSchema) => {
     updateMutation.mutate(
@@ -91,7 +112,6 @@ export function EditExpense({
             type: "success",
             description: "The expense was updated.",
           });
-
           onOpenChange();
         },
         onError: () => {
@@ -99,6 +119,7 @@ export function EditExpense({
             type: "error",
             description: "The expense could not be updated.",
           });
+          onOpenChange();
         },
       },
     );
@@ -172,6 +193,12 @@ export function EditExpense({
                     />
                   )}
                 />
+              </Field>
+            </div>
+            <div className="flex items-center gap-2">
+              <Field>
+                <Label htmlFor="date">Date</Label>
+                <Input id="date" type="date" {...register("date")} />
               </Field>
             </div>
           </FieldGroup>

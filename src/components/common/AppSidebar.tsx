@@ -67,10 +67,10 @@ export function AppSidebar() {
             <SidebarMenuItem>
               <SidebarMenuButton
                 className="cursor-pointer"
-                onClick={() => navigate("/dashboard/incomes")}
+                onClick={() => navigate("/dashboard/income")}
               >
                 <BanknoteArrowUp />
-                <span>Incomes</span>
+                <span>Income</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
@@ -79,13 +79,19 @@ export function AppSidebar() {
           <SidebarGroupLabel>Analytics</SidebarGroupLabel>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton className="cursor-pointer">
+              <SidebarMenuButton
+                className="cursor-pointer"
+                onClick={() => navigate("/dashboard/goals")}
+              >
                 <Goal />
                 <span>Goals</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton className="cursor-pointer">
+              <SidebarMenuButton
+                className="cursor-pointer"
+                onClick={() => navigate("/dashboard/wallet")}
+              >
                 <Wallet />
                 <span>Wallet</span>
               </SidebarMenuButton>

@@ -35,7 +35,7 @@ import { useExpenses, useExpenseDates } from "@/hooks/use-expenses";
 import useDebouncedValue from "@/hooks/use-debounced-value";
 import { toast } from "@/components/ui/toast";
 import { EditExpense } from "@/components/expenses/EditExpense";
-import { getMonthLabel, formatCurrency } from "@/utils/format";
+import { getMonthLabel, formatCurrency, formatDate } from "@/utils/format";
 import { type Period, type Date } from "@/types/date";
 import { getDefaultPeriod, ALL } from "@/utils/format";
 
@@ -163,16 +163,17 @@ export default function Expenses() {
                 <Fragment key={`expense-group-${expense.id}`}>
                   <EditExpense
                     id={expense.id}
-                    open={openEditModal}
-                    onOpenChange={handleEditModal}
                     title={expense.title}
                     amount={expense.amount}
+                    date={expense.date}
                     categoryId={expense.category.id}
                     paymentMethodId={expense.payment.id}
                     purposeId={expense.purpose.id}
+                    open={openEditModal}
+                    onOpenChange={handleEditModal}
                   />
                   <TableRow key={`expense-${expense.id}`}>
-                    <TableCell>{expense.date}</TableCell>
+                    <TableCell>{formatDate(expense.date)}</TableCell>
                     <TableCell>{expense.title}</TableCell>
                     <TableCell>{formatCurrency(expense.amount)}</TableCell>
                     <TableCell>
@@ -221,7 +222,7 @@ export default function Expenses() {
                             className="cursor-pointer"
                             onClick={handleEditModal}
                           >
-                            Editar
+                            Edit
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             className="cursor-pointer"

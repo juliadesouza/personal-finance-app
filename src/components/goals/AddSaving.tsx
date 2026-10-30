@@ -16,22 +16,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { Button } from "../ui/button";
 import { toast } from "../ui/toast";
-import { useIncomes } from "@/hooks/use-incomes";
-import type { IncomeData } from "@/types/income";
+import { useGoals } from "@/hooks/use-goals";
+import type { SavingData } from "@/types/goal";
 
-type EditIncomeProps = {
+type AddSavingProps = {
   id: number;
   open: boolean;
-  title: string;
-  amount: number;
-  date: string;
   onOpenChange: () => void;
 };
 
-const formatDateForInput = (date: string) => date.split(" ")[0];
-
-const incomeSchema = z.object({
-  title: z.string().trim().min(1, "Title is required"),
+const savingSchema = z.object({
   amount: z.preprocess((val) => {
     if (typeof val === "string") {
       return Number(val.replace(",", "."));
@@ -41,55 +35,49 @@ const incomeSchema = z.object({
   date: z.string().min(1, "Date is required"),
 });
 
-type IncomeFormInput = z.input<typeof incomeSchema>;
-type IncomeSchema = z.output<typeof incomeSchema>;
+type SavingFormInput = z.input<typeof savingSchema>;
+type SavingSchema = z.output<typeof savingSchema>;
 
-export function EditIncome({
-  id,
-  open,
-  onOpenChange,
-  title,
-  amount,
-  date,
-}: EditIncomeProps) {
+const defaultValues = {
+  amount: 0,
+  date: "",
+} satisfies Partial<SavingFormInput>;
+
+export function AddSaving({ id, open, onOpenChange }: AddSavingProps) {
   const { register, reset, handleSubmit } = useForm<
-    IncomeFormInput,
+    SavingFormInput,
     unknown,
-    IncomeSchema
+    SavingSchema
   >({
-    resolver: zodResolver(incomeSchema),
-    defaultValues: {
-      title,
-      amount,
-      date: formatDateForInput(date),
-    },
+    resolver: zodResolver(savingSchema),
+    defaultValues,
   });
 
-  const { updateMutation } = useIncomes();
+  const { savingMutation } = useGoals();
 
   useEffect(() => {
     if (open) {
-      reset({ title, amount, date: formatDateForInput(date) });
+      reset(defaultValues);
     }
-  }, [open, title, amount, date, reset]);
+  }, [open, reset]);
 
-  const handleEdit = (data: IncomeSchema) => {
-    updateMutation.mutate(
-      { id, income: data as IncomeData },
+  const handleEdit = (data: SavingSchema) => {
+    savingMutation.mutate(
+      { id, saving: data as SavingData },
       {
         onSuccess: () => {
           toast.add({
             type: "success",
-            description: "The income was updated.",
+            description: "The saving was added.",
           });
-
           onOpenChange();
         },
         onError: () => {
           toast.add({
             type: "error",
-            description: "The income could not be updated.",
+            description: "The saving could not be completed.",
           });
+          onOpenChange();
         },
       },
     );
@@ -100,18 +88,12 @@ export function EditIncome({
       <DialogContent className="sm:max-w-md">
         <form onSubmit={handleSubmit(handleEdit)}>
           <DialogHeader>
-            <DialogTitle className="text-lg font-medium">
-              Edit income
-            </DialogTitle>
+            <DialogTitle className="text-lg font-medium">Edit goal</DialogTitle>
             <DialogDescription className="mb-4">
-              Fill in the details of the income to edit it.
+              Fill in the value of the saving.
             </DialogDescription>
           </DialogHeader>
           <FieldGroup>
-            <Field>
-              <Label htmlFor="title">Title</Label>
-              <Input id="title" {...register("title")} />
-            </Field>
             <div className="flex items-center gap-2">
               <Field>
                 <Label htmlFor="amount">Amount</Label>

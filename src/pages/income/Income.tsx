@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import PageHeader from "@/components/common/PageHeader";
-import { AddIncome } from "@/components/incomes/AddIncome";
-import { EditIncome } from "@/components/incomes/EditIncome";
+import { AddIncome } from "@/components/income/AddIncome";
+import { EditIncome } from "@/components/income/EditIncome";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/table";
 import { toast } from "@/components/ui/toast";
 import useDebouncedValue from "@/hooks/use-debounced-value";
-import { useIncomes, useIncomesDates } from "@/hooks/use-incomes";
+import { useIncome, useIncomeDates } from "@/hooks/use-income";
 import { type Period, type Date } from "@/types/date";
 import type { Income } from "@/types/income";
 import {
@@ -44,19 +44,19 @@ import {
 import { MoreHorizontalIcon, SearchIcon } from "lucide-react";
 import { useState } from "react";
 
-export default function Incomes() {
+export default function Income() {
   const [selected, setSelected] = useState<Period | null>(null);
   const [search, setSearch] = useState("");
   const [openEditModal, setOpenEditModal] = useState(false);
 
-  const { data: dates } = useIncomesDates();
+  const { data: dates } = useIncomeDates();
 
   const dateOptions: Date[] = dates ?? [];
   const period = selected ?? getDefaultPeriod(dateOptions);
   const months = dateOptions.find((d) => d.year === period.year)?.months ?? [];
 
   const debouncedSearch = useDebouncedValue(search.trim());
-  const { data: incomes, deleteMutation } = useIncomes(
+  const { data: income, deleteMutation } = useIncome(
     {
       year: period.year === ALL ? undefined : Number(period.year),
       month: period.month === ALL ? undefined : Number(period.month),
@@ -93,7 +93,7 @@ export default function Incomes() {
 
   return (
     <section className="w-full">
-      <PageHeader title="Incomes" description="Track your daily incomes." />
+      <PageHeader title="Income" description="Track your daily income." />
       <main>
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-2 flex-1 mr-2">
@@ -124,15 +124,15 @@ export default function Incomes() {
                     ? "All months"
                     : getMonthLabel(period.month)}
                 </SelectValue>
-                <SelectContent>
-                  <SelectItem value={ALL}>All months</SelectItem>
-                  {months.map((m) => (
-                    <SelectItem value={m} key={m}>
-                      {getMonthLabel(m)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
               </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={ALL}>All months</SelectItem>
+                {months.map((m) => (
+                  <SelectItem value={m} key={m}>
+                    {getMonthLabel(m)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
             </Select>
 
             <InputGroup className="flex-1">
@@ -159,7 +159,7 @@ export default function Incomes() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {incomes?.map((income: Income) => (
+              {income?.map((income: Income) => (
                 <Fragment key={`income-group-${income.id}`}>
                   <EditIncome
                     id={income.id}
@@ -192,7 +192,7 @@ export default function Incomes() {
                             className="cursor-pointer"
                             onClick={handleEditModal}
                           >
-                            Editar
+                            Edit
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             className="cursor-pointer"

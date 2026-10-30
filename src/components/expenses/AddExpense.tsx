@@ -85,7 +85,6 @@ export function AddExpense() {
           type: "success",
           description: "The expense was created.",
         });
-
         setOpen(false);
       },
       onError: () => {
@@ -93,6 +92,7 @@ export function AddExpense() {
           type: "error",
           description: "The expense could not be created.",
         });
+        setOpen(false);
       },
     });
   };

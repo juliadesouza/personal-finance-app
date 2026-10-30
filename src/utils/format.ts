@@ -38,3 +38,5 @@ export function getDefaultPeriod(dates: DateOption[]): Period {
       : (yearData.months[0] ?? ALL),
   };
 }
+
+export const formatDateForInput = (date: string) => date.split(" ")[0];

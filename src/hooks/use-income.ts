@@ -2,29 +2,29 @@ import {
   createIncome,
   deleteIncome,
   getDates,
-  getIncomes,
+  getIncome,
   updateIncome,
-} from "@/services/incomes-service";
+} from "@/services/income-service";
 import type { FilterIncome } from "@/types/income";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { expensesKeys } from "./use-expenses";
 
-export const incomesKeys = {
-  all: ["incomes"] as const,
+export const incomeKeys = {
+  all: ["income"] as const,
   list: (filters: FilterIncome) =>
-    [...incomesKeys.all, "list", filters] as const,
-  dates: () => [...incomesKeys.all, "dates"] as const,
+    [...incomeKeys.all, "list", filters] as const,
+  dates: () => [...incomeKeys.all, "dates"] as const,
 };
 
-export function useIncomes(
+export function useIncome(
   filters: FilterIncome = {},
   options: { enabled?: boolean } = {},
 ) {
   const queryClient = useQueryClient();
 
-  const incomes = useQuery({
-    queryKey: incomesKeys.list(filters),
-    queryFn: () => getIncomes(filters),
+  const income = useQuery({
+    queryKey: incomeKeys.list(filters),
+    queryFn: () => getIncome(filters),
     enabled: options.enabled ?? true,
   });
 
@@ -32,27 +32,27 @@ export function useIncomes(
     mutationKey: ["create-income"],
     mutationFn: createIncome,
     onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: incomesKeys.all }),
+      queryClient.invalidateQueries({ queryKey: incomeKeys.all }),
   });
 
   const deleteMutation = useMutation({
-    mutationKey: ["delete-mutation"],
+    mutationKey: ["delete-income"],
     mutationFn: deleteIncome,
     onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: incomesKeys.all }),
+      queryClient.invalidateQueries({ queryKey: incomeKeys.all }),
   });
 
   const updateMutation = useMutation({
-    mutationKey: ["update-mutation"],
+    mutationKey: ["update-income"],
     mutationFn: updateIncome,
     onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: incomesKeys.all }),
+      queryClient.invalidateQueries({ queryKey: incomeKeys.all }),
   });
 
-  return { ...incomes, createMutation, deleteMutation, updateMutation };
+  return { ...income, createMutation, deleteMutation, updateMutation };
 }
 
-export function useIncomesDates() {
+export function useIncomeDates() {
   return useQuery({
     queryKey: expensesKeys.dates(),
     queryFn: getDates,
