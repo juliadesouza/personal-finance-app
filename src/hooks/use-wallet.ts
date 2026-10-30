@@ -18,13 +18,18 @@ export function useWallet(
 ) {
   const queryClient = useQueryClient();
 
-  const summary = useQuery({
+  const { data } = useQuery({
     queryKey: walletKeys.list(filters),
     queryFn: () => getSummary(filters),
     enabled: options.enabled ?? true,
   });
 
-  return { summary };
+  return {
+    summary: data?.summary,
+    savingsSummary: data?.savingsSummary,
+    extraExpensesSummary: data?.extraExpensesSummary,
+    expensesSummary: data?.expensesSummary,
+  };
 }
 
 export function useWalletDates() {

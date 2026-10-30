@@ -88,7 +88,9 @@ export function AddSaving({ id, open, onOpenChange }: AddSavingProps) {
       <DialogContent className="sm:max-w-md">
         <form onSubmit={handleSubmit(handleEdit)}>
           <DialogHeader>
-            <DialogTitle className="text-lg font-medium">Edit goal</DialogTitle>
+            <DialogTitle className="text-lg font-medium">
+              Add saving
+            </DialogTitle>
             <DialogDescription className="mb-4">
               Fill in the value of the saving.
             </DialogDescription>
