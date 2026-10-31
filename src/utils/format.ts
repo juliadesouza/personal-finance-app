@@ -20,23 +20,42 @@ export function getMonthLabel(month: string) {
   });
 }
 
-export function getDefaultPeriod(dates: DateOption[]): Period {
-  if (dates.length === 0) return { year: ALL, month: ALL };
-
+export function getDefaultPeriod(dateOptions: DateOption[]): Period {
   const now = new Date();
   const year = String(now.getFullYear());
   const month = String(now.getMonth() + 1).padStart(2, "0");
-  const yearData = dates.find((d) => d.year === year);
+  const current = `${year}-${month}`;
 
-  if (!yearData) {
-    return { year: dates[0].year, month: dates[0].months[0] ?? ALL };
-  }
-  return {
-    year,
-    month: yearData.months.includes(month)
-      ? month
-      : (yearData.months[0] ?? ALL),
-  };
+  const available = dateOptions
+    .flatMap((d) => d.months.map((m) => `${d.year}-${m}`))
+    .sort();
+
+  if (!available.length) return { year, month };
+
+  const target = available.includes(current)
+    ? current
+    : (available.filter((p) => p < current).at(-1) ?? available[0]);
+
+  const [y, m] = target.split("-");
+  return { year: y, month: m };
 }
 
 export const formatDateForInput = (date: string) => date.split(" ")[0];
+
+export function getPageItems(
+  page: number,
+  totalPages: number,
+): (number | "...")[] {
+  if (totalPages <= 7) {
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
+  if (page <= 4) return [1, 2, 3, 4, 5, "...", totalPages];
+  if (page >= totalPages - 3) {
+    return [
+      1,
+      "...",
+      ...Array.from({ length: 5 }, (_, i) => totalPages - 4 + i),
+    ];
+  }
+  return [1, "...", page - 1, page, page + 1, "...", totalPages];
+}

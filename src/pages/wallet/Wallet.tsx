@@ -42,7 +42,7 @@ export default function Wallet() {
   };
 
   return (
-    <section className="w-full">
+    <section className="w-full pb-3 mb-3">
       <PageHeader
         title="Wallet"
         description="Overview your balance, savings and expenses."

@@ -8,6 +8,7 @@ export type Expense = {
   purpose: { id: number; title: string; color: string };
   installmentsTotal: number;
   installmentNumber: number;
+  isSimulation: boolean;
 };
 
 export type ExpenseData = {
@@ -18,12 +19,34 @@ export type ExpenseData = {
   purposeId: number;
   paymentMethodId: number;
   installments: number;
+  isSimulation: boolean;
 };
+
+export type ExpenseSortField =
+  | "date"
+  | "title"
+  | "category"
+  | "purpose"
+  | "payment";
+
+export type SortOrder = "asc" | "desc";
 
 export type FilterExpense = {
   month?: number;
   year?: number;
   search?: string;
+  sortBy?: "title" | "date" | "category" | "payment" | "purpose";
+  order?: "asc" | "desc";
+  page?: number;
+  pageSize?: number;
+};
+
+export type PaginatedExpenses = {
+  items: Expense[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
 };
 
 export type UpdateExpense = {

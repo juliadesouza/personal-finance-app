@@ -31,6 +31,7 @@ import z from "zod";
 import { useForm, Controller } from "react-hook-form";
 import type { ExpenseData } from "@/types/expense";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Checkbox } from "../ui/checkbox";
 
 const expenseSchema = z.object({
   title: z.string().trim().min(1, "Title is required"),
@@ -45,6 +46,7 @@ const expenseSchema = z.object({
   paymentMethodId: z.coerce.number().positive("Select a payment method"),
   purposeId: z.coerce.number().positive("Select a purpose"),
   installments: z.coerce.number().int().min(1).max(12),
+  isSimulation: z.boolean().default(false),
 });
 
 const defaultValues = {
@@ -55,6 +57,7 @@ const defaultValues = {
   paymentMethodId: undefined,
   purposeId: undefined,
   installments: 1,
+  isSimulation: false,
 };
 
 type ExpenseFormInput = z.input<typeof expenseSchema>;
@@ -137,7 +140,7 @@ export function AddExpense() {
                 />
               </Field>
               <Field>
-                <Label htmlFor="amount">Date</Label>
+                <Label htmlFor="date">Date</Label>
                 <Input id="date" type="date" {...register("date")} />
               </Field>
             </div>
@@ -215,6 +218,22 @@ export function AddExpense() {
                 />
               </Field>
             </div>
+            <Field orientation="horizontal">
+              <Controller
+                name="isSimulation"
+                control={control}
+                render={({ field }) => (
+                  <Checkbox
+                    id="isSimulation"
+                    checked={field.value}
+                    onCheckedChange={(checked) =>
+                      field.onChange(checked === true)
+                    }
+                  />
+                )}
+              />
+              <Label htmlFor="isSimulation">This is a simulation</Label>
+            </Field>
           </FieldGroup>
           <DialogFooter className="flex items-center justify-between gap-2">
             <DialogClose

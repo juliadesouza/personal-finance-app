@@ -22,6 +22,7 @@ import { toast } from "../ui/toast";
 import { useExpenses } from "@/hooks/use-expenses";
 import { type ExpenseData } from "@/types/expense";
 import { formatDateForInput } from "@/utils/format";
+import { Checkbox } from "../ui/checkbox";
 
 type EditExpenseProps = {
   id: number;
@@ -33,6 +34,7 @@ type EditExpenseProps = {
   paymentMethodId: number;
   open: boolean;
   onOpenChange: () => void;
+  isSimulation: boolean;
 };
 
 const expenseSchema = z.object({
@@ -47,6 +49,7 @@ const expenseSchema = z.object({
   paymentMethodId: z.coerce.number().positive("Select a payment method"),
   purposeId: z.coerce.number().positive("Select a purpose"),
   date: z.string().min(1, "Date is required"),
+  isSimulation: z.boolean().default(false),
 });
 
 type ExpenseFormInput = z.input<typeof expenseSchema>;
@@ -62,6 +65,7 @@ export function EditExpense({
   paymentMethodId,
   open,
   onOpenChange,
+  isSimulation,
 }: EditExpenseProps) {
   const { register, control, reset, handleSubmit } = useForm<
     ExpenseFormInput,
@@ -76,6 +80,7 @@ export function EditExpense({
       paymentMethodId,
       purposeId,
       date: formatDateForInput(date),
+      isSimulation,
     },
   });
 
@@ -90,6 +95,7 @@ export function EditExpense({
         paymentMethodId,
         purposeId,
         date: formatDateForInput(date),
+        isSimulation,
       });
     }
   }, [
@@ -101,6 +107,7 @@ export function EditExpense({
     paymentMethodId,
     purposeId,
     reset,
+    isSimulation,
   ]);
 
   const handleEdit = (data: ExpenseSchema) => {
@@ -195,12 +202,27 @@ export function EditExpense({
                 />
               </Field>
             </div>
-            <div className="flex items-center gap-2">
-              <Field>
-                <Label htmlFor="date">Date</Label>
-                <Input id="date" type="date" {...register("date")} />
-              </Field>
-            </div>
+
+            <Field>
+              <Label htmlFor="date">Date</Label>
+              <Input id="date" type="date" {...register("date")} />
+            </Field>
+            <Field orientation="horizontal">
+              <Controller
+                name="isSimulation"
+                control={control}
+                render={({ field }) => (
+                  <Checkbox
+                    id="isSimulation"
+                    checked={field.value}
+                    onCheckedChange={(checked) =>
+                      field.onChange(checked === true)
+                    }
+                  />
+                )}
+              />
+              <Label htmlFor="isSimulation">This is a simulation</Label>
+            </Field>
           </FieldGroup>
           <DialogFooter className="flex items-center justify-between gap-2 mt-4">
             <DialogClose

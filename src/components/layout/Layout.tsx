@@ -9,15 +9,19 @@ export function Layout() {
   if (status === AUTH_STATUS.LOADING) return null;
   if (status === AUTH_STATUS.ERROR) return <Navigate to="/" replace />;
 
-  return (  
+  return (
     <SidebarProvider>
-    <main className="flex h-screen w-full">
-      <AppSidebar />
-      <div className="flex w-full pl-2 pr-8 py-4 gap-4">
-        <SidebarTrigger className="cursor-pointer" />
-        <Outlet />
-      </div>
-    </main>
+      <main className="flex h-screen w-full overflow-hidden">
+        <AppSidebar />
+        <div className="min-h-0 flex-1 overflow-y-auto">
+          <div className="flex min-h-full gap-4 pl-2 pr-8 py-4">
+            <SidebarTrigger className="cursor-pointer" />
+            <div className="min-w-0 flex-1 pb-8">
+              <Outlet />
+            </div>
+          </div>
+        </div>
+      </main>
     </SidebarProvider>
   );
 }

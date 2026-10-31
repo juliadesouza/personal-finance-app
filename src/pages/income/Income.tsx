@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import PageHeader from "@/components/common/PageHeader";
 import { AddIncome } from "@/components/income/AddIncome";
 import { EditIncome } from "@/components/income/EditIncome";
@@ -47,7 +46,7 @@ import { useState } from "react";
 export default function Income() {
   const [selected, setSelected] = useState<Period | null>(null);
   const [search, setSearch] = useState("");
-  const [openEditModal, setOpenEditModal] = useState(false);
+  const [editingIncome, setEditingIncome] = useState<Income | null>(null);
 
   const { data: dates } = useIncomeDates();
 
@@ -85,10 +84,6 @@ export default function Income() {
           description: "The income could not be deleted.",
         }),
     });
-  };
-
-  const handleEditModal = () => {
-    setOpenEditModal((curr) => !curr);
   };
 
   return (
@@ -160,55 +155,55 @@ export default function Income() {
             </TableHeader>
             <TableBody>
               {income?.map((income: Income) => (
-                <Fragment key={`income-group-${income.id}`}>
-                  <EditIncome
-                    id={income.id}
-                    open={openEditModal}
-                    onOpenChange={handleEditModal}
-                    title={income.title}
-                    amount={income.amount}
-                    date={income.date}
-                  />
-                  <TableRow key={`income-${income.id}`}>
-                    <TableCell>{formatDate(income.date)}</TableCell>
-                    <TableCell>{income.title}</TableCell>
-                    <TableCell>{formatCurrency(income.amount)}</TableCell>
-                    <TableCell>
-                      <DropdownMenu modal={false}>
-                        <DropdownMenuTrigger
-                          render={
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="size-8"
-                            >
-                              <MoreHorizontalIcon />
-                              <span className="sr-only">Open menu</span>
-                            </Button>
-                          }
-                        />
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem
-                            className="cursor-pointer"
-                            onClick={handleEditModal}
+                <TableRow key={`income-${income.id}`}>
+                  <TableCell>{formatDate(income.date)}</TableCell>
+                  <TableCell>{income.title}</TableCell>
+                  <TableCell>{formatCurrency(income.amount)}</TableCell>
+                  <TableCell>
+                    <DropdownMenu modal={false}>
+                      <DropdownMenuTrigger
+                        render={
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="size-8"
                           >
-                            Edit
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            className="cursor-pointer"
-                            variant="destructive"
-                            onClick={() => handleDelete(income.id)}
-                          >
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                </Fragment>
+                            <MoreHorizontalIcon />
+                            <span className="sr-only">Open menu</span>
+                          </Button>
+                        }
+                      />
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          className="cursor-pointer"
+                          onClick={() => setEditingIncome(income)}
+                        >
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="cursor-pointer"
+                          variant="destructive"
+                          onClick={() => handleDelete(income.id)}
+                        >
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
               ))}
             </TableBody>
           </Table>
+          {editingIncome && (
+            <EditIncome
+              id={editingIncome?.id}
+              open
+              onOpenChange={() => setEditingIncome(null)}
+              title={editingIncome?.title}
+              amount={editingIncome?.amount}
+              date={editingIncome?.date}
+            />
+          )}
         </div>
       </main>
     </section>

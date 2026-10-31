@@ -13,8 +13,8 @@ import {
 } from "@/components/ui/select";
 import { useState } from "react";
 import { SavingGoalsWidget } from "@/components/dashboard/SavingGoalsWidget";
-import { useExpenses } from "@/hooks/use-expenses";
-import { ExpensesPieChartWidget } from "@/components/dashboard/ExpensesPieChartWidget";
+import { useExpensesByCategory } from "@/hooks/use-expenses";
+import { ExpensesPieChartWidget } from "@/components/dashboard/ExpensesByCategoryWidget";
 import { MonthlyBudgetWidget } from "@/components/dashboard/MonthlyBudgetWidget";
 
 export default function Dashboard() {
@@ -37,11 +37,8 @@ export default function Dashboard() {
     { enabled: !!dates },
   );
 
-  const { expensesByCategory } = useExpenses(
-    {
-      year: Number(period.year),
-      month: Number(period.month),
-    },
+  const { data: expensesByCategory } = useExpensesByCategory(
+    { year: Number(period.year), month: Number(period.month) },
     { enabled: !!dates },
   );
 
@@ -52,7 +49,7 @@ export default function Dashboard() {
   const handleMonthChange = (month: string | null) => {
     if (month) setSelected({ year: period.year, month });
   };
-  console.log(summary);
+
   return (
     <section className="w-full">
       <PageHeader
@@ -95,7 +92,7 @@ export default function Dashboard() {
               expenses={summary?.expense?.amount}
               savings={summary?.saving?.amount}
             />
-            <ExpensesPieChartWidget expenses={expensesByCategory.data} />
+            <ExpensesPieChartWidget expenses={expensesByCategory} />
             <SavingGoalsWidget />
           </div>
         </div>

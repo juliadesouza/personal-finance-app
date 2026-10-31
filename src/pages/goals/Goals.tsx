@@ -17,7 +17,7 @@ export default function Goals() {
         <div className="flex items-center justify-between mb-8">
           <AddGoal />
         </div>
-        <div className="grid grid-cols-3">
+        <div className="grid grid-cols-3 gap-8">
           {goals?.map((goal: Goal) => (
             <GoalCard {...goal} key={`goal-card-${goal.id}`} />
           ))}
