@@ -46,7 +46,7 @@ export default function Expenses() {
     { enabled: !!dates },
   );
 
-  const { summary } = useWallet(
+  const { overview } = useWallet(
     {
       year: Number(period.year),
       month: Number(period.month),
@@ -92,7 +92,7 @@ export default function Expenses() {
     <section className="w-full">
       <PageHeader title="Expenses" description="Track your daily expenses." />
       <main>
-        <BalanceSummary {...summary} />
+        <BalanceSummary {...overview} />
         <ExpensesFilter
           dateOptions={dateOptions}
           period={period}

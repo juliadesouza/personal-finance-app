@@ -26,17 +26,17 @@ function getBarColor(usedPct: number) {
   return "var(--chart-1)";
 }
 
-type MonthlyBudgetWidgetProps = {
+type MonthlyBudgetProps = {
   income: number;
   expenses: number;
   savings: number;
 };
 
-export function MonthlyBudgetWidget({
+export function MonthlyBudget({
   income,
   expenses,
   savings,
-}: MonthlyBudgetWidgetProps) {
+}: MonthlyBudgetProps) {
   const spent = expenses + savings;
   const remaining = income - spent;
   const overBudget = remaining < 0;
@@ -59,10 +59,7 @@ export function MonthlyBudgetWidget({
       </CardHeader>
 
       <CardContent className="flex flex-1 items-center justify-center pb-0">
-        <ChartContainer
-          config={chartConfig}
-          className="aspect-square size-[220px]"
-        >
+        <ChartContainer config={chartConfig} className="aspect-square size-55">
           <RadialBarChart
             data={data}
             startAngle={90}

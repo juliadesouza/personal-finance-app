@@ -14,6 +14,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import type { FilterExpense } from "@/types/expense";
+import { invalidateWallet } from "@/lib/invalidate-finance";
 
 export const expensesKeys = {
   all: ["expenses"] as const,
@@ -41,21 +42,30 @@ export function useExpenses(
     mutationKey: ["create-expense"],
     mutationFn: createExpense,
     onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: expensesKeys.all }),
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: expensesKeys.all }),
+        invalidateWallet(queryClient),
+      ]),
   });
 
   const deleteMutation = useMutation({
     mutationKey: ["delete-expense"],
     mutationFn: deleteExpense,
     onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: expensesKeys.all }),
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: expensesKeys.all }),
+        invalidateWallet(queryClient),
+      ]),
   });
 
   const updateMutation = useMutation({
     mutationKey: ["update-expense"],
     mutationFn: updateExpense,
     onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: expensesKeys.all }),
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: expensesKeys.all }),
+        invalidateWallet(queryClient),
+      ]),
   });
 
   return {

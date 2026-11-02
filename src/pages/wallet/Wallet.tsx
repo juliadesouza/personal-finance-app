@@ -6,10 +6,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ExpenseOverview } from "@/components/wallet/ExpenseOverview";
-import { ExtraExpensesSummary } from "@/components/wallet/ExtraExpensesSummary";
-import { SavingsSummary } from "@/components/wallet/SavingsSummary";
-import { WalletSummary } from "@/components/wallet/WalletSummary";
+import { FixedExpenses } from "@/components/wallet/FixedExpenses";
+import { FlexibleBudget } from "@/components/wallet/FlexibleBudget";
+import { SavingsGoal } from "@/components/wallet/SavingsGoal";
+import { TopExpenses } from "@/components/wallet/TopExpenses";
+import { WalletOverview } from "@/components/wallet/WalletOverview";
 import { useWalletDates, useWallet } from "@/hooks/use-wallet";
 import type { Period, Date } from "@/types/date";
 import { getDefaultPeriod, getMonthLabel } from "@/utils/format";
@@ -24,7 +25,7 @@ export default function Wallet() {
   const period = selected ?? getDefaultPeriod(dateOptions);
   const months = dateOptions.find((d) => d.year === period.year)?.months ?? [];
 
-  const { summary, savingsSummary, extraExpensesSummary, expensesSummary } =
+  const { overview, savingsGoal, flexibleBudget, topExpenses, fixedExpenses } =
     useWallet(
       {
         year: Number(period.year),
@@ -45,7 +46,7 @@ export default function Wallet() {
     <section className="w-full pb-3 mb-3">
       <PageHeader
         title="Wallet"
-        description="Overview your balance, savings and expenses."
+        description="Your balance, savings and spending at a glance."
       />
       <main>
         <div className="flex items-center gap-2 mb-8">
@@ -76,12 +77,18 @@ export default function Wallet() {
           </Select>
         </div>
         <div className="flex flex-col gap-8">
-          <WalletSummary {...summary} />
+          <WalletOverview {...overview} />
           <div className="grid grid-cols-2 gap-8">
-            <SavingsSummary {...savingsSummary} />
-            <ExtraExpensesSummary {...extraExpensesSummary} />
+            <SavingsGoal {...savingsGoal} />
+            <FlexibleBudget {...flexibleBudget} />
           </div>
-          <ExpenseOverview expenses={expensesSummary} />
+          <div className="grid grid-cols-2 gap-8">
+            <TopExpenses expenses={topExpenses} />
+            <FixedExpenses
+              expenses={fixedExpenses?.data}
+              average={fixedExpenses?.average}
+            />
+          </div>
         </div>
       </main>
     </section>

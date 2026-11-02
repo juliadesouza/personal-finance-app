@@ -1,5 +1,5 @@
 import PageHeader from "@/components/common/PageHeader";
-import { WalletSummary } from "@/components/wallet/WalletSummary";
+import { WalletOverview } from "@/components/wallet/WalletOverview";
 import { useWalletDates, useWallet } from "@/hooks/use-wallet";
 import { useAuth } from "@/providers/auth/auth-context";
 import type { Period, Date } from "@/types/date";
@@ -12,10 +12,10 @@ import {
   SelectContent,
 } from "@/components/ui/select";
 import { useState } from "react";
-import { SavingGoalsWidget } from "@/components/dashboard/SavingGoalsWidget";
+import { SavingsGoalList } from "@/components/dashboard/SavingsGoalList";
 import { useExpensesByCategory } from "@/hooks/use-expenses";
-import { ExpensesPieChartWidget } from "@/components/dashboard/ExpensesByCategoryWidget";
-import { MonthlyBudgetWidget } from "@/components/dashboard/MonthlyBudgetWidget";
+import { ExpensesByCategory } from "@/components/dashboard/ExpensesByCategory";
+import { MonthlyBudget } from "@/components/dashboard/MonthlyBudget";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -29,7 +29,7 @@ export default function Dashboard() {
   const period = selected ?? getDefaultPeriod(dateOptions);
   const months = dateOptions.find((d) => d.year === period.year)?.months ?? [];
 
-  const { summary } = useWallet(
+  const { overview } = useWallet(
     {
       year: Number(period.year),
       month: Number(period.month),
@@ -85,15 +85,15 @@ export default function Dashboard() {
           </Select>
         </div>
         <div className="flex flex-col gap-8">
-          <WalletSummary {...summary} />
+          <WalletOverview {...overview} />
           <div className="grid grid-cols-3 gap-8">
-            <MonthlyBudgetWidget
-              income={summary?.income}
-              expenses={summary?.expense?.amount}
-              savings={summary?.saving?.amount}
+            <MonthlyBudget
+              income={overview?.income}
+              expenses={overview?.expense?.amount}
+              savings={overview?.saving?.amount}
             />
-            <ExpensesPieChartWidget expenses={expensesByCategory} />
-            <SavingGoalsWidget />
+            <ExpensesByCategory expenses={expensesByCategory} />
+            <SavingsGoalList />
           </div>
         </div>
       </main>

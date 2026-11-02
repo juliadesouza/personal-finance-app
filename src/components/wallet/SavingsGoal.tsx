@@ -1,29 +1,29 @@
 import { PiggyBank } from "lucide-react";
 import { DetailedCard } from "./DetailedCard";
 
-type SavingsSummaryProps = {
+type SavingsGoalProps = {
   amount: number;
   target: number;
   left: number;
   progress: number;
 };
 
-export function SavingsSummary({
+export function SavingsGoal({
   amount,
   target,
   left,
   progress,
-}: SavingsSummaryProps) {
+}: SavingsGoalProps) {
   return (
     <DetailedCard
-      title="Savings progress"
-      description="30% of monthly income"
+      title="Savings goal"
+      description="Target: 30% of your monthly income"
       amount={amount}
       target={target}
       progress={progress}
       left={left}
       warningTitle="MONTHLY INSIGHT"
-      warningSubtitle="left to reach your target"
+      warningSubtitle="to go to hit this month’s goal"
       icon={<PiggyBank className="text-muted-foreground size-5" />}
     />
   );

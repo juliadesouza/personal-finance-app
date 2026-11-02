@@ -4,7 +4,7 @@ import type { Goal } from "@/types/goal";
 import { formatCurrency } from "@/utils/format";
 import { ProgressBar } from "../common/ProgressBar";
 
-export function SavingGoalsWidget() {
+export function SavingsGoalList() {
   const { data: goals } = useGoals();
 
   return (

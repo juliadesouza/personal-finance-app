@@ -7,6 +7,7 @@ import {
 } from "@/services/goals-service";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { FilterGoal } from "@/types/goal";
+import { invalidateWallet } from "@/lib/invalidate-finance";
 
 export const goalsKeys = {
   all: ["goals"] as const,
@@ -24,25 +25,41 @@ export function useGoals(filters: FilterGoal = {}) {
   const createMutation = useMutation({
     mutationKey: ["create-goal"],
     mutationFn: createGoal,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: goalsKeys.all }),
+    onSuccess: () =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: goalsKeys.all }),
+        invalidateWallet(queryClient),
+      ]),
   });
 
   const deleteMutation = useMutation({
     mutationKey: ["delete-goal"],
     mutationFn: deleteGoal,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: goalsKeys.all }),
+    onSuccess: () =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: goalsKeys.all }),
+        invalidateWallet(queryClient),
+      ]),
   });
 
   const updateMutation = useMutation({
     mutationKey: ["update-goal"],
     mutationFn: updateGoal,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: goalsKeys.all }),
+    onSuccess: () =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: goalsKeys.all }),
+        invalidateWallet(queryClient),
+      ]),
   });
 
   const savingMutation = useMutation({
     mutationKey: ["add-saving"],
     mutationFn: addSaving,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: goalsKeys.all }),
+    onSuccess: () =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: goalsKeys.all }),
+        invalidateWallet(queryClient),
+      ]),
   });
 
   return {

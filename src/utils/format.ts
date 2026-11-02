@@ -59,3 +59,14 @@ export function getPageItems(
   }
   return [1, "...", page - 1, page, page + 1, "...", totalPages];
 }
+
+export const formatMonth = (value: string) =>
+  new Date(`${value}-01T00:00:00`).toLocaleDateString("en-US", {
+    month: "short",
+  });
+
+export const formatMonthLong = (value: string) =>
+  new Date(`${value}-01T00:00:00`).toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric",
+  });

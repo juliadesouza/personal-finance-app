@@ -3,7 +3,13 @@
 import * as React from "react";
 import { Label, Pie, PieChart } from "recharts";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
@@ -18,13 +24,11 @@ type ExpenseCategory = {
   id: number;
 };
 
-type ExpensesPieChartWidgetProps = {
+type ExpensesByCategoryProps = {
   expenses?: ExpenseCategory[];
 };
 
-export function ExpensesPieChartWidget({
-  expenses = [],
-}: ExpensesPieChartWidgetProps) {
+export function ExpensesByCategory({ expenses = [] }: ExpensesByCategoryProps) {
   const total = React.useMemo(
     () => expenses.reduce((acc, curr) => acc + Number(curr.amount), 0),
     [expenses],
@@ -73,34 +77,20 @@ export function ExpensesPieChartWidget({
           Expenses by category
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-row items-center justify-center">
-        <div>
-          {expenses.map((expense) => (
-            <div
-              className="flex items-center gap-2"
-              key={`expense-${expense.id}`}
-            >
-              <div
-                className="size-3 rounded-full"
-                style={{ backgroundColor: expense.fill }}
-              />
-              <span>{expense.title}</span>
-            </div>
-          ))}
-        </div>
-        <ChartContainer config={chartConfig} className="w-[250px] h-[180px]">
+      <CardContent className="flex items-center justify-center">
+        <ChartContainer config={chartConfig} className="w-62.5 h-45">
           <PieChart>
             <ChartTooltip
               cursor={false}
               content={
                 <ChartTooltipContent
                   hideLabel
-                  className="min-w-[180px]"
+                  className="min-w-45"
                   formatter={(value, name, item) => (
                     <div className="flex w-full items-center justify-between gap-8">
                       <div className="flex items-center gap-2">
                         <div
-                          className="size-2.5 shrink-0 rounded-[2px]"
+                          className="size-2.5 shrink-0 rounded-xs"
                           style={{ backgroundColor: item.payload.fill }}
                         />
                         <span className="text-muted-foreground">{name}</span>
@@ -154,6 +144,20 @@ export function ExpensesPieChartWidget({
           </PieChart>
         </ChartContainer>
       </CardContent>
+      <CardFooter className="grid grid-cols-2">
+        {expenses.map((expense) => (
+          <div
+            className="flex items-center gap-2"
+            key={`expense-${expense.id}`}
+          >
+            <div
+              className="size-3 rounded-full"
+              style={{ backgroundColor: expense.fill }}
+            />
+            <span>{expense.title}</span>
+          </div>
+        ))}
+      </CardFooter>
     </Card>
   );
 }

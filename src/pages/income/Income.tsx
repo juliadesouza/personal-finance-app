@@ -1,46 +1,15 @@
+import { BalanceSummary } from "@/components/common/BalanceSummary";
 import PageHeader from "@/components/common/PageHeader";
-import { AddIncome } from "@/components/income/AddIncome";
 import { EditIncome } from "@/components/income/EditIncome";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/components/ui/input-group";
-import {
-  Select,
-  SelectContent,
-  SelectTrigger,
-  SelectValue,
-  SelectItem,
-} from "@/components/ui/select";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import IncomeFilter from "@/components/income/IncomeFilter";
+import { IncomeTable } from "@/components/income/IncomeTable";
 import { toast } from "@/components/ui/toast";
 import useDebouncedValue from "@/hooks/use-debounced-value";
 import { useIncome, useIncomeDates } from "@/hooks/use-income";
+import { useWallet } from "@/hooks/use-wallet";
 import { type Period, type Date } from "@/types/date";
 import type { Income } from "@/types/income";
-import {
-  getDefaultPeriod,
-  ALL,
-  getMonthLabel,
-  formatCurrency,
-  formatDate,
-} from "@/utils/format";
-import { MoreHorizontalIcon, SearchIcon } from "lucide-react";
+import { getDefaultPeriod, ALL } from "@/utils/format";
 import { useState } from "react";
 
 export default function Income() {
@@ -52,7 +21,6 @@ export default function Income() {
 
   const dateOptions: Date[] = dates ?? [];
   const period = selected ?? getDefaultPeriod(dateOptions);
-  const months = dateOptions.find((d) => d.year === period.year)?.months ?? [];
 
   const debouncedSearch = useDebouncedValue(search.trim());
   const { data: income, deleteMutation } = useIncome(
@@ -63,12 +31,21 @@ export default function Income() {
     },
     { enabled: !!dates },
   );
-  const handleYearChange = (year: string | null) => {
-    if (year) setSelected({ year, month: ALL });
+
+  const { overview } = useWallet(
+    {
+      year: Number(period.year),
+      month: Number(period.month),
+    },
+    { enabled: !!dates },
+  );
+
+  const handlePeriodChange = (next: Period) => {
+    setSelected(next);
   };
 
-  const handleMonthChange = (month: string | null) => {
-    if (month) setSelected({ year: period.year, month });
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
   };
 
   const handleDelete = (id: number) => {
@@ -90,110 +67,20 @@ export default function Income() {
     <section className="w-full">
       <PageHeader title="Income" description="Track your daily income." />
       <main>
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-2 flex-1 mr-2">
-            <Select value={period.year} onValueChange={handleYearChange}>
-              <SelectTrigger>
-                <SelectValue>
-                  {period.year === ALL ? "All years" : period.year}
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={ALL}>All years</SelectItem>
-                {dateOptions.map((d) => (
-                  <SelectItem key={d.year} value={d.year}>
-                    {d.year}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <Select
-              value={period.month}
-              onValueChange={handleMonthChange}
-              disabled={period.year === ALL}
-            >
-              <SelectTrigger>
-                <SelectValue>
-                  {period.month === ALL
-                    ? "All months"
-                    : getMonthLabel(period.month)}
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={ALL}>All months</SelectItem>
-                {months.map((m) => (
-                  <SelectItem value={m} key={m}>
-                    {getMonthLabel(m)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <InputGroup className="flex-1">
-              <InputGroupInput
-                placeholder="Search by title..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-              <InputGroupAddon>
-                <SearchIcon />
-              </InputGroupAddon>
-            </InputGroup>
-          </div>
-          <AddIncome />
-        </div>
+        <BalanceSummary {...overview} />
+        <IncomeFilter
+          dateOptions={dateOptions}
+          period={period}
+          search={search}
+          onPeriodChange={handlePeriodChange}
+          onSearchChange={handleSearchChange}
+        />
         <div>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Date</TableHead>
-                <TableHead>Title</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {income?.map((income: Income) => (
-                <TableRow key={`income-${income.id}`}>
-                  <TableCell>{formatDate(income.date)}</TableCell>
-                  <TableCell>{income.title}</TableCell>
-                  <TableCell>{formatCurrency(income.amount)}</TableCell>
-                  <TableCell>
-                    <DropdownMenu modal={false}>
-                      <DropdownMenuTrigger
-                        render={
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="size-8"
-                          >
-                            <MoreHorizontalIcon />
-                            <span className="sr-only">Open menu</span>
-                          </Button>
-                        }
-                      />
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem
-                          className="cursor-pointer"
-                          onClick={() => setEditingIncome(income)}
-                        >
-                          Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          className="cursor-pointer"
-                          variant="destructive"
-                          onClick={() => handleDelete(income.id)}
-                        >
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <IncomeTable
+            income={income ?? []}
+            onEdit={setEditingIncome}
+            onDelete={handleDelete}
+          />
           {editingIncome && (
             <EditIncome
               id={editingIncome?.id}

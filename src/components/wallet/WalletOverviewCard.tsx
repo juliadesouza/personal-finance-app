@@ -1,13 +1,17 @@
 import { formatCurrency } from "@/utils/format";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 
-type SummaryCardProps = {
+type WalletOverviewCardProps = {
   title: string;
   subtitle: string;
   value: number;
 };
 
-export function SummaryCard({ title, value, subtitle }: SummaryCardProps) {
+export function WalletOverviewCard({
+  title,
+  value,
+  subtitle,
+}: WalletOverviewCardProps) {
   return (
     <Card>
       <CardHeader>

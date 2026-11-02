@@ -1,8 +1,8 @@
 import { api } from "./api";
 import type { FilterWallet } from "@/types/wallet";
 
-export async function getSummary(filters: FilterWallet) {
-  const { data } = await api.get("/wallet/summary", { params: filters });
+export async function getWallet(filters: FilterWallet) {
+  const { data } = await api.get("/wallet", { params: filters });
   return data;
 }
 
