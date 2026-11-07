@@ -69,6 +69,7 @@ export function useExpenses(
   });
 
   return {
+    isPendingExpenses: expenses.isPending,
     expenses: expenses?.data?.items ?? [],
     pagination: {
       page: expenses?.data?.page,

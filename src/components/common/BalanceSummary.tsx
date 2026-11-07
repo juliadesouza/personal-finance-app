@@ -12,6 +12,7 @@ type WalletSummaryProps = {
     amount: number;
     percentage: number;
   };
+  isLoading: boolean;
 };
 
 export function BalanceSummary({
@@ -19,6 +20,7 @@ export function BalanceSummary({
   income,
   expense,
   saving,
+  isLoading,
 }: WalletSummaryProps) {
   return (
     <div className="grid grid-cols-4 gap-8 mb-8">
@@ -26,21 +28,25 @@ export function BalanceSummary({
         title="Income"
         value={income}
         icon={<BanknoteArrowUp className="size-5 text-muted-foreground" />}
+        isLoading={isLoading}
       />
       <BalanceCard
         title="Balance"
         value={balance}
         icon={<Wallet className="size-5 text-muted-foreground" />}
+        isLoading={isLoading}
       />
       <BalanceCard
         title="Expenses"
         value={expense?.amount}
         icon={<ReceiptText className="size-5 text-muted-foreground" />}
+        isLoading={isLoading}
       />
       <BalanceCard
         title="Savings"
         value={saving?.amount}
         icon={<PiggyBank className="size-5 text-muted-foreground" />}
+        isLoading={isLoading}
       />
     </div>
   );

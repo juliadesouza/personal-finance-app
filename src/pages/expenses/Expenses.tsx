@@ -33,20 +33,21 @@ export default function Expenses() {
   const dateOptions: Date[] = dates ?? [];
   const period = selected ?? getDefaultPeriod(dateOptions);
 
-  const { expenses, pagination, deleteMutation } = useExpenses(
-    {
-      year: period.year === ALL ? undefined : Number(period.year),
-      month: period.month === ALL ? undefined : Number(period.month),
-      sortBy: sort.sortBy,
-      order: sort.order,
-      ...(debouncedSearch && { search: debouncedSearch }),
-      page,
-      pageSize: PAGE_SIZE,
-    },
-    { enabled: !!dates },
-  );
+  const { expenses, isPendingExpenses, pagination, deleteMutation } =
+    useExpenses(
+      {
+        year: period.year === ALL ? undefined : Number(period.year),
+        month: period.month === ALL ? undefined : Number(period.month),
+        sortBy: sort.sortBy,
+        order: sort.order,
+        ...(debouncedSearch && { search: debouncedSearch }),
+        page,
+        pageSize: PAGE_SIZE,
+      },
+      { enabled: !!dates },
+    );
 
-  const { overview } = useWallet(
+  const { overview, isPending: isPendingOverview } = useWallet(
     {
       year: Number(period.year),
       month: Number(period.month),
@@ -92,7 +93,7 @@ export default function Expenses() {
     <section className="w-full">
       <PageHeader title="Expenses" description="Track your daily expenses." />
       <main>
-        <BalanceSummary {...overview} />
+        <BalanceSummary {...overview} isLoading={isPendingOverview} />
         <ExpensesFilter
           dateOptions={dateOptions}
           period={period}
@@ -109,6 +110,7 @@ export default function Expenses() {
             onPageChange={setPage}
             onEdit={setEditingExpense}
             onDelete={handleDelete}
+            isLoading={isPendingExpenses}
           />
           {editingExpense && (
             <EditExpense

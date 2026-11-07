@@ -36,7 +36,22 @@ type ExpensesTableProps = {
   onPageChange: (page: number) => void;
   onEdit: (expense: Expense) => void;
   onDelete: (id: number) => void;
+  isLoading: boolean;
 };
+
+import { Skeleton } from "@/components/ui/skeleton";
+
+export function SkeletonTable() {
+  return (
+    <div className="flex flex-col gap-4 mt-6">
+      {Array.from({ length: 5 }).map((_, index) => (
+        <div key={index}>
+          <Skeleton className="h-6 flex-1" />
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function ExpensesTable({
   expenses,
@@ -46,12 +61,16 @@ export default function ExpensesTable({
   onPageChange,
   onEdit,
   onDelete,
+  isLoading = false,
 }: ExpensesTableProps) {
   const sortProps = {
     activeField: sort.sortBy,
     order: sort.order,
     onSort,
   };
+
+  const hasNoData = !isLoading && expenses.length === 0;
+
   return (
     <div>
       <Table>
@@ -72,76 +91,85 @@ export default function ExpensesTable({
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
-          {expenses?.map((expense: Expense) => (
-            <TableRow key={`expense-${expense.id}`}>
-              <TableCell>
-                {expense.isSimulation && (
-                  <TriangleAlert className="size-5 text-warning" />
-                )}
-              </TableCell>
-              <TableCell>{formatDate(expense.date)}</TableCell>
-              <TableCell>{expense.title}</TableCell>
-              <TableCell>{formatCurrency(expense.amount)}</TableCell>
-              <TableCell>
-                <span
-                  className="px-2 py-1 rounded-full"
-                  style={{ backgroundColor: expense.category.color }}
-                >
-                  {expense.category.title}
-                </span>
-              </TableCell>
-              <TableCell>
-                <span
-                  className="px-2 py-1 rounded-full"
-                  style={{ backgroundColor: expense.purpose.color }}
-                >
-                  {expense.purpose.title}
-                </span>
-              </TableCell>
-              <TableCell>
-                <span
-                  className="px-2 py-1 rounded-full"
-                  style={{ backgroundColor: expense.payment.color }}
-                >
-                  {expense.payment.title}
-                </span>
-              </TableCell>
-              <TableCell>
-                {expense.installmentNumber}/{expense.installmentsTotal}
-              </TableCell>
-              <TableCell>
-                <DropdownMenu modal={false}>
-                  <DropdownMenuTrigger
-                    render={
-                      <Button variant="ghost" size="icon" className="size-8">
-                        <MoreHorizontalIcon />
-                        <span className="sr-only">Open menu</span>
-                      </Button>
-                    }
-                  />
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                      className="cursor-pointer"
-                      onClick={() => onEdit(expense)}
-                    >
-                      Edit
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="cursor-pointer"
-                      variant="destructive"
-                      onClick={() => onDelete(expense.id)}
-                    >
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
+        {!isLoading && expenses.length > 0 && (
+          <TableBody>
+            {expenses?.map((expense: Expense) => (
+              <TableRow key={`expense-${expense.id}`}>
+                <TableCell>
+                  {expense.isSimulation && (
+                    <TriangleAlert className="size-5 text-warning" />
+                  )}
+                </TableCell>
+                <TableCell>{formatDate(expense.date)}</TableCell>
+                <TableCell>{expense.title}</TableCell>
+                <TableCell>{formatCurrency(Number(expense.amount))}</TableCell>
+                <TableCell>
+                  <span
+                    className="px-2 py-1 rounded-full"
+                    style={{ backgroundColor: expense.category.color }}
+                  >
+                    {expense.category.title}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <span
+                    className="px-2 py-1 rounded-full"
+                    style={{ backgroundColor: expense.purpose.color }}
+                  >
+                    {expense.purpose.title}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <span
+                    className="px-2 py-1 rounded-full"
+                    style={{ backgroundColor: expense.payment.color }}
+                  >
+                    {expense.payment.title}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  {expense.installmentNumber}/{expense.installmentsTotal}
+                </TableCell>
+                <TableCell>
+                  <DropdownMenu modal={false}>
+                    <DropdownMenuTrigger
+                      render={
+                        <Button variant="ghost" size="icon" className="size-8">
+                          <MoreHorizontalIcon />
+                          <span className="sr-only">Open menu</span>
+                        </Button>
+                      }
+                    />
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem
+                        className="cursor-pointer"
+                        onClick={() => onEdit(expense)}
+                      >
+                        Edit
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="cursor-pointer"
+                        variant="destructive"
+                        onClick={() => onDelete(expense.id)}
+                      >
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        )}
       </Table>
-      {pagination && (
+      {isLoading && <SkeletonTable />}
+      {hasNoData && (
+        <p className="mt-16 text-center text-muted-foreground">
+          No expenses found for the selected filters. Try changing your filters
+          or adding new expenses.
+        </p>
+      )}
+      {!isLoading && !hasNoData && pagination && (
         <TablePagination {...pagination} onPageChange={onPageChange} />
       )}
     </div>

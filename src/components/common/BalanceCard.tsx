@@ -7,14 +7,21 @@ import {
   CardAction,
 } from "../ui/card";
 import type { ReactNode } from "react";
+import { Skeleton } from "../ui/skeleton";
 
 type SummaryCardProps = {
   title: string;
   value: number;
   icon: ReactNode;
+  isLoading: boolean;
 };
 
-export function BalanceCard({ title, value, icon }: SummaryCardProps) {
+export function BalanceCard({
+  title,
+  value,
+  icon,
+  isLoading = false,
+}: SummaryCardProps) {
   return (
     <Card>
       <CardHeader>
@@ -22,7 +29,13 @@ export function BalanceCard({ title, value, icon }: SummaryCardProps) {
         <CardAction>{icon}</CardAction>
       </CardHeader>
       <CardContent>
-        <span className="text-lg font-semibold">{formatCurrency(value)}</span>
+        <span className="text-lg font-semibold">
+          {isLoading ? (
+            <Skeleton className="h-4 w-37.5" />
+          ) : (
+            (formatCurrency(value) ?? "N/A")
+          )}
+        </span>
       </CardContent>
     </Card>
   );
