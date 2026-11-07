@@ -167,17 +167,17 @@ export function GoalCard({
           <CardContent className="mt-4 px-0">
             <div>
               <span className="text-xl font-semibold pr-1">
-                {formatCurrency(currentAmount)}
+                {formatCurrency(currentAmount) ?? 0}
               </span>
               <span className="text-xs text-muted-foreground font-normal">
-                / {formatCurrency(targetAmount)}
+                / {formatCurrency(targetAmount) ?? 0}
               </span>
             </div>
             <div>
-              <ProgressBar progress={progress} />
+              <ProgressBar progress={progress ?? 0} />
               <div className="flex justify-between mt-2 mb-4">
-                <span>{formatCurrency(left)} left</span>
-                <span className="font-bold">{progress}%</span>
+                <span>{formatCurrency(left) ?? 0} left</span>
+                <span className="font-bold">{progress ?? 0}%</span>
               </div>
               <div className="bg-sidebar rounded-lg p-4">
                 <div className="flex gap-2 items-center mb-2">
@@ -188,7 +188,7 @@ export function GoalCard({
                 </div>
                 <p className="text-xs">
                   Save
-                  <b className="font-semibold"> {formatCurrency(saving)} </b>
+                  <b className="font-semibold">{formatCurrency(saving) ?? 0}</b>
                   per month to reach your goal on time.
                 </p>
               </div>

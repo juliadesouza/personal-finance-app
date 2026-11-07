@@ -7,8 +7,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { FixedExpenses } from "@/components/wallet/FixedExpenses";
-import { FlexibleBudget } from "@/components/wallet/FlexibleBudget";
-import { SavingsGoal } from "@/components/wallet/SavingsGoal";
+import {
+  FlexibleBudget,
+  LoadingFlexibleBudget,
+} from "@/components/wallet/FlexibleBudget";
+import {
+  SavingsGoal,
+  LoadingSavingsGoals,
+} from "@/components/wallet/SavingsGoal";
 import { TopExpenses } from "@/components/wallet/TopExpenses";
 import { WalletOverview } from "@/components/wallet/WalletOverview";
 import { useWalletDates, useWallet } from "@/hooks/use-wallet";
@@ -25,14 +31,20 @@ export default function Wallet() {
   const period = selected ?? getDefaultPeriod(dateOptions);
   const months = dateOptions.find((d) => d.year === period.year)?.months ?? [];
 
-  const { overview, savingsGoal, flexibleBudget, topExpenses, fixedExpenses } =
-    useWallet(
-      {
-        year: Number(period.year),
-        month: Number(period.month),
-      },
-      { enabled: !!dates },
-    );
+  const {
+    overview,
+    savingsGoal,
+    flexibleBudget,
+    topExpenses,
+    fixedExpenses,
+    isPending,
+  } = useWallet(
+    {
+      year: Number(period.year),
+      month: Number(period.month),
+    },
+    { enabled: !!dates },
+  );
 
   const handleYearChange = (year: string | null) => {
     if (year) setSelected({ year, month: months[0] });
@@ -77,16 +89,25 @@ export default function Wallet() {
           </Select>
         </div>
         <div className="flex flex-col gap-8">
-          <WalletOverview {...overview} />
+          <WalletOverview {...overview} isLoading={isPending} />
           <div className="grid grid-cols-2 gap-8">
-            <SavingsGoal {...savingsGoal} />
-            <FlexibleBudget {...flexibleBudget} />
+            {isPending ? (
+              <LoadingSavingsGoals />
+            ) : (
+              <SavingsGoal {...savingsGoal} />
+            )}
+            {isPending ? (
+              <LoadingFlexibleBudget />
+            ) : (
+              <FlexibleBudget {...flexibleBudget} />
+            )}
           </div>
           <div className="grid grid-cols-2 gap-8">
-            <TopExpenses expenses={topExpenses} />
+            <TopExpenses expenses={topExpenses} isLoading={isPending} />
             <FixedExpenses
               expenses={fixedExpenses?.data}
               average={fixedExpenses?.average}
+              isLoading={isPending}
             />
           </div>
         </div>

@@ -8,6 +8,23 @@ type FlexibleBudgetProps = {
   percentage: number;
 };
 
+export function LoadingFlexibleBudget() {
+  return (
+    <DetailedCard
+      title="Flexible budget"
+      description="What’s left after savings and fixed costs"
+      amount={0}
+      target={0}
+      progress={0}
+      left={0}
+      warningTitle="MONTHLY INSIGHT"
+      warningSubtitle="still free for extra spending"
+      icon={<TrendingUp className="text-muted-foreground size-5" />}
+      isLoading={true}
+    />
+  );
+}
+
 export function FlexibleBudget({
   amount,
   left,
