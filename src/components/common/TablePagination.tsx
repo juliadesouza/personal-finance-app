@@ -49,6 +49,7 @@ export function TablePagination({
                 <PaginationLink
                   isActive={item === page}
                   onClick={() => onPageChange(item)}
+                  className="cursor-pointer"
                 >
                   {item}
                 </PaginationLink>

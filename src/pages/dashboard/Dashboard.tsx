@@ -29,7 +29,7 @@ export default function Dashboard() {
   const period = selected ?? getDefaultPeriod(dateOptions);
   const months = dateOptions.find((d) => d.year === period.year)?.months ?? [];
 
-  const { overview } = useWallet(
+  const { overview, isPending } = useWallet(
     {
       year: Number(period.year),
       month: Number(period.month),
@@ -85,14 +85,18 @@ export default function Dashboard() {
           </Select>
         </div>
         <div className="flex flex-col gap-8">
-          <WalletOverview {...overview} />
+          <WalletOverview {...overview} isLoading={isPending} />
           <div className="grid grid-cols-3 gap-8">
             <MonthlyBudget
               income={overview?.income}
               expenses={overview?.expense?.amount}
               savings={overview?.saving?.amount}
+              isLoading={isPending}
             />
-            <ExpensesByCategory expenses={expensesByCategory} />
+            <ExpensesByCategory
+              expenses={expensesByCategory}
+              isLoading={isPending}
+            />
             <SavingsGoalList />
           </div>
         </div>

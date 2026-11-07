@@ -15,13 +15,16 @@ export function useWallet(
   filters: FilterWallet = {},
   options: { enabled?: boolean } = {},
 ) {
-  const { data } = useQuery({
+  const query = useQuery({
     queryKey: walletKeys.list(filters),
     queryFn: () => getWallet(filters),
     enabled: options.enabled ?? true,
   });
 
+  const { data } = query;
+
   return {
+    ...query,
     overview: data?.overview,
     savingsGoal: data?.savingsGoal,
     flexibleBudget: data?.flexibleBudget,

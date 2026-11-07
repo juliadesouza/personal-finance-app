@@ -104,7 +104,7 @@ export function AddExpense() {
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger
         render={
-          <Button>
+          <Button className="cursor-pointer">
             <PlusIcon /> Add Expense
           </Button>
         }

@@ -16,6 +16,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { formatCurrency } from "@/utils/format";
+import { Skeleton } from "../ui/skeleton";
 
 type ExpenseCategory = {
   amount: number;
@@ -26,9 +27,13 @@ type ExpenseCategory = {
 
 type ExpensesByCategoryProps = {
   expenses?: ExpenseCategory[];
+  isLoading: boolean;
 };
 
-export function ExpensesByCategory({ expenses = [] }: ExpensesByCategoryProps) {
+export function ExpensesByCategory({
+  expenses = [],
+  isLoading,
+}: ExpensesByCategoryProps) {
   const total = React.useMemo(
     () => expenses.reduce((acc, curr) => acc + Number(curr.amount), 0),
     [expenses],
@@ -62,13 +67,7 @@ export function ExpensesByCategory({ expenses = [] }: ExpensesByCategoryProps) {
     [expenses],
   );
 
-  if (chartData.length === 0) {
-    return (
-      <Card>
-        <CardContent>No Expenses</CardContent>
-      </Card>
-    );
-  }
+  const hasNoData = chartData.length === 0;
 
   return (
     <Card className="flex flex-col">
@@ -78,86 +77,100 @@ export function ExpensesByCategory({ expenses = [] }: ExpensesByCategoryProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="flex items-center justify-center">
-        <ChartContainer config={chartConfig} className="w-62.5 h-45">
-          <PieChart>
-            <ChartTooltip
-              cursor={false}
-              content={
-                <ChartTooltipContent
-                  hideLabel
-                  className="min-w-45"
-                  formatter={(value, name, item) => (
-                    <div className="flex w-full items-center justify-between gap-8">
-                      <div className="flex items-center gap-2">
-                        <div
-                          className="size-2.5 shrink-0 rounded-xs"
-                          style={{ backgroundColor: item.payload.fill }}
-                        />
-                        <span className="text-muted-foreground">{name}</span>
+        {isLoading ? (
+          <Skeleton className="aspect-square size-55" />
+        ) : hasNoData ? (
+          <p className="text-center text-muted-foreground">
+            No data available yet.
+          </p>
+        ) : (
+          <ChartContainer config={chartConfig} className="w-62.5 h-45">
+            <PieChart>
+              <ChartTooltip
+                cursor={false}
+                content={
+                  <ChartTooltipContent
+                    hideLabel
+                    className="min-w-45"
+                    formatter={(value, name, item) => (
+                      <div className="flex w-full items-center justify-between gap-8">
+                        <div className="flex items-center gap-2">
+                          <div
+                            className="size-2.5 shrink-0 rounded-xs"
+                            style={{ backgroundColor: item.payload.fill }}
+                          />
+                          <span className="text-muted-foreground">{name}</span>
+                        </div>
+                        <span className="font-mono font-medium tabular-nums text-foreground">
+                          {formatCurrency(Number(value))}
+                        </span>
                       </div>
-                      <span className="font-mono font-medium tabular-nums text-foreground">
-                        {formatCurrency(Number(value))}
-                      </span>
-                    </div>
-                  )}
-                />
-              }
-            />
-            <Pie
-              data={chartData}
-              dataKey="amount"
-              nameKey="title"
-              innerRadius={70}
-              outerRadius={90}
-              strokeWidth={5}
-            >
-              <Label
-                content={({ viewBox }) => {
-                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                    return (
-                      <text
-                        x={viewBox.cx}
-                        y={viewBox.cy}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                      >
-                        <tspan
+                    )}
+                  />
+                }
+              />
+              <Pie
+                data={chartData}
+                dataKey="amount"
+                nameKey="title"
+                innerRadius={70}
+                outerRadius={90}
+                strokeWidth={5}
+              >
+                <Label
+                  content={({ viewBox }) => {
+                    if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                      return (
+                        <text
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-xl font-bold"
+                          textAnchor="middle"
+                          dominantBaseline="middle"
                         >
-                          {formatCurrency(total)}
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
-                        >
-                          Total for month
-                        </tspan>
-                      </text>
-                    );
-                  }
-                }}
-              />
-            </Pie>
-          </PieChart>
-        </ChartContainer>
+                          <tspan
+                            x={viewBox.cx}
+                            y={viewBox.cy}
+                            className="fill-foreground text-xl font-bold"
+                          >
+                            {formatCurrency(total)}
+                          </tspan>
+                          <tspan
+                            x={viewBox.cx}
+                            y={(viewBox.cy || 0) + 24}
+                            className="fill-muted-foreground"
+                          >
+                            Total for month
+                          </tspan>
+                        </text>
+                      );
+                    }
+                  }}
+                />
+              </Pie>
+            </PieChart>
+          </ChartContainer>
+        )}
       </CardContent>
-      <CardFooter className="grid grid-cols-2">
-        {expenses.map((expense) => (
-          <div
-            className="flex items-center gap-2"
-            key={`expense-${expense.id}`}
-          >
-            <div
-              className="size-3 rounded-full"
-              style={{ backgroundColor: expense.fill }}
-            />
-            <span>{expense.title}</span>
-          </div>
-        ))}
-      </CardFooter>
+      {!hasNoData && (
+        <CardFooter className="grid grid-cols-2 gap-2">
+          {isLoading
+            ? Array.from({ length: 6 }, () => (
+                <Skeleton className="h-4 w-25 m-auto" />
+              ))
+            : expenses.map((expense) => (
+                <div
+                  className="flex items-center gap-2"
+                  key={`expense-${expense.id}`}
+                >
+                  <div
+                    className="size-3 rounded-full"
+                    style={{ backgroundColor: expense.fill }}
+                  />
+                  <span>{expense.title}</span>
+                </div>
+              ))}
+        </CardFooter>
+      )}
     </Card>
   );
 }

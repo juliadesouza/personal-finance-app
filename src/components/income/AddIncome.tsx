@@ -79,7 +79,7 @@ export function AddIncome() {
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger
         render={
-          <Button>
+          <Button className="cursor-pointer">
             <PlusIcon /> Add Income
           </Button>
         }
