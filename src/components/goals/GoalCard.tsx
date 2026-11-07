@@ -25,6 +25,7 @@ import { EditGoal } from "./EditGoal";
 import { useState } from "react";
 import { toast } from "../ui/toast";
 import { useGoals } from "@/hooks/use-goals";
+import { Skeleton } from "../ui/skeleton";
 
 type GoalCardProps = {
   id: number;
@@ -35,8 +36,43 @@ type GoalCardProps = {
   left: number;
   saving: number;
   dueDate: string;
+  isLoading?: boolean;
 };
 
+export function LoadingGoalCard() {
+  return (
+    <>
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex justify-between items-center text-xl">
+            <Skeleton className="h-4 flex-1" />
+          </CardTitle>
+          <CardDescription className="flex items-center gap-2 mt-2">
+            <Calendar className="size-4" /> <Skeleton className="h-4 w-24" />
+          </CardDescription>
+          <CardContent className="mt-4 px-0">
+            <div className="mt-8">
+              <span className="text-xl font-semibold pr-1">
+                <Skeleton className="h-4 flex-1" />
+              </span>
+            </div>
+            <div>
+              <div className="flex justify-between mt-2 mb-4">
+                <Skeleton className="h-4 w-[200px]" />
+                <Skeleton className="h-4 w-[100px]" />
+              </div>
+              <div className="bg-sidebar rounded-lg p-4">
+                <div className="flex gap-2 items-center mb-2">
+                  <SparklesIcon className="size-4 text-primary" />
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </CardHeader>
+      </Card>
+    </>
+  );
+}
 export function GoalCard({
   id,
   title,

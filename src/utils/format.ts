@@ -3,7 +3,7 @@ import { type DateOption, type Period } from "@/types/date";
 export const ALL = "all";
 
 export function formatCurrency(value: number): string | null {
-  if (typeof value !== "number") return null;
+  if (typeof value !== "number" && typeof value !== "string") return null;
 
   return new Intl.NumberFormat("pt-BR", {
     style: "currency",
