@@ -23,7 +23,11 @@ export default function Income() {
   const period = selected ?? getDefaultPeriod(dateOptions);
 
   const debouncedSearch = useDebouncedValue(search.trim());
-  const { data: income, deleteMutation } = useIncome(
+  const {
+    data: income,
+    deleteMutation,
+    isPending: isLoadingIncome,
+  } = useIncome(
     {
       year: period.year === ALL ? undefined : Number(period.year),
       month: period.month === ALL ? undefined : Number(period.month),
@@ -32,7 +36,7 @@ export default function Income() {
     { enabled: !!dates },
   );
 
-  const { overview } = useWallet(
+  const { overview, isPending: isPendingOverview } = useWallet(
     {
       year: Number(period.year),
       month: Number(period.month),
@@ -67,7 +71,7 @@ export default function Income() {
     <section className="w-full">
       <PageHeader title="Income" description="Track your daily income." />
       <main>
-        <BalanceSummary {...overview} />
+        <BalanceSummary {...overview} isLoading={isPendingOverview} />
         <IncomeFilter
           dateOptions={dateOptions}
           period={period}
@@ -80,6 +84,7 @@ export default function Income() {
             income={income ?? []}
             onEdit={setEditingIncome}
             onDelete={handleDelete}
+            isLoading={isLoadingIncome}
           />
           {editingIncome && (
             <EditIncome

@@ -39,19 +39,7 @@ type ExpensesTableProps = {
   isLoading: boolean;
 };
 
-import { Skeleton } from "@/components/ui/skeleton";
-
-export function SkeletonTable() {
-  return (
-    <div className="flex flex-col gap-4 mt-6">
-      {Array.from({ length: 5 }).map((_, index) => (
-        <div key={index}>
-          <Skeleton className="h-6 flex-1" />
-        </div>
-      ))}
-    </div>
-  );
-}
+import { SkeletonTable } from "../common/SkeletonTable";
 
 export default function ExpensesTable({
   expenses,
@@ -134,7 +122,11 @@ export default function ExpensesTable({
                   <DropdownMenu modal={false}>
                     <DropdownMenuTrigger
                       render={
-                        <Button variant="ghost" size="icon" className="size-8">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="size-8 cursor-pointer"
+                        >
                           <MoreHorizontalIcon />
                           <span className="sr-only">Open menu</span>
                         </Button>
