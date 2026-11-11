@@ -6,26 +6,25 @@ import {
   DialogDescription,
   DialogFooter,
   DialogClose,
+  DialogTrigger,
 } from "../ui/dialog";
 import { FieldGroup, Field } from "../ui/field";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import z from "zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useState } from "react";
 import { Button } from "../ui/button";
 import { toast } from "../ui/toast";
-import { useGoals } from "@/hooks/use-goals";
+import { useSavings } from "@/hooks/use-goals";
+import { Spinner } from "@/components/ui/spinner";
+import { SelectGoal } from "./SelectGoal";
 import type { SavingData } from "@/types/goal";
-
-type AddSavingProps = {
-  id: number;
-  open: boolean;
-  onOpenChange: () => void;
-};
+import { PlusIcon } from "lucide-react";
 
 const savingSchema = z.object({
+  goalId: z.coerce.number().positive("Select a goal"),
   amount: z.preprocess((val) => {
     if (typeof val === "string") {
       return Number(val.replace(",", "."));
@@ -39,12 +38,15 @@ type SavingFormInput = z.input<typeof savingSchema>;
 type SavingSchema = z.output<typeof savingSchema>;
 
 const defaultValues = {
+  goalId: undefined,
   amount: 0,
   date: "",
 } satisfies Partial<SavingFormInput>;
 
-export function AddSaving({ id, open, onOpenChange }: AddSavingProps) {
-  const { register, reset, handleSubmit } = useForm<
+export function AddSaving() {
+  const [open, setOpen] = useState(false);
+
+  const { register, reset, handleSubmit, control } = useForm<
     SavingFormInput,
     unknown,
     SavingSchema
@@ -53,40 +55,44 @@ export function AddSaving({ id, open, onOpenChange }: AddSavingProps) {
     defaultValues,
   });
 
-  const { savingMutation } = useGoals();
+  const { createSaving } = useSavings();
+  const isLoading = createSaving?.isPending || false;
 
-  useEffect(() => {
-    if (open) {
-      reset(defaultValues);
-    }
-  }, [open, reset]);
+  const handleOpenChange = () => {
+    setOpen((curr) => !curr);
+    reset(defaultValues);
+  };
 
-  const handleEdit = (data: SavingSchema) => {
-    savingMutation.mutate(
-      { id, saving: data as SavingData },
-      {
-        onSuccess: () => {
-          toast.add({
-            type: "success",
-            description: "The saving was added.",
-          });
-          onOpenChange();
-        },
-        onError: () => {
-          toast.add({
-            type: "error",
-            description: "The saving could not be completed.",
-          });
-          onOpenChange();
-        },
+  const handleAdd = (data: SavingSchema) => {
+    createSaving.mutate(data as SavingData, {
+      onSuccess: () => {
+        toast.add({
+          type: "success",
+          description: "The saving was created.",
+        });
+        setOpen(false);
       },
-    );
+      onError: () => {
+        toast.add({
+          type: "error",
+          description: "The saving could not be created.",
+        });
+        setOpen(false);
+      },
+    });
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <form onSubmit={handleSubmit(handleEdit)}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogTrigger
+        render={
+          <Button className="cursor-pointer">
+            <PlusIcon /> Add Saving
+          </Button>
+        }
+      />
+      <DialogContent className="sm:max-w-md" showCloseButton={false}>
+        <form onSubmit={handleSubmit(handleAdd)}>
           <DialogHeader>
             <DialogTitle className="text-lg font-medium">
               Add saving
@@ -112,17 +118,38 @@ export function AddSaving({ id, open, onOpenChange }: AddSavingProps) {
                 <Input id="date" type="date" {...register("date")} />
               </Field>
             </div>
+            <Field>
+              <Label htmlFor="goalId">Goal</Label>
+              <Controller
+                name="goalId"
+                control={control}
+                render={({ field }) => (
+                  <SelectGoal
+                    value={field.value ? String(field.value) : ""}
+                    onChange={(value) => field.onChange(Number(value))}
+                  />
+                )}
+              />
+            </Field>
           </FieldGroup>
           <DialogFooter className="flex items-center justify-between gap-2 mt-4">
             <DialogClose
               render={
-                <Button variant="outline" className="cursor-pointer flex-1">
+                <Button
+                  variant="outline"
+                  className="cursor-pointer flex-1"
+                  disabled={isLoading}
+                >
                   Cancel
                 </Button>
               }
             />
-            <Button type="submit" className="cursor-pointer flex-1">
-              Confirm
+            <Button
+              type="submit"
+              className="cursor-pointer flex-1"
+              disabled={isLoading}
+            >
+              Confirm {isLoading && <Spinner data-icon="inline-start" />}
             </Button>
           </DialogFooter>
         </form>

@@ -1,12 +1,14 @@
 import {
-  createGoal,
-  deleteGoal,
+  createGoal as createGoalService,
+  deleteGoal as deleteGoalService,
+  updateGoal as updateGoalService,
+  createSaving as createSavingService,
+  getSavings,
   getGoals,
-  updateGoal,
-  addSaving,
+  getSavingDates,
 } from "@/services/goals-service";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { FilterGoal } from "@/types/goal";
+import type { FilterGoal, FilterSaving } from "@/types/goal";
 import { invalidateWallet } from "@/lib/invalidate-finance";
 
 export const goalsKeys = {
@@ -17,14 +19,14 @@ export const goalsKeys = {
 export function useGoals(filters: FilterGoal = {}) {
   const queryClient = useQueryClient();
 
-  const goals = useQuery({
+  const goalsQuery = useQuery({
     queryKey: goalsKeys.list(filters),
     queryFn: () => getGoals(filters),
   });
 
-  const createMutation = useMutation({
+  const createGoal = useMutation({
     mutationKey: ["create-goal"],
-    mutationFn: createGoal,
+    mutationFn: createGoalService,
     onSuccess: () =>
       Promise.all([
         queryClient.invalidateQueries({ queryKey: goalsKeys.all }),
@@ -32,9 +34,9 @@ export function useGoals(filters: FilterGoal = {}) {
       ]),
   });
 
-  const deleteMutation = useMutation({
+  const deleteGoal = useMutation({
     mutationKey: ["delete-goal"],
-    mutationFn: deleteGoal,
+    mutationFn: deleteGoalService,
     onSuccess: () =>
       Promise.all([
         queryClient.invalidateQueries({ queryKey: goalsKeys.all }),
@@ -42,19 +44,9 @@ export function useGoals(filters: FilterGoal = {}) {
       ]),
   });
 
-  const updateMutation = useMutation({
+  const updateGoal = useMutation({
     mutationKey: ["update-goal"],
-    mutationFn: updateGoal,
-    onSuccess: () =>
-      Promise.all([
-        queryClient.invalidateQueries({ queryKey: goalsKeys.all }),
-        invalidateWallet(queryClient),
-      ]),
-  });
-
-  const savingMutation = useMutation({
-    mutationKey: ["add-saving"],
-    mutationFn: addSaving,
+    mutationFn: updateGoalService,
     onSuccess: () =>
       Promise.all([
         queryClient.invalidateQueries({ queryKey: goalsKeys.all }),
@@ -63,10 +55,60 @@ export function useGoals(filters: FilterGoal = {}) {
   });
 
   return {
-    ...goals,
-    createMutation,
-    deleteMutation,
-    updateMutation,
-    savingMutation,
+    goalsQuery,
+    createGoal,
+    deleteGoal,
+    updateGoal,
   };
+}
+
+export const savingsKeys = {
+  all: ["savings"] as const,
+  list: (filters: FilterSaving) =>
+    [...savingsKeys.all, "list", filters] as const,
+  dates: () => [...savingsKeys.all, "dates"] as const,
+};
+
+export function useSavings(
+  filters: FilterSaving = {},
+  options: { enabled?: boolean } = {},
+) {
+  const queryClient = useQueryClient();
+
+  const savingsQuery = useQuery({
+    queryKey: savingsKeys.list(filters),
+    queryFn: () => getSavings(filters),
+    enabled: options.enabled ?? true,
+  });
+
+  const createSaving = useMutation({
+    mutationKey: ["create-saving"],
+    mutationFn: createSavingService,
+    onSuccess: () =>
+      Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: [...goalsKeys.all, ...savingsKeys.all],
+        }),
+        invalidateWallet(queryClient),
+      ]),
+  });
+
+  return {
+    savingsQuery,
+    createSaving,
+    pagination: {
+      page: savingsQuery?.data?.page,
+      totalPages: savingsQuery?.data?.totalPages,
+      total: savingsQuery?.data?.total,
+      pageSize: savingsQuery?.data?.pageSize,
+    },
+  };
+}
+
+export function useSavingDates() {
+  return useQuery({
+    queryKey: savingsKeys.dates(),
+    queryFn: getSavingDates,
+    staleTime: 5 * 60 * 1000,
+  });
 }

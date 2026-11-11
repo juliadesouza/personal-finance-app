@@ -20,6 +20,7 @@ import { toast } from "../ui/toast";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { GoalData } from "@/types/goal";
+import { Spinner } from "@/components/ui/spinner";
 
 const goalSchema = z.object({
   title: z.string().trim().min(1, "Title is required"),
@@ -60,7 +61,9 @@ export function AddGoal() {
     GoalSchema
   >({ resolver: zodResolver(goalSchema), defaultValues });
 
-  const { createMutation } = useGoals();
+  const { createGoal } = useGoals();
+
+  const isLoading = createGoal?.isPending || false;
 
   const handleOpenChange = () => {
     setOpen((curr) => !curr);
@@ -68,7 +71,7 @@ export function AddGoal() {
   };
 
   const handleAdd = (data: GoalSchema) => {
-    createMutation.mutate(data as GoalData, {
+    createGoal.mutate(data as GoalData, {
       onSuccess: () => {
         toast.add({
           type: "success",
@@ -95,7 +98,7 @@ export function AddGoal() {
           </Button>
         }
       />
-      <DialogContent className="sm-max-w-md">
+      <DialogContent className="sm-max-w-md" showCloseButton={false}>
         <form onSubmit={handleSubmit(handleAdd)}>
           <DialogHeader>
             <DialogTitle className="text-lg font-medium">New Goal</DialogTitle>
@@ -145,13 +148,21 @@ export function AddGoal() {
           <DialogFooter>
             <DialogClose
               render={
-                <Button variant="outline" className="cursor-pointer flex-1">
+                <Button
+                  variant="outline"
+                  className="cursor-pointer flex-1"
+                  disabled={isLoading}
+                >
                   Cancel
                 </Button>
               }
             />
-            <Button type="submit" className="cursor-pointer flex-1">
-              Confirm
+            <Button
+              type="submit"
+              className="cursor-pointer flex-1"
+              disabled={isLoading}
+            >
+              Confirm {isLoading && <Spinner data-icon="inline-start" />}
             </Button>
           </DialogFooter>
         </form>

@@ -1,23 +1,25 @@
 import { ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon } from "lucide-react";
 import { TableHead } from "@/components/ui/table";
-import type { ExpenseSortField, SortOrder } from "@/types/expense";
 
-type Props = {
-  field: ExpenseSortField;
+export type SortOrder = "asc" | "desc";
+
+type Props<T extends string> = {
+  field: T;
   label: string;
-  activeField: ExpenseSortField;
+  activeField: T;
   order: SortOrder;
-  onSort: (field: ExpenseSortField) => void;
+  onSort: (field: T) => void;
 };
 
-export function SortableHead({
+export function SortableHead<T extends string>({
   field,
   label,
   activeField,
   order,
   onSort,
-}: Props) {
+}: Props<T>) {
   const active = field === activeField;
+
   const Icon = !active
     ? ArrowUpDownIcon
     : order === "asc"

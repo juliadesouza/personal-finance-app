@@ -1,4 +1,3 @@
-// src/hooks/use-expenses.ts
 import {
   createExpense,
   getDates,

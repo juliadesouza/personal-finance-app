@@ -18,6 +18,7 @@ import {
   Wallet,
   Goal,
   Settings,
+  PiggyBank,
 } from "lucide-react";
 import { AppAvatar } from "./AppAvatar";
 import { useNavigate } from "react-router";
@@ -73,6 +74,15 @@ export function AppSidebar() {
               >
                 <BanknoteArrowUp />
                 <span>Income</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                className="cursor-pointer"
+                onClick={() => navigate("/dashboard/savings")}
+              >
+                <PiggyBank />
+                <span>Savings</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>

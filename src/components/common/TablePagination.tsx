@@ -24,19 +24,15 @@ export function TablePagination({
 }: Props) {
   if (total === 0) return null;
 
-  const disabled = {
-    cursor: "default",
-    opacity: 0.5,
-  };
-
   return (
     <div className="flex items-center justify-end pt-4">
       <Pagination className="mx-0 w-auto">
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious
-              className="cursor-pointer"
-              style={page <= 1 ? disabled : {}}
+              className={
+                page <= 1 ? "pointer-events-none opacity-50" : "cursor-pointer"
+              }
               onClick={() => onPageChange(page - 1)}
             />
           </PaginationItem>
@@ -59,8 +55,11 @@ export function TablePagination({
 
           <PaginationItem>
             <PaginationNext
-              className="cursor-pointer"
-              style={page >= totalPages ? disabled : {}}
+              className={
+                page >= totalPages
+                  ? "pointer-events-none opacity-50"
+                  : "cursor-pointer"
+              }
               onClick={() => onPageChange(page + 1)}
             />
           </PaginationItem>

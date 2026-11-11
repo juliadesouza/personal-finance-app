@@ -9,6 +9,7 @@ import Income from "./pages/income/Income";
 import Goals from "./pages/goals/Goals";
 import Wallet from "./pages/wallet/Wallet";
 import { Toaster } from "./components/ui/toast";
+import Savings from "./pages/savings/Savings";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="income" element={<Income />} />
             <Route path="goals" element={<Goals />} />
             <Route path="wallet" element={<Wallet />} />
+            <Route path="savings" element={<Savings />} />
           </Route>
         </Routes>
       </AuthProvider>

@@ -5,7 +5,8 @@ import type { Goal } from "@/types/goal";
 import { GoalCard, LoadingGoalCard } from "@/components/goals/GoalCard";
 
 export default function Goals() {
-  const { data: goals, isPending } = useGoals();
+  const { goalsQuery } = useGoals();
+  const { data: goals = [], isPending = false } = goalsQuery;
 
   const hasNoData = !isPending && goals.length === 0;
 

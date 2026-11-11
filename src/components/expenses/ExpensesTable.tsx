@@ -1,4 +1,4 @@
-import type { Expense, ExpenseSortField, SortOrder } from "@/types/expense";
+import type { Expense, ExpenseSortField } from "@/types/expense";
 import { formatDate, formatCurrency } from "@/utils/format";
 import { Button } from "@/components/ui/button";
 import { TriangleAlert, MoreHorizontalIcon } from "lucide-react";
@@ -18,6 +18,7 @@ import {
   TableCell,
 } from "../ui/table";
 import { TablePagination } from "../common/TablePagination";
+import type { SortOrder } from "../common/SortableHead";
 
 type Sort = { sortBy: ExpenseSortField; order: SortOrder };
 

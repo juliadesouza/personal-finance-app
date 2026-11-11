@@ -1,4 +1,4 @@
-export type SavingData = { amount: number; date: string };
+export type SavingData = { goalId: number; amount: number; date: string };
 export type GoalData = {
   title: string;
   currentAmount: number;
@@ -7,7 +7,6 @@ export type GoalData = {
 };
 export type FilterGoal = { status?: string };
 export type UpdateGoal = { id: number; goal: GoalData };
-export type UpdateSaving = { id: number; saving: SavingData };
 export type Goal = {
   id: number;
   title: string;
@@ -18,3 +17,21 @@ export type Goal = {
   progress: number;
   saving: number;
 };
+export type Saving = {
+  id: string;
+  goal: string;
+  amount: number;
+  date: string;
+};
+
+export type FilterSaving = {
+  month?: number;
+  year?: number;
+  search?: string;
+  sortBy?: "goal" | "date";
+  order?: "asc" | "desc";
+  page?: number;
+  pageSize?: number;
+};
+
+export type SavingSortField = "date" | "goal";

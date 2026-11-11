@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PageHeader from "@/components/common/PageHeader";
-import type { Expense, ExpenseSortField, SortOrder } from "@/types/expense";
+import type { Expense, ExpenseSortField } from "@/types/expense";
 import { useExpenses, useExpenseDates } from "@/hooks/use-expenses";
 import useDebouncedValue from "@/hooks/use-debounced-value";
 import { toast } from "@/components/ui/toast";
@@ -11,6 +11,7 @@ import ExpensesFilter from "@/components/expenses/ExpensesFilter";
 import ExpensesTable from "@/components/expenses/ExpensesTable";
 import { BalanceSummary } from "@/components/common/BalanceSummary";
 import { useWallet } from "@/hooks/use-wallet";
+import type { SortOrder } from "@/components/common/SortableHead";
 
 const PAGE_SIZE = 12;
 

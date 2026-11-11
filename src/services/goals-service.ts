@@ -1,9 +1,10 @@
 import { api } from "./api";
 import type {
-  UpdateSaving,
   FilterGoal,
   GoalData,
   UpdateGoal,
+  SavingData,
+  FilterSaving,
 } from "@/types/goal";
 
 export async function getGoals(filters: FilterGoal) {
@@ -26,7 +27,17 @@ export async function updateGoal({ id, goal }: UpdateGoal) {
   return data;
 }
 
-export async function addSaving({ id, saving }: UpdateSaving) {
-  const { data } = await api.patch(`/goals/savings/${id}`, { ...saving });
+export async function getSavings(filters: FilterSaving) {
+  const { data } = await api.get("/goals/savings", { params: filters });
+  return data;
+}
+
+export async function createSaving(saving: SavingData) {
+  const { data } = await api.post(`/goals/savings`, { ...saving });
+  return data;
+}
+
+export async function getSavingDates() {
+  const { data } = await api.get("/goals/savings/dates");
   return data;
 }

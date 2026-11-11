@@ -29,8 +29,6 @@ export type ExpenseSortField =
   | "purpose"
   | "payment";
 
-export type SortOrder = "asc" | "desc";
-
 export type FilterExpense = {
   month?: number;
   year?: number;

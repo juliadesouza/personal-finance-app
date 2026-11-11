@@ -32,6 +32,7 @@ import { useForm, Controller } from "react-hook-form";
 import type { ExpenseData } from "@/types/expense";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Checkbox } from "../ui/checkbox";
+import { Spinner } from "@/components/ui/spinner";
 
 const expenseSchema = z.object({
   title: z.string().trim().min(1, "Title is required"),
@@ -74,7 +75,10 @@ export function AddExpense() {
     resolver: zodResolver(expenseSchema),
     defaultValues,
   });
+
   const { createMutation } = useExpenses();
+
+  const isLoading = createMutation?.isPending || false;
 
   const handleOpenChange = () => {
     setOpen((curr) => !curr);
@@ -109,7 +113,7 @@ export function AddExpense() {
           </Button>
         }
       />
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md" showCloseButton={false}>
         <form onSubmit={handleSubmit(handleAdd)}>
           <DialogHeader>
             <DialogTitle className="text-lg font-medium">
@@ -238,13 +242,21 @@ export function AddExpense() {
           <DialogFooter className="flex items-center justify-between gap-2">
             <DialogClose
               render={
-                <Button variant="outline" className="cursor-pointer flex-1">
+                <Button
+                  variant="outline"
+                  className="cursor-pointer flex-1"
+                  disabled={isLoading}
+                >
                   Cancel
                 </Button>
               }
             />
-            <Button type="submit" className="cursor-pointer flex-1">
-              Confirm
+            <Button
+              type="submit"
+              className="cursor-pointer flex-1"
+              disabled={isLoading}
+            >
+              Confirm {isLoading && <Spinner data-icon="inline-start" />}
             </Button>
           </DialogFooter>
         </form>

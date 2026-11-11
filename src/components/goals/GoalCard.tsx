@@ -1,11 +1,6 @@
 import { formatDate, formatCurrency } from "@/utils/format";
 import { Button } from "../ui/button";
-import {
-  EllipsisVerticalIcon,
-  Calendar,
-  SparklesIcon,
-  PlusIcon,
-} from "lucide-react";
+import { EllipsisVerticalIcon, Calendar, SparklesIcon } from "lucide-react";
 import { ProgressBar } from "../common/ProgressBar";
 import {
   Card,
@@ -20,7 +15,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "../ui/dropdown-menu";
-import { AddSaving } from "./AddSaving";
 import { EditGoal } from "./EditGoal";
 import { useState } from "react";
 import { toast } from "../ui/toast";
@@ -58,8 +52,8 @@ export function LoadingGoalCard() {
             </div>
             <div>
               <div className="flex justify-between mt-2 mb-4">
-                <Skeleton className="h-4 w-[200px]" />
-                <Skeleton className="h-4 w-[100px]" />
+                <Skeleton className="h-4 w-50" />
+                <Skeleton className="h-4 w-25" />
               </div>
               <div className="bg-sidebar rounded-lg p-4">
                 <div className="flex gap-2 items-center mb-2">
@@ -84,20 +78,15 @@ export function GoalCard({
   dueDate,
 }: GoalCardProps) {
   const [openEditModal, setOpenEditModal] = useState(false);
-  const [openDepositModal, setOpenDepositModal] = useState(false);
 
-  const { deleteMutation } = useGoals();
+  const { deleteGoal } = useGoals();
 
   const handleEditModal = () => {
     setOpenEditModal((curr) => !curr);
   };
 
-  const handleDepositModal = () => {
-    setOpenDepositModal((curr) => !curr);
-  };
-
   const handleDelete = (id: number) => {
-    deleteMutation.mutate(id, {
+    deleteGoal.mutate(id, {
       onSuccess: () =>
         toast.add({
           type: "success",
@@ -113,11 +102,6 @@ export function GoalCard({
 
   return (
     <>
-      <AddSaving
-        id={id}
-        open={openDepositModal}
-        onOpenChange={handleDepositModal}
-      />
       <EditGoal
         id={id}
         title={title}
@@ -192,14 +176,6 @@ export function GoalCard({
                   per month to reach your goal on time.
                 </p>
               </div>
-              <Button
-                variant="outline"
-                className="mt-4 w-full cursor-pointer"
-                onClick={handleDepositModal}
-              >
-                <PlusIcon />
-                Add saving
-              </Button>
             </div>
           </CardContent>
         </CardHeader>

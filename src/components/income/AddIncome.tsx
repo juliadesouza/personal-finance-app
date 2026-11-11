@@ -20,6 +20,7 @@ import { toast } from "../ui/toast";
 import type { IncomeData } from "@/types/income";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Spinner } from "@/components/ui/spinner";
 
 const incomeSchema = z.object({
   title: z.string().trim().min(1, "Title is required"),
@@ -51,7 +52,11 @@ export function AddIncome() {
   >({ resolver: zodResolver(incomeSchema), defaultValues });
   const { createMutation } = useIncome();
 
+  const isLoading = createMutation?.isPending || false;
+
   const handleOpenChange = () => {
+    if (isLoading) return;
+
     setOpen((curr) => !curr);
     reset(defaultValues);
   };
@@ -84,7 +89,7 @@ export function AddIncome() {
           </Button>
         }
       />
-      <DialogContent className="sm-max-w-md">
+      <DialogContent className="sm-max-w-md" showCloseButton={false}>
         <form onSubmit={handleSubmit(handleAdd)}>
           <DialogHeader>
             <DialogTitle className="text-lg font-medium">
@@ -123,13 +128,21 @@ export function AddIncome() {
           <DialogFooter>
             <DialogClose
               render={
-                <Button variant="outline" className="cursor-pointer flex-1">
+                <Button
+                  variant="outline"
+                  className="cursor-pointer flex-1"
+                  disabled={isLoading}
+                >
                   Cancel
                 </Button>
               }
             />
-            <Button type="submit" className="cursor-pointer flex-1">
-              Confirm
+            <Button
+              type="submit"
+              className="cursor-pointer flex-1"
+              disabled={isLoading}
+            >
+              Confirm {isLoading && <Spinner data-icon="inline-start" />}
             </Button>
           </DialogFooter>
         </form>

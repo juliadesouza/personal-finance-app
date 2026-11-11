@@ -76,7 +76,7 @@ export function EditGoal({
     },
   });
 
-  const { updateMutation } = useGoals();
+  const { updateGoal } = useGoals();
 
   useEffect(() => {
     if (open) {
@@ -90,7 +90,7 @@ export function EditGoal({
   }, [open, title, currentAmount, targetAmount, dueDate, reset]);
 
   const handleEdit = (data: GoalSchema) => {
-    updateMutation.mutate(
+    updateGoal.mutate(
       { id, goal: data as GoalData },
       {
         onSuccess: () => {

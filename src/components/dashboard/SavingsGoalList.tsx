@@ -6,7 +6,8 @@ import { ProgressBar } from "../common/ProgressBar";
 import { Skeleton } from "../ui/skeleton";
 
 export function SavingsGoalList() {
-  const { data: goals = [], isPending } = useGoals();
+  const { goalsQuery } = useGoals();
+  const { data: goals = [], isPending = false } = goalsQuery;
 
   const hasNoData = !goals || goals.length === 0;
   return (

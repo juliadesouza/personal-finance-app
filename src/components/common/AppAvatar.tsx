@@ -4,11 +4,11 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/providers/auth/auth-context";
 import { cn } from "@/utils/clsx";
+import { handleLogout } from "@/services/auth-service";
 
 type AppAvatarProps = {
   collapsed: boolean;
@@ -47,13 +47,11 @@ export function AppAvatar({ collapsed }: AppAvatarProps) {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuGroup>
-          <DropdownMenuItem className="cursor-pointer">
-            Profile
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem variant="destructive" className="cursor-pointer">
+          <DropdownMenuItem
+            variant="destructive"
+            className="cursor-pointer"
+            onClick={handleLogout}
+          >
             Log out
           </DropdownMenuItem>
         </DropdownMenuGroup>
