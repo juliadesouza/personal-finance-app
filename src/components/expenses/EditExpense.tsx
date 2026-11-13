@@ -23,6 +23,7 @@ import { useExpenses } from "@/hooks/use-expenses";
 import { type ExpenseData } from "@/types/expense";
 import { formatDateForInput } from "@/utils/format";
 import { Checkbox } from "../ui/checkbox";
+import { Spinner } from "../ui/spinner";
 
 type EditExpenseProps = {
   id: number;
@@ -85,6 +86,7 @@ export function EditExpense({
   });
 
   const { updateMutation } = useExpenses();
+  const isLoading = updateMutation?.isPending || false;
 
   useEffect(() => {
     if (open) {
@@ -134,7 +136,7 @@ export function EditExpense({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md" showCloseButton={false}>
         <form onSubmit={handleSubmit(handleEdit)}>
           <DialogHeader>
             <DialogTitle className="text-lg font-medium">
@@ -227,13 +229,21 @@ export function EditExpense({
           <DialogFooter className="flex items-center justify-between gap-2 mt-4">
             <DialogClose
               render={
-                <Button variant="outline" className="cursor-pointer flex-1">
+                <Button
+                  variant="outline"
+                  className="cursor-pointer flex-1"
+                  disabled={isLoading}
+                >
                   Cancel
                 </Button>
               }
             />
-            <Button type="submit" className="cursor-pointer flex-1">
-              Confirm
+            <Button
+              type="submit"
+              className="cursor-pointer flex-1"
+              disabled={isLoading}
+            >
+              Confirm {isLoading && <Spinner data-icon="inline-start" />}
             </Button>
           </DialogFooter>
         </form>

@@ -67,8 +67,7 @@ export function EditSaving({
   });
 
   const { updateSaving } = useSavings();
-
-  const isLoading = updateSaving?.isPending;
+  const isLoading = updateSaving?.isPending || false;
 
   useEffect(() => {
     if (open) {
