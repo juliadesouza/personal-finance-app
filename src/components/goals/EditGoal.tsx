@@ -26,6 +26,7 @@ type EditGoalProps = {
   title: string;
   currentAmount: number;
   targetAmount: number;
+  startDate: string;
   dueDate: string;
   open: boolean;
   onOpenChange: () => void;
@@ -48,6 +49,7 @@ const goalSchema = z.object({
     }
     return val;
   }, z.number().positive("Target amount must be greater than zero")),
+  startDate: z.string().min(1, "Start date is required"),
   dueDate: z.string().min(1, "Due date is required"),
 });
 
@@ -59,6 +61,7 @@ export function EditGoal({
   title,
   currentAmount,
   targetAmount,
+  startDate,
   dueDate,
   open,
   onOpenChange,
@@ -73,6 +76,7 @@ export function EditGoal({
       title,
       currentAmount,
       targetAmount,
+      startDate: formatDateForInput(startDate),
       dueDate: formatDateForInput(dueDate),
     },
   });
@@ -86,10 +90,11 @@ export function EditGoal({
         title,
         currentAmount,
         targetAmount,
+        startDate: formatDateForInput(startDate),
         dueDate: formatDateForInput(dueDate),
       });
     }
-  }, [open, title, currentAmount, targetAmount, dueDate, reset]);
+  }, [open, title, currentAmount, targetAmount, startDate, dueDate, reset]);
 
   const handleEdit = (data: GoalSchema) => {
     updateGoal.mutate(
@@ -156,6 +161,10 @@ export function EditGoal({
             </div>
 
             <div className="flex items-center gap-2">
+              <Field>
+                <Label htmlFor="startDate">Start Date</Label>
+                <Input id="startDate" type="date" {...register("startDate")} />
+              </Field>
               <Field>
                 <Label htmlFor="dueDate">Due Date</Label>
                 <Input id="dueDate" type="date" {...register("dueDate")} />

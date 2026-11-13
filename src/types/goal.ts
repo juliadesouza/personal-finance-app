@@ -2,6 +2,7 @@ export type GoalData = {
   title: string;
   currentAmount: number;
   targetAmount: number;
+  startDate: string;
   dueDate: string;
 };
 export type FilterGoal = { status?: string };
@@ -11,6 +12,7 @@ export type Goal = {
   title: string;
   currentAmount: number;
   targetAmount: number;
+  startDate: string;
   dueDate: string;
   left: number;
   progress: number;

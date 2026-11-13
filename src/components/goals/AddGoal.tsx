@@ -39,6 +39,7 @@ const goalSchema = z.object({
     }
     return val;
   }, z.number().positive("Target amount must be greater than zero")),
+  startDate: z.string().min(1, "Start date is required"),
   dueDate: z.string().min(1, "Due date is required"),
 });
 
@@ -46,6 +47,7 @@ const defaultValues = {
   title: "",
   currentAmount: 0,
   targetAmount: undefined,
+  startDate: "",
   dueDate: "",
 } satisfies Partial<GoalFormInput>;
 
@@ -139,6 +141,10 @@ export function AddGoal() {
             </div>
 
             <div className="flex items-center gap-2">
+              <Field>
+                <Label htmlFor="startDate">Start Date</Label>
+                <Input id="startDate" type="date" {...register("startDate")} />
+              </Field>
               <Field>
                 <Label htmlFor="dueDate">Due Date</Label>
                 <Input id="dueDate" type="date" {...register("dueDate")} />

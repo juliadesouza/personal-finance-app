@@ -46,7 +46,7 @@ export function LoadingGoalsSummary() {
 
 export function GoalsSummary({ goals, isLoading }: GoalsSummaryProps) {
   return (
-    <div className="flex flex-wrap items-center justify-between gap-4">
+    <div className="flex flex-wrap items-center gap-4">
       {isLoading && <LoadingGoalsSummary />}
       {!isLoading &&
         goals?.length > 0 &&

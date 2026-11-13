@@ -29,6 +29,7 @@ type GoalCardProps = {
   progress: number;
   left: number;
   saving: number;
+  startDate: string;
   dueDate: string;
   isLoading?: boolean;
 };
@@ -75,6 +76,7 @@ export function GoalCard({
   progress,
   left,
   saving,
+  startDate,
   dueDate,
 }: GoalCardProps) {
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -107,6 +109,7 @@ export function GoalCard({
         title={title}
         currentAmount={currentAmount}
         targetAmount={targetAmount}
+        startDate={startDate}
         dueDate={dueDate}
         open={openEditModal}
         onOpenChange={handleEditModal}
