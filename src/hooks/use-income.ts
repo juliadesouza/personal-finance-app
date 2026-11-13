@@ -7,7 +7,7 @@ import {
 } from "@/services/income-service";
 import type { FilterIncome } from "@/types/income";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { invalidateWallet } from "@/lib/invalidate-finance";
+import { invalidateWallet } from "@/lib/invalidate-wallet";
 
 export const incomeKeys = {
   all: ["income"] as const,

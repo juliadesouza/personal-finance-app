@@ -19,8 +19,11 @@ type GoalsSummaryProps = {
 export function LoadingGoalsSummary() {
   return (
     <div className="flex flex-wrap items-center justify-between gap-4">
-      {Array.from({ length: 4 }, () => (
-        <Card className="w-full min-w-0 sm:w-70 shrink-0">
+      {Array.from({ length: 4 }, (_, idx) => (
+        <Card
+          className="w-full min-w-0 sm:w-70 shrink-0"
+          key={`loading-goal-summary-${idx}`}
+        >
           <CardHeader>
             <CardTitle className="flex items-center justify-between mb-2">
               <Skeleton className="h-4 flex-1" />
@@ -48,7 +51,10 @@ export function GoalsSummary({ goals, isLoading }: GoalsSummaryProps) {
       {!isLoading &&
         goals?.length > 0 &&
         goals.map((goal: Goal) => (
-          <Card className="w-full min-w-0 sm:w-70 shrink-0">
+          <Card
+            className="w-full min-w-0 sm:w-70 shrink-0"
+            key={`goal-card-${goal.id}`}
+          >
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
                 <span>{goal.title}</span>

@@ -6,7 +6,6 @@ import {
   DialogDescription,
   DialogFooter,
   DialogClose,
-  DialogTrigger,
 } from "../ui/dialog";
 import { FieldGroup, Field } from "../ui/field";
 import { Label } from "../ui/label";
@@ -14,14 +13,14 @@ import { Input } from "../ui/input";
 import z from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect } from "react";
 import { Button } from "../ui/button";
 import { toast } from "../ui/toast";
-import { useSavings } from "@/hooks/use-goals";
+import { useSavings } from "@/hooks/use-savings";
 import { Spinner } from "@/components/ui/spinner";
 import { SelectGoal } from "./SelectGoal";
-import type { SavingData } from "@/types/goal";
-import { PlusIcon } from "lucide-react";
+import type { SavingData } from "@/types/saving";
+import { formatDateForInput } from "@/utils/format";
 
 const savingSchema = z.object({
   goalId: z.coerce.number().positive("Select a goal"),
@@ -37,68 +36,83 @@ const savingSchema = z.object({
 type SavingFormInput = z.input<typeof savingSchema>;
 type SavingSchema = z.output<typeof savingSchema>;
 
-const defaultValues = {
-  goalId: undefined,
-  amount: 0,
-  date: "",
-} satisfies Partial<SavingFormInput>;
+type EditExpenseProps = {
+  id: number;
+  amount: number;
+  date: string;
+  goalId: number;
+  open: boolean;
+  onOpenChange: () => void;
+};
 
-export function AddSaving() {
-  const [open, setOpen] = useState(false);
-
+export function EditSaving({
+  id,
+  amount,
+  date,
+  goalId,
+  open,
+  onOpenChange,
+}: EditExpenseProps) {
   const { register, reset, handleSubmit, control } = useForm<
     SavingFormInput,
     unknown,
     SavingSchema
   >({
     resolver: zodResolver(savingSchema),
-    defaultValues,
+    defaultValues: {
+      amount,
+      date: formatDateForInput(date),
+      goalId,
+    },
   });
 
-  const { createSaving } = useSavings();
-  const isLoading = createSaving?.isPending || false;
+  const { updateSaving } = useSavings();
 
-  const handleOpenChange = () => {
-    setOpen((curr) => !curr);
-    reset(defaultValues);
-  };
+  const isLoading = updateSaving?.isPending;
 
-  const handleAdd = (data: SavingSchema) => {
-    createSaving.mutate(data as SavingData, {
-      onSuccess: () => {
-        toast.add({
-          type: "success",
-          description: "The saving was created.",
-        });
-        setOpen(false);
+  useEffect(() => {
+    if (open) {
+      reset({
+        amount,
+        goalId,
+
+        date: formatDateForInput(date),
+      });
+    }
+  }, [open, amount, date, reset, goalId]);
+
+  const handleEdit = (data: SavingSchema) => {
+    updateSaving.mutate(
+      { id, saving: data as SavingData },
+      {
+        onSuccess: () => {
+          toast.add({
+            type: "success",
+            description: "The saving was updated.",
+          });
+          onOpenChange();
+        },
+        onError: () => {
+          toast.add({
+            type: "error",
+            description: "The saving could not be updated.",
+          });
+          onOpenChange();
+        },
       },
-      onError: () => {
-        toast.add({
-          type: "error",
-          description: "The saving could not be created.",
-        });
-        setOpen(false);
-      },
-    });
+    );
   };
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger
-        render={
-          <Button className="cursor-pointer">
-            <PlusIcon /> Add Saving
-          </Button>
-        }
-      />
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md" showCloseButton={false}>
-        <form onSubmit={handleSubmit(handleAdd)}>
+        <form onSubmit={handleSubmit(handleEdit)}>
           <DialogHeader>
             <DialogTitle className="text-lg font-medium">
-              Add saving
+              Edir saving
             </DialogTitle>
             <DialogDescription className="mb-4">
-              Fill in the value of the saving.
+              Fill in the value of the saving to edit it.
             </DialogDescription>
           </DialogHeader>
           <FieldGroup>

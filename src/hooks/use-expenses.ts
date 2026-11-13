@@ -13,7 +13,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import type { FilterExpense } from "@/types/expense";
-import { invalidateWallet } from "@/lib/invalidate-finance";
+import { invalidateWallet } from "@/lib/invalidate-wallet";
 
 export const expensesKeys = {
   all: ["expenses"] as const,

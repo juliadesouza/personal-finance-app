@@ -7,10 +7,18 @@ import {
   TableRow,
 } from "../ui/table";
 import { SortableHead, type SortOrder } from "../common/SortableHead";
-import type { Saving, SavingSortField } from "@/types/goal";
+import type { Saving, SavingSortField } from "@/types/saving";
 import { formatCurrency, formatDate } from "@/utils/format";
 import { SkeletonTable } from "../common/SkeletonTable";
 import { TablePagination } from "../common/TablePagination";
+import { Button } from "../ui/button";
+import { MoreHorizontalIcon } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "../ui/dropdown-menu";
 
 type Sort = { sortBy: SavingSortField; order: SortOrder };
 
@@ -27,8 +35,8 @@ type SavingsTableProps = {
   pagination: Pagination;
   onSort: (field: SavingSortField) => void;
   onPageChange: (page: number) => void;
-  onEdit?: (expense: Saving) => void;
-  onDelete?: (id: number) => void;
+  onEdit: (saving: Saving) => void;
+  onDelete: (id: number) => void;
   isLoading: boolean;
 };
 
@@ -57,6 +65,7 @@ export function SavingsTable({
             <SortableHead field="date" label="Date" {...sortProps} />
             <SortableHead field="goal" label="Goal" {...sortProps} />
             <TableHead>Amount</TableHead>
+            <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         {!isLoading && savings?.length > 0 && (
@@ -64,8 +73,39 @@ export function SavingsTable({
             {savings.map((saving: Saving) => (
               <TableRow key={`saving-${saving.id}`}>
                 <TableCell>{formatDate(saving.date)}</TableCell>
-                <TableCell>{saving.goal}</TableCell>
+                <TableCell>{saving.goal.title}</TableCell>
                 <TableCell>{formatCurrency(saving.amount)}</TableCell>
+                <TableCell>
+                  <DropdownMenu modal={false}>
+                    <DropdownMenuTrigger
+                      render={
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="size-8 cursor-pointer"
+                        >
+                          <MoreHorizontalIcon />
+                          <span className="sr-only">Open menu</span>
+                        </Button>
+                      }
+                    />
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem
+                        className="cursor-pointer"
+                        onClick={() => onEdit(saving)}
+                      >
+                        Edit
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="cursor-pointer"
+                        variant="destructive"
+                        onClick={() => onDelete(saving.id)}
+                      >
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
