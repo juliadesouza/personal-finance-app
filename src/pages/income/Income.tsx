@@ -38,8 +38,8 @@ export default function Income() {
 
   const { overview, isPending: isPendingOverview } = useWallet(
     {
-      year: Number(period.year),
-      month: Number(period.month),
+      year: period.year === ALL ? undefined : Number(period.year),
+      month: period.month === ALL ? undefined : Number(period.month),
     },
     { enabled: !!dates },
   );
