@@ -15,8 +15,8 @@ type SelectGoalProps = {
 };
 
 export function SelectGoal({ value, onChange }: SelectGoalProps) {
-  const { goalsQuery } = useGoals();
-  const { data } = goalsQuery;
+  const { getGoals } = useGoals();
+  const { data } = getGoals;
 
   const selectedGoal = data?.find(
     (item: Goal) => String(item.id) === String(value),

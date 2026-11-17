@@ -16,10 +16,18 @@ import {
   DropdownMenuItem,
 } from "../ui/dropdown-menu";
 import { EditGoal } from "./EditGoal";
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { toast } from "../ui/toast";
 import { useGoals } from "@/hooks/use-goals";
 import { Skeleton } from "../ui/skeleton";
+import type { GoalStatus } from "@/types/goal";
+
+const GOAL_STATUS: Record<string, CSSProperties> = {
+  NOT_STARTED: { borderColor: "var(--warning)" },
+  IN_PROGRESS: { borderColor: "var(--success)" },
+  CANCELLED: { borderColor: "var(--destructive)" },
+  COMPLETED: { borderColor: "#8055c7" },
+};
 
 type GoalCardProps = {
   id: number;
@@ -32,6 +40,7 @@ type GoalCardProps = {
   startDate: string;
   dueDate: string;
   isLoading?: boolean;
+  status: GoalStatus;
 };
 
 export function LoadingGoalCard() {
@@ -78,8 +87,11 @@ export function GoalCard({
   saving,
   startDate,
   dueDate,
+  status,
 }: GoalCardProps) {
   const [openEditModal, setOpenEditModal] = useState(false);
+
+  const style = GOAL_STATUS[status];
 
   const { deleteGoal } = useGoals();
 
@@ -113,9 +125,14 @@ export function GoalCard({
         dueDate={dueDate}
         open={openEditModal}
         onOpenChange={handleEditModal}
+        status={status}
       />
-      <Card>
+      <Card className="relative">
         <CardHeader>
+          <hr
+            className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 border-3 rounded-full w-30"
+            style={style}
+          />
           <CardTitle className="flex justify-between items-center text-xl">
             {title}
             <DropdownMenu modal={false}>

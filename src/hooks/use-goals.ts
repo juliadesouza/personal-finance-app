@@ -2,7 +2,9 @@ import {
   createGoal as createGoalService,
   deleteGoal as deleteGoalService,
   updateGoal as updateGoalService,
-  getGoals,
+  getGoals as getGoalService,
+  getTotal as getTotalService,
+  getDates,
 } from "@/services/goals-service";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { FilterGoal } from "@/types/goal";
@@ -10,14 +12,26 @@ import { invalidateWallet } from "@/lib/invalidate-wallet";
 
 export const goalsKeys = {
   all: ["goals"] as const,
+  list: (filters: FilterGoal) => ["goals", filters] as const,
+  dates: () => [...goalsKeys.all, "dates"] as const,
+  total: () => [...goalsKeys.all, "total"] as const,
 };
 
-export function useGoals(filters: FilterGoal = {}) {
+export function useGoals(
+  filters: FilterGoal = {},
+  options: { enabled?: boolean } = {},
+) {
   const queryClient = useQueryClient();
 
-  const goalsQuery = useQuery({
-    queryKey: goalsKeys.all,
-    queryFn: () => getGoals(filters),
+  const getGoals = useQuery({
+    queryKey: goalsKeys.list(filters),
+    queryFn: () => getGoalService(filters),
+    enabled: options.enabled ?? true,
+  });
+
+  const getTotal = useQuery({
+    queryKey: goalsKeys.total(),
+    queryFn: getTotalService,
   });
 
   const createGoal = useMutation({
@@ -51,9 +65,18 @@ export function useGoals(filters: FilterGoal = {}) {
   });
 
   return {
-    goalsQuery,
+    getGoals,
+    getTotal,
     createGoal,
     deleteGoal,
     updateGoal,
   };
+}
+
+export function useGoalDates() {
+  return useQuery({
+    queryKey: goalsKeys.dates(),
+    queryFn: getDates,
+    staleTime: 5 * 60 * 1000,
+  });
 }

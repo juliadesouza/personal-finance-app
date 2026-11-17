@@ -16,6 +16,7 @@ import { SavingsGoalList } from "@/components/dashboard/SavingsGoalList";
 import { useExpensesByCategory } from "@/hooks/use-expenses";
 import { ExpensesByCategory } from "@/components/dashboard/ExpensesByCategory";
 import { MonthlyBudget } from "@/components/dashboard/MonthlyBudget";
+import { useGoals } from "@/hooks/use-goals";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -41,6 +42,16 @@ export default function Dashboard() {
     { year: Number(period.year), month: Number(period.month) },
     { enabled: !!dates },
   );
+
+  const { getGoals } = useGoals(
+    {
+      year: Number(period.year),
+      month: Number(period.month),
+    },
+    { enabled: !!dates },
+  );
+
+  const { data: goals = [], isPending: isPendingGoals } = getGoals;
 
   const handleYearChange = (year: string | null) => {
     if (year) setSelected({ year, month: months[0] });
@@ -97,7 +108,7 @@ export default function Dashboard() {
               expenses={expensesByCategory}
               isLoading={isPending}
             />
-            <SavingsGoalList />
+            <SavingsGoalList goals={goals} isLoading={isPendingGoals} />
           </div>
         </div>
       </main>

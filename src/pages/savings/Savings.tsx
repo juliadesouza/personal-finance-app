@@ -50,8 +50,8 @@ export default function Savings() {
   const { data = {}, isPending = false } = savingsQuery;
   const { items: savings = [] } = data;
 
-  const { goalsQuery } = useGoals();
-  const { data: goals, isPending: isLoadingGoals = false } = goalsQuery;
+  const { getGoals } = useGoals();
+  const { data: goals, isPending: isLoadingGoals = false } = getGoals;
 
   const handlePeriodChange = (next: Period) => {
     setSelected(next);

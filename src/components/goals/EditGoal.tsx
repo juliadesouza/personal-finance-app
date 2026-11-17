@@ -17,9 +17,20 @@ import { useEffect } from "react";
 import { Button } from "../ui/button";
 import { toast } from "../ui/toast";
 import { useGoals } from "@/hooks/use-goals";
-import type { GoalData } from "@/types/goal";
+import {
+  type GoalData,
+  type GoalStatus,
+  GOAL_STATUS_VALUE_TO_TEXT,
+} from "@/types/goal";
 import { formatDateForInput } from "@/utils/format";
 import { Spinner } from "../ui/spinner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 type EditGoalProps = {
   id: number;
@@ -28,6 +39,7 @@ type EditGoalProps = {
   targetAmount: number;
   startDate: string;
   dueDate: string;
+  status: GoalStatus;
   open: boolean;
   onOpenChange: () => void;
 };
@@ -36,21 +48,16 @@ const goalSchema = z.object({
   title: z.string().trim().min(1, "Title is required"),
   currentAmount: z.preprocess((val) => {
     if (val === undefined || val === "") return 0;
-
-    if (typeof val === "string") {
-      return Number(val.replace(",", "."));
-    }
-
+    if (typeof val === "string") return Number(val.replace(",", "."));
     return val;
   }, z.number().nonnegative("Amount cannot be negative")),
   targetAmount: z.preprocess((val) => {
-    if (typeof val === "string") {
-      return Number(val.replace(",", "."));
-    }
+    if (typeof val === "string") return Number(val.replace(",", "."));
     return val;
   }, z.number().positive("Target amount must be greater than zero")),
   startDate: z.string().min(1, "Start date is required"),
   dueDate: z.string().min(1, "Due date is required"),
+  status: z.enum(["NOT_STARTED", "IN_PROGRESS", "CANCELLED", "COMPLETED"]),
 });
 
 type GoalFormInput = z.input<typeof goalSchema>;
@@ -63,10 +70,11 @@ export function EditGoal({
   targetAmount,
   startDate,
   dueDate,
+  status,
   open,
   onOpenChange,
 }: EditGoalProps) {
-  const { register, reset, handleSubmit } = useForm<
+  const { register, reset, handleSubmit, setValue, watch } = useForm<
     GoalFormInput,
     unknown,
     GoalSchema
@@ -78,11 +86,14 @@ export function EditGoal({
       targetAmount,
       startDate: formatDateForInput(startDate),
       dueDate: formatDateForInput(dueDate),
+      status,
     },
   });
 
   const { updateGoal } = useGoals();
   const isLoading = updateGoal?.isPending || false;
+
+  const selectedStatus = watch("status");
 
   useEffect(() => {
     if (open) {
@@ -92,9 +103,19 @@ export function EditGoal({
         targetAmount,
         startDate: formatDateForInput(startDate),
         dueDate: formatDateForInput(dueDate),
+        status,
       });
     }
-  }, [open, title, currentAmount, targetAmount, startDate, dueDate, reset]);
+  }, [
+    open,
+    title,
+    currentAmount,
+    targetAmount,
+    startDate,
+    dueDate,
+    reset,
+    status,
+  ]);
 
   const handleEdit = (data: GoalSchema) => {
     updateGoal.mutate(
@@ -170,6 +191,29 @@ export function EditGoal({
                 <Input id="dueDate" type="date" {...register("dueDate")} />
               </Field>
             </div>
+            <Field>
+              <Label htmlFor="status">Status</Label>
+              <Select
+                defaultValue={status}
+                onValueChange={(value) =>
+                  setValue("status", value as GoalStatus)
+                }
+              >
+                <SelectTrigger id="status" className="w-full">
+                  <SelectValue>
+                    {GOAL_STATUS_VALUE_TO_TEXT[selectedStatus] ??
+                      "Select status"}
+                  </SelectValue>
+                </SelectTrigger>
+
+                <SelectContent>
+                  <SelectItem value="NOT_STARTED">Not Started</SelectItem>
+                  <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
+                  <SelectItem value="CANCELLED">Cancelled</SelectItem>
+                  <SelectItem value="COMPLETED">Completed</SelectItem>
+                </SelectContent>
+              </Select>
+            </Field>
           </FieldGroup>
           <DialogFooter className="flex items-center justify-between gap-2 mt-4">
             <DialogClose
