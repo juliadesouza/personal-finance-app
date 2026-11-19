@@ -6,8 +6,10 @@ import { TagIcon } from "lucide-react";
 import type { CategoryData } from "@/types/setting";
 
 export default function CategoriesCard() {
-  const { data, isPending, isError, createMutation, deleteMutation } =
-    useCategories();
+  const { getCategories, createCategory, deleteCategory } = useCategories();
+
+  const { isPending = false, isError = false } = getCategories;
+  const categories = getCategories?.data || [];
 
   useEffect(() => {
     if (isError) {
@@ -18,45 +20,43 @@ export default function CategoriesCard() {
     }
   }, [isError]);
 
-  useEffect(() => {
-    if (createMutation.isSuccess) {
-      toast.add({ type: "success", title: "The category was created." });
-    }
-  }, [createMutation.isSuccess]);
-
-  useEffect(() => {
-    if (deleteMutation.isSuccess) {
-      toast.add({ type: "success", title: "The category was deleted." });
-    }
-  }, [deleteMutation.isSuccess]);
-
   const handleAdd = async (category: CategoryData) => {
-    try {
-      await createMutation.mutateAsync(category);
-    } catch {
-      toast.add({
-        type: "error",
-        title: "The category could not be created.",
-      });
-    }
+    createCategory.mutate(category, {
+      onSuccess: () => {
+        toast.add({
+          type: "success",
+          description: "The income was created.",
+        });
+      },
+      onError: () => {
+        toast.add({
+          type: "error",
+          description: "The income could not be created.",
+        });
+      },
+    });
   };
 
   const handleDelete = async (id: number) => {
-    try {
-      await deleteMutation.mutateAsync(id);
-    } catch {
-      toast.add({
-        type: "error",
-        title: "The category could not be deleted.",
-      });
-    }
+    deleteCategory.mutate(id, {
+      onSuccess: () =>
+        toast.add({
+          type: "success",
+          description: "The category was deleted.",
+        }),
+      onError: () =>
+        toast.add({
+          type: "error",
+          description: "The category could not be deleted.",
+        }),
+    });
   };
 
   return (
     <>
       <SettingsCard
         title="Categories"
-        items={data}
+        items={categories}
         isPending={isPending}
         icon={<TagIcon />}
         type="category"

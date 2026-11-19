@@ -85,8 +85,8 @@ export function EditExpense({
     },
   });
 
-  const { updateMutation } = useExpenses();
-  const isLoading = updateMutation?.isPending || false;
+  const { updateExpense } = useExpenses();
+  const isLoading = updateExpense?.isPending || false;
 
   useEffect(() => {
     if (open) {
@@ -113,7 +113,7 @@ export function EditExpense({
   ]);
 
   const handleEdit = (data: ExpenseSchema) => {
-    updateMutation.mutate(
+    updateExpense.mutate(
       { id, expense: data as ExpenseData },
       {
         onSuccess: () => {

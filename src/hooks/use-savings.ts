@@ -2,7 +2,7 @@ import {
   createSaving as createSavingService,
   updateSaving as updateSavingService,
   deleteSaving as deleteSavingService,
-  getSavings,
+  getSavings as getSavingsService,
   getDates,
 } from "@/services/savings-service";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -22,9 +22,9 @@ export function useSavings(
 ) {
   const queryClient = useQueryClient();
 
-  const savingsQuery = useQuery({
+  const getSavings = useQuery({
     queryKey: savingsKeys.list(filters),
-    queryFn: () => getSavings(filters),
+    queryFn: () => getSavingsService(filters),
     enabled: options.enabled ?? true,
   });
 
@@ -61,15 +61,15 @@ export function useSavings(
   });
 
   return {
-    savingsQuery,
+    getSavings,
     createSaving,
     deleteSaving,
     updateSaving,
     pagination: {
-      page: savingsQuery?.data?.page,
-      totalPages: savingsQuery?.data?.totalPages,
-      total: savingsQuery?.data?.total,
-      pageSize: savingsQuery?.data?.pageSize,
+      page: getSavings?.data?.page,
+      totalPages: getSavings?.data?.totalPages,
+      total: getSavings?.data?.total,
+      pageSize: getSavings?.data?.pageSize,
     },
   };
 }

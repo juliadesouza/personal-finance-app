@@ -2,7 +2,7 @@ import { getDates } from "@/services/expenses-service";
 import { useQuery } from "@tanstack/react-query";
 import type { FilterExpense } from "@/types/expense";
 import type { FilterWallet } from "@/types/wallet";
-import { getWallet } from "@/services/wallet-service";
+import { getWallet as getWalletService } from "@/services/wallet-service";
 
 export const walletKeys = {
   all: ["wallet"] as const,
@@ -15,16 +15,16 @@ export function useWallet(
   filters: FilterWallet = {},
   options: { enabled?: boolean } = {},
 ) {
-  const query = useQuery({
+  const getWallet = useQuery({
     queryKey: walletKeys.list(filters),
-    queryFn: () => getWallet(filters),
+    queryFn: () => getWalletService(filters),
     enabled: options.enabled ?? true,
   });
 
-  const { data } = query;
+  const { data } = getWallet;
 
   return {
-    ...query,
+    getWallet,
     overview: data?.overview,
     savingsGoal: data?.savingsGoal,
     flexibleBudget: data?.flexibleBudget,

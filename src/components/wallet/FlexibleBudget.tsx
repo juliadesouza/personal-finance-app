@@ -31,16 +31,20 @@ export function FlexibleBudget({
   available,
   percentage,
 }: FlexibleBudgetProps) {
+  const message =
+    left > 0
+      ? `available for extra spending this month.`
+      : `${Math.abs(left)} over your flexible spending budget.`;
   return (
     <DetailedCard
-      title="Flexible budget"
-      description="What’s left after savings and fixed costs"
+      title="Extra spending"
+      description="What you can spend after covering savings and fixed expenses"
       amount={amount}
       target={available}
       progress={percentage}
-      left={left}
+      left={left > 0 ? left : undefined}
       warningTitle="MONTHLY INSIGHT"
-      warningSubtitle="still free for extra spending"
+      warningSubtitle={message}
       icon={<TrendingUp className="text-muted-foreground size-5" />}
     />
   );

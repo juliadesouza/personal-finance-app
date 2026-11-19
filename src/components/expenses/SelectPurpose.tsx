@@ -14,7 +14,9 @@ type SelectPurposesProps = {
 };
 
 export function SelectPurpose({ value, onChange }: SelectPurposesProps) {
-  const { data: purposes } = usePurposes();
+  const { getPurposes } = usePurposes();
+
+  const purposes = getPurposes?.data ?? [];
 
   const selectedPurpose = purposes?.find(
     (item: Purpose) => String(item.id) === String(value),

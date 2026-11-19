@@ -26,8 +26,8 @@ type ChartData = {
 };
 
 export function SavingsChart() {
-  const { savingsQuery } = useSavings();
-  const { data, isPending = false } = savingsQuery;
+  const { getSavings } = useSavings();
+  const { data, isPending = false } = getSavings;
 
   const savings: Saving[] = data?.items ?? [];
 

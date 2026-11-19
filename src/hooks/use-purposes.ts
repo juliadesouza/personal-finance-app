@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { getPurposes } from "@/services/settings-service";
+import { getPurposes as getPurposesService } from "@/services/settings-service";
 
 export function usePurposes() {
-  const { data, isPending } = useQuery({
+  const getPurposes = useQuery({
     queryKey: ["purposes"],
-    queryFn: getPurposes,
+    queryFn: getPurposesService,
   });
 
-  return { data, isPending };
+  return { getPurposes };
 }

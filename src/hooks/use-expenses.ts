@@ -1,9 +1,9 @@
 import {
-  createExpense,
+  createExpense as createExpenseService,
+  getExpenses as getExpensesService,
+  deleteExpense as deleteExpenseService,
+  updateExpense as updateExpenseService,
   getDates,
-  getExpenses,
-  deleteExpense,
-  updateExpense,
   getExpensesByCategory,
 } from "@/services/expenses-service";
 import {
@@ -30,16 +30,16 @@ export function useExpenses(
 ) {
   const queryClient = useQueryClient();
 
-  const expenses = useQuery({
+  const getExpenses = useQuery({
     queryKey: expensesKeys.list(filters),
-    queryFn: () => getExpenses(filters),
+    queryFn: () => getExpensesService(filters),
     enabled: options.enabled ?? true,
     placeholderData: keepPreviousData,
   });
 
-  const createMutation = useMutation({
+  const createExpense = useMutation({
     mutationKey: ["create-expense"],
-    mutationFn: createExpense,
+    mutationFn: createExpenseService,
     onSuccess: () =>
       Promise.all([
         queryClient.invalidateQueries({ queryKey: expensesKeys.all }),
@@ -47,9 +47,9 @@ export function useExpenses(
       ]),
   });
 
-  const deleteMutation = useMutation({
+  const deleteExpense = useMutation({
     mutationKey: ["delete-expense"],
-    mutationFn: deleteExpense,
+    mutationFn: deleteExpenseService,
     onSuccess: () =>
       Promise.all([
         queryClient.invalidateQueries({ queryKey: expensesKeys.all }),
@@ -57,9 +57,9 @@ export function useExpenses(
       ]),
   });
 
-  const updateMutation = useMutation({
+  const updateExpense = useMutation({
     mutationKey: ["update-expense"],
-    mutationFn: updateExpense,
+    mutationFn: updateExpenseService,
     onSuccess: () =>
       Promise.all([
         queryClient.invalidateQueries({ queryKey: expensesKeys.all }),
@@ -68,17 +68,16 @@ export function useExpenses(
   });
 
   return {
-    isPendingExpenses: expenses.isPending,
-    expenses: expenses?.data?.items ?? [],
+    getExpenses,
     pagination: {
-      page: expenses?.data?.page,
-      totalPages: expenses?.data?.totalPages,
-      total: expenses?.data?.total,
-      pageSize: expenses?.data?.pageSize,
+      page: getExpenses?.data?.page,
+      totalPages: getExpenses?.data?.totalPages,
+      total: getExpenses?.data?.total,
+      pageSize: getExpenses?.data?.pageSize,
     },
-    createMutation,
-    deleteMutation,
-    updateMutation,
+    createExpense,
+    deleteExpense,
+    updateExpense,
   };
 }
 

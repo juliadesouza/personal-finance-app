@@ -34,7 +34,7 @@ export default function Savings() {
   const dateOptions: Date[] = dates ?? [];
   const period = selected ?? getDefaultPeriod(dateOptions);
 
-  const { savingsQuery, deleteSaving, pagination } = useSavings(
+  const { getSavings, deleteSaving, pagination } = useSavings(
     {
       year: period.year === ALL ? undefined : Number(period.year),
       month: period.month === ALL ? undefined : Number(period.month),
@@ -47,7 +47,7 @@ export default function Savings() {
     { enabled: !!dates },
   );
 
-  const { data = {}, isPending = false } = savingsQuery;
+  const { data = {}, isPending = false } = getSavings;
   const { items: savings = [] } = data;
 
   const { getGoals } = useGoals();

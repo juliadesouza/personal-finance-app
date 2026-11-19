@@ -23,11 +23,7 @@ export default function Income() {
   const period = selected ?? getDefaultPeriod(dateOptions);
 
   const debouncedSearch = useDebouncedValue(search.trim());
-  const {
-    data: income,
-    deleteMutation,
-    isPending: isLoadingIncome,
-  } = useIncome(
+  const { getIncome, deleteIncome } = useIncome(
     {
       year: period.year === ALL ? undefined : Number(period.year),
       month: period.month === ALL ? undefined : Number(period.month),
@@ -36,13 +32,17 @@ export default function Income() {
     { enabled: !!dates },
   );
 
-  const { overview, isPending: isPendingOverview } = useWallet(
+  const { data: income, isPending: isLoadingIncome } = getIncome;
+
+  const { overview, getWallet } = useWallet(
     {
       year: period.year === ALL ? undefined : Number(period.year),
       month: period.month === ALL ? undefined : Number(period.month),
     },
     { enabled: !!dates },
   );
+
+  const isPendingOverview = getWallet?.isPending ?? false;
 
   const handlePeriodChange = (next: Period) => {
     setSelected(next);
@@ -53,7 +53,7 @@ export default function Income() {
   };
 
   const handleDelete = (id: number) => {
-    deleteMutation.mutate(id, {
+    deleteIncome.mutate(id, {
       onSuccess: () =>
         toast.add({
           type: "success",

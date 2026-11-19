@@ -14,7 +14,9 @@ type SelectPaymentProps = {
 };
 
 export function SelectPayment({ value, onChange }: SelectPaymentProps) {
-  const { data: payments } = usePayments();
+  const { getPayments } = usePayments();
+
+  const payments = getPayments?.data ?? [];
 
   const selectedPayment = payments?.find(
     (item: PaymentMethod) => String(item.id) === String(value),

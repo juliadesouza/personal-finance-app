@@ -50,9 +50,9 @@ export function AddIncome() {
     undefined,
     IncomeSchema
   >({ resolver: zodResolver(incomeSchema), defaultValues });
-  const { createMutation } = useIncome();
+  const { createIncome } = useIncome();
 
-  const isLoading = createMutation?.isPending || false;
+  const isLoading = createIncome?.isPending || false;
 
   const handleOpenChange = () => {
     if (isLoading) return;
@@ -62,7 +62,7 @@ export function AddIncome() {
   };
 
   const handleAdd = (data: IncomeSchema) => {
-    createMutation.mutate(data as IncomeData, {
+    createIncome.mutate(data as IncomeData, {
       onSuccess: () => {
         toast.add({
           type: "success",

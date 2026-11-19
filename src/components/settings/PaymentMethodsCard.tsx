@@ -1,55 +1,45 @@
 import { toast } from "@/components/ui/toast";
-import { useEffect } from "react";
 import SettingsCard from "./SettingsCard";
 import { TagIcon } from "lucide-react";
 import type { PaymentMethodData } from "@/types/setting";
 import { usePayments } from "@/hooks/use-payments";
 
 export default function PaymentMethodsCard() {
-  const { data, isPending, isError, createMutation, deleteMutation } =
-    usePayments();
+  const { getPayments, createPayment, deletePayment } = usePayments();
 
-  useEffect(() => {
-    if (isError) {
-      toast.add({
-        type: "error",
-        title: "The payment methods could not be loaded.",
-      });
-    }
-  }, [isError]);
-
-  useEffect(() => {
-    if (createMutation.isSuccess) {
-      toast.add({ type: "success", title: "The payment method was created." });
-    }
-  }, [createMutation.isSuccess]);
-
-  useEffect(() => {
-    if (deleteMutation.isSuccess) {
-      toast.add({ type: "success", title: "The payment method was deleted." });
-    }
-  }, [deleteMutation.isSuccess]);
+  const data = getPayments?.data ?? [];
+  const isPending = getPayments?.isPending;
 
   const handleAdd = async (method: PaymentMethodData) => {
-    try {
-      await createMutation.mutateAsync(method);
-    } catch {
-      toast.add({
-        type: "error",
-        title: "The payment method could not be created.",
-      });
-    }
+    createPayment.mutate(method, {
+      onSuccess: () => {
+        toast.add({
+          type: "success",
+          description: "The payment method was created.",
+        });
+      },
+      onError: () => {
+        toast.add({
+          type: "error",
+          description: "The payment method could not be created.",
+        });
+      },
+    });
   };
 
   const handleDelete = async (id: number) => {
-    try {
-      await deleteMutation.mutateAsync(id);
-    } catch {
-      toast.add({
-        type: "error",
-        title: "The payment method could not be deleted.",
-      });
-    }
+    deletePayment.mutate(id, {
+      onSuccess: () =>
+        toast.add({
+          type: "success",
+          description: "The payment method was deleted.",
+        }),
+      onError: () =>
+        toast.add({
+          type: "error",
+          description: "The payment method could not be deleted.",
+        }),
+    });
   };
 
   return (

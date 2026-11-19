@@ -76,9 +76,9 @@ export function AddExpense() {
     defaultValues,
   });
 
-  const { createMutation } = useExpenses();
+  const { createExpense } = useExpenses();
 
-  const isLoading = createMutation?.isPending || false;
+  const isLoading = createExpense?.isPending || false;
 
   const handleOpenChange = () => {
     setOpen((curr) => !curr);
@@ -86,7 +86,7 @@ export function AddExpense() {
   };
 
   const handleAdd = (data: ExpenseSchema) => {
-    createMutation.mutate(data as ExpenseData, {
+    createExpense.mutate(data as ExpenseData, {
       onSuccess: () => {
         toast.add({
           type: "success",

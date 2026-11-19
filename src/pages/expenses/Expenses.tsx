@@ -34,27 +34,31 @@ export default function Expenses() {
   const dateOptions: Date[] = dates ?? [];
   const period = selected ?? getDefaultPeriod(dateOptions);
 
-  const { expenses, isPendingExpenses, pagination, deleteMutation } =
-    useExpenses(
-      {
-        year: period.year === ALL ? undefined : Number(period.year),
-        month: period.month === ALL ? undefined : Number(period.month),
-        sortBy: sort.sortBy,
-        order: sort.order,
-        ...(debouncedSearch && { search: debouncedSearch }),
-        page,
-        pageSize: PAGE_SIZE,
-      },
-      { enabled: !!dates },
-    );
+  const { getExpenses, pagination, deleteExpense } = useExpenses(
+    {
+      year: period.year === ALL ? undefined : Number(period.year),
+      month: period.month === ALL ? undefined : Number(period.month),
+      sortBy: sort.sortBy,
+      order: sort.order,
+      ...(debouncedSearch && { search: debouncedSearch }),
+      page,
+      pageSize: PAGE_SIZE,
+    },
+    { enabled: !!dates },
+  );
 
-  const { overview, isPending: isPendingOverview } = useWallet(
+  const expenses = getExpenses?.data?.items ?? [];
+  const isPendingExpenses = getExpenses?.isPending ?? false;
+
+  const { overview, getWallet } = useWallet(
     {
       year: period.year === ALL ? undefined : Number(period.year),
       month: period.month === ALL ? undefined : Number(period.month),
     },
     { enabled: !!dates },
   );
+
+  const isPendingWallet = getWallet.isPending ?? false;
 
   const handlePeriodChange = (next: Period) => {
     setSelected(next);
@@ -76,7 +80,7 @@ export default function Expenses() {
   };
 
   const handleDelete = (id: number) => {
-    deleteMutation.mutate(id, {
+    deleteExpense.mutate(id, {
       onSuccess: () =>
         toast.add({
           type: "success",
@@ -94,7 +98,7 @@ export default function Expenses() {
     <section className="w-full">
       <PageHeader title="Expenses" description="Track your daily expenses." />
       <main>
-        <BalanceSummary {...overview} isLoading={isPendingOverview} />
+        <BalanceSummary {...overview} isLoading={isPendingWallet} />
         <ExpensesFilter
           dateOptions={dateOptions}
           period={period}

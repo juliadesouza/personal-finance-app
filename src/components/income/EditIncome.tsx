@@ -65,8 +65,8 @@ export function EditIncome({
     },
   });
 
-  const { updateMutation } = useIncome();
-  const isLoading = updateMutation?.isPending || false;
+  const { updateIncome } = useIncome();
+  const isLoading = updateIncome?.isPending || false;
 
   useEffect(() => {
     if (open) {
@@ -75,7 +75,7 @@ export function EditIncome({
   }, [open, title, amount, date, reset]);
 
   const handleEdit = (data: IncomeSchema) => {
-    updateMutation.mutate(
+    updateIncome.mutate(
       { id, income: data as IncomeData },
       {
         onSuccess: () => {

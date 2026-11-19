@@ -1,9 +1,9 @@
 import {
-  createIncome,
-  deleteIncome,
+  createIncome as createIncomeService,
+  deleteIncome as deleteIncomeService,
+  getIncome as getIncomeService,
+  updateIncome as updateIncomeService,
   getDates,
-  getIncome,
-  updateIncome,
 } from "@/services/income-service";
 import type { FilterIncome } from "@/types/income";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -22,15 +22,15 @@ export function useIncome(
 ) {
   const queryClient = useQueryClient();
 
-  const income = useQuery({
+  const getIncome = useQuery({
     queryKey: incomeKeys.list(filters),
-    queryFn: () => getIncome(filters),
+    queryFn: () => getIncomeService(filters),
     enabled: options.enabled ?? true,
   });
 
-  const createMutation = useMutation({
+  const createIncome = useMutation({
     mutationKey: ["create-income"],
-    mutationFn: createIncome,
+    mutationFn: createIncomeService,
     onSuccess: () =>
       Promise.all([
         queryClient.invalidateQueries({ queryKey: incomeKeys.all }),
@@ -38,9 +38,9 @@ export function useIncome(
       ]),
   });
 
-  const deleteMutation = useMutation({
+  const deleteIncome = useMutation({
     mutationKey: ["delete-income"],
-    mutationFn: deleteIncome,
+    mutationFn: deleteIncomeService,
     onSuccess: () =>
       Promise.all([
         queryClient.invalidateQueries({ queryKey: incomeKeys.all }),
@@ -48,9 +48,9 @@ export function useIncome(
       ]),
   });
 
-  const updateMutation = useMutation({
+  const updateIncome = useMutation({
     mutationKey: ["update-income"],
-    mutationFn: updateIncome,
+    mutationFn: updateIncomeService,
     onSuccess: () =>
       Promise.all([
         queryClient.invalidateQueries({ queryKey: incomeKeys.all }),
@@ -58,7 +58,7 @@ export function useIncome(
       ]),
   });
 
-  return { ...income, createMutation, deleteMutation, updateMutation };
+  return { getIncome, createIncome, deleteIncome, updateIncome };
 }
 
 export function useIncomeDates() {

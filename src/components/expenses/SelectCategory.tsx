@@ -14,7 +14,9 @@ type SelectCategoryProps = {
 };
 
 export function SelectCategory({ value, onChange }: SelectCategoryProps) {
-  const { data: categories } = useCategories();
+  const { getCategories } = useCategories();
+
+  const categories = getCategories?.data;
 
   const selectedCategory = categories?.find(
     (item: Category) => String(item.id) === String(value),

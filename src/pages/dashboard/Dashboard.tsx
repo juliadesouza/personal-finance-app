@@ -30,13 +30,15 @@ export default function Dashboard() {
   const period = selected ?? getDefaultPeriod(dateOptions);
   const months = dateOptions.find((d) => d.year === period.year)?.months ?? [];
 
-  const { overview, isPending } = useWallet(
+  const { overview, getWallet } = useWallet(
     {
       year: Number(period.year),
       month: Number(period.month),
     },
     { enabled: !!dates },
   );
+
+  const isPending = getWallet?.isPending ?? false;
 
   const { data: expensesByCategory } = useExpensesByCategory(
     { year: Number(period.year), month: Number(period.month) },

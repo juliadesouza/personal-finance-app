@@ -16,7 +16,7 @@ type DetailedCardProps = {
   amount: number;
   target: number;
   progress: number;
-  left: number;
+  left?: number;
   warningTitle: string;
   warningSubtitle: string;
   icon: ReactNode;
@@ -77,7 +77,9 @@ export function DetailedCard({
             </span>
           </div>
           <p className="text-sm">
-            <b className="font-semibold"> {formatCurrency(left) ?? 0} </b>
+            {left && (
+              <b className="font-semibold"> {formatCurrency(left) ?? 0} </b>
+            )}
             {warningSubtitle}
           </p>
         </div>
