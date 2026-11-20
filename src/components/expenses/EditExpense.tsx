@@ -15,7 +15,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SelectPayment } from "./SelectPayment";
 import { SelectCategory } from "./SelectCategory";
-import { SelectPurpose } from "./SelectPurpose";
+import { SelectType } from "./SelectType";
 import { useEffect } from "react";
 import { Button } from "../ui/button";
 import { toast } from "../ui/toast";
@@ -31,7 +31,7 @@ type EditExpenseProps = {
   amount: number;
   date: string;
   categoryId: number;
-  purposeId: number;
+  typeId: number;
   paymentMethodId: number;
   open: boolean;
   onOpenChange: () => void;
@@ -48,7 +48,7 @@ const expenseSchema = z.object({
   }, z.number().positive("Amount must be greater than zero")),
   categoryId: z.coerce.number().positive("Select a category"),
   paymentMethodId: z.coerce.number().positive("Select a payment method"),
-  purposeId: z.coerce.number().positive("Select a purpose"),
+  typeId: z.coerce.number().positive("Select a type"),
   date: z.string().min(1, "Date is required"),
   isSimulation: z.boolean().default(false),
 });
@@ -62,7 +62,7 @@ export function EditExpense({
   amount,
   date,
   categoryId,
-  purposeId,
+  typeId,
   paymentMethodId,
   open,
   onOpenChange,
@@ -79,7 +79,7 @@ export function EditExpense({
       amount,
       categoryId,
       paymentMethodId,
-      purposeId,
+      typeId,
       date: formatDateForInput(date),
       isSimulation,
     },
@@ -95,7 +95,7 @@ export function EditExpense({
         amount,
         categoryId,
         paymentMethodId,
-        purposeId,
+        typeId,
         date: formatDateForInput(date),
         isSimulation,
       });
@@ -107,7 +107,7 @@ export function EditExpense({
     date,
     categoryId,
     paymentMethodId,
-    purposeId,
+    typeId,
     reset,
     isSimulation,
   ]);
@@ -191,12 +191,12 @@ export function EditExpense({
                 />
               </Field>
               <Field>
-                <Label htmlFor="purpose">Purpose</Label>
+                <Label htmlFor="type">Type</Label>
                 <Controller
-                  name="purposeId"
+                  name="typeId"
                   control={control}
                   render={({ field }) => (
-                    <SelectPurpose
+                    <SelectType
                       value={field.value ? String(field.value) : ""}
                       onChange={(value) => field.onChange(Number(value))}
                     />

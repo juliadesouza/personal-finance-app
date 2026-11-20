@@ -31,7 +31,7 @@ export async function deletePayment(id: number) {
   return data;
 }
 
-export async function getPurposes() {
-  const { data } = await api.get("/settings/purposes");
+export async function getTypes() {
+  const { data } = await api.get("/settings/types");
   return data;
 }

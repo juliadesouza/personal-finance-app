@@ -70,7 +70,7 @@ export default function ExpensesTable({
             <SortableHead field="title" label="Title" {...sortProps} />
             <TableHead>Amount</TableHead>
             <SortableHead field="category" label="Category" {...sortProps} />
-            <SortableHead field="purpose" label="Purpose" {...sortProps} />
+            <SortableHead field="type" label="Type" {...sortProps} />
             <SortableHead
               field="payment"
               label="Payment Method"
@@ -103,9 +103,9 @@ export default function ExpensesTable({
                 <TableCell>
                   <span
                     className="px-2 py-1 rounded-full"
-                    style={{ backgroundColor: expense.purpose.color }}
+                    style={{ backgroundColor: expense.type.color }}
                   >
-                    {expense.purpose.title}
+                    {expense.type.title}
                   </span>
                 </TableCell>
                 <TableCell>

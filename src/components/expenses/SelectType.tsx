@@ -5,21 +5,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { Purpose } from "@/types/setting";
-import { usePurposes } from "@/hooks/use-purposes";
+import type { Type } from "@/types/setting";
+import { useTypes } from "@/hooks/use-types";
 
-type SelectPurposesProps = {
+type SelectTypeProps = {
   value: string;
   onChange: (value: string) => void;
 };
 
-export function SelectPurpose({ value, onChange }: SelectPurposesProps) {
-  const { getPurposes } = usePurposes();
+export function SelectType({ value, onChange }: SelectTypeProps) {
+  const { getTypes } = useTypes();
 
-  const purposes = getPurposes?.data ?? [];
+  const types = getTypes?.data ?? [];
 
-  const selectedPurpose = purposes?.find(
-    (item: Purpose) => String(item.id) === String(value),
+  const selectedType = types?.find(
+    (item: Type) => String(item.id) === String(value),
   );
 
   const handleOnValueChange = (newValue: string | null) => {
@@ -30,10 +30,10 @@ export function SelectPurpose({ value, onChange }: SelectPurposesProps) {
   return (
     <Select value={value} onValueChange={handleOnValueChange}>
       <SelectTrigger className="w-full max-w-64">
-        <SelectValue>{selectedPurpose?.title}</SelectValue>
+        <SelectValue>{selectedType?.title}</SelectValue>
       </SelectTrigger>
       <SelectContent>
-        {purposes?.map((item: Purpose) => (
+        {types?.map((item: Type) => (
           <SelectItem key={item.id} value={String(item.id)}>
             {item.title}
           </SelectItem>

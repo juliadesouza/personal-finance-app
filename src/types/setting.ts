@@ -20,8 +20,9 @@ export type PaymentMethod = {
   color: string;
 };
 
-export type Purpose = {
+export type Type = {
   id: number;
   title: string;
   color: string;
+  percentage: number;
 };

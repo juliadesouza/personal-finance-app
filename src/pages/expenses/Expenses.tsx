@@ -126,7 +126,7 @@ export default function Expenses() {
               date={editingExpense.date}
               categoryId={editingExpense.category.id}
               paymentMethodId={editingExpense.payment.id}
-              purposeId={editingExpense.purpose.id}
+              typeId={editingExpense.type.id}
               isSimulation={editingExpense.isSimulation}
               open
               onOpenChange={() => setEditingExpense(null)}

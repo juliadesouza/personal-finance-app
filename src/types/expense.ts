@@ -5,7 +5,7 @@ export type Expense = {
   date: string;
   category: { id: number; title: string; color: string };
   payment: { id: number; title: string; color: string };
-  purpose: { id: number; title: string; color: string };
+  type: { id: number; title: string; color: string; percentage: number };
   installmentsTotal: number;
   installmentNumber: number;
   isSimulation: boolean;
@@ -16,7 +16,7 @@ export type ExpenseData = {
   amount: number;
   date: string;
   categoryId: number;
-  purposeId: number;
+  typeId: number;
   paymentMethodId: number;
   installments: number;
   isSimulation: boolean;
@@ -26,14 +26,14 @@ export type ExpenseSortField =
   | "date"
   | "title"
   | "category"
-  | "purpose"
+  | "type"
   | "payment";
 
 export type FilterExpense = {
   month?: number;
   year?: number;
   search?: string;
-  sortBy?: "title" | "date" | "category" | "payment" | "purpose";
+  sortBy?: "title" | "date" | "category" | "payment" | "type";
   order?: "asc" | "desc";
   page?: number;
   pageSize?: number;

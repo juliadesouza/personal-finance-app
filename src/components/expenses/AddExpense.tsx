@@ -24,7 +24,7 @@ import {
 import { useState } from "react";
 import { SelectPayment } from "./SelectPayment";
 import { SelectCategory } from "./SelectCategory";
-import { SelectPurpose } from "./SelectPurpose";
+import { SelectType } from "./SelectType";
 import { useExpenses } from "@/hooks/use-expenses";
 import { toast } from "../ui/toast";
 import z from "zod";
@@ -45,7 +45,7 @@ const expenseSchema = z.object({
   date: z.string().min(1, "Date is required"),
   categoryId: z.coerce.number().positive("Select a category"),
   paymentMethodId: z.coerce.number().positive("Select a payment method"),
-  purposeId: z.coerce.number().positive("Select a purpose"),
+  typeId: z.coerce.number().positive("Select a type"),
   installments: z.coerce.number().int().min(1).max(12),
   isSimulation: z.boolean().default(false),
 });
@@ -56,7 +56,7 @@ const defaultValues = {
   date: "",
   categoryId: undefined,
   paymentMethodId: undefined,
-  purposeId: undefined,
+  typeId: undefined,
   installments: 1,
   isSimulation: false,
 };
@@ -209,12 +209,12 @@ export function AddExpense() {
                 />
               </Field>
               <Field>
-                <Label htmlFor="purpose">Purpose</Label>
+                <Label htmlFor="type">Type</Label>
                 <Controller
-                  name="purposeId"
+                  name="typeId"
                   control={control}
                   render={({ field }) => (
-                    <SelectPurpose
+                    <SelectType
                       value={field.value ? String(field.value) : ""}
                       onChange={(value) => field.onChange(Number(value))}
                     />
