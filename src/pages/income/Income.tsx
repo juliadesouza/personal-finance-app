@@ -34,15 +34,13 @@ export default function Income() {
 
   const { data: income, isPending: isLoadingIncome } = getIncome;
 
-  const { overview, getWallet } = useWallet(
+  const { overview, isPending } = useWallet(
     {
       year: period.year === ALL ? undefined : Number(period.year),
       month: period.month === ALL ? undefined : Number(period.month),
     },
     { enabled: !!dates },
   );
-
-  const isPendingOverview = getWallet?.isPending ?? false;
 
   const handlePeriodChange = (next: Period) => {
     setSelected(next);
@@ -71,7 +69,7 @@ export default function Income() {
     <section className="w-full">
       <PageHeader title="Income" description="Track your daily income." />
       <main>
-        <BalanceSummary {...overview} isLoading={isPendingOverview} />
+        <BalanceSummary {...overview} isLoading={isPending} />
         <IncomeFilter
           dateOptions={dateOptions}
           period={period}
