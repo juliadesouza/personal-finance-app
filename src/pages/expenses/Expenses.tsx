@@ -94,7 +94,10 @@ export default function Expenses() {
 
   return (
     <section className="w-full">
-      <PageHeader title="Expenses" description="Track your daily expenses." />
+      <PageHeader
+        title="Expenses"
+        description="Know where your money goes, every day."
+      />
       <main>
         <BalanceSummary {...overview} isLoading={isPendingWallet} />
         <ExpensesFilter
