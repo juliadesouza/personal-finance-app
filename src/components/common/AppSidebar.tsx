@@ -21,20 +21,21 @@ import {
   PiggyBank,
 } from "lucide-react";
 import { AppAvatar } from "./AppAvatar";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 
 export function AppSidebar() {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const { open: isOpen } = useSidebar();
 
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <SidebarMenu>
-          <SidebarMenuItem>
+          <SidebarMenuItem className="flex items-center mt-3">
             <Logo />
             {isOpen && (
-              <span className="text-2xl font-bold ml-2 text-primary font-cursive">
+              <span className="text-2xl font-semibold ml-2 text-primary">
                 Lúmen
               </span>
             )}
@@ -43,9 +44,11 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
+          <SidebarGroupLabel>Menu</SidebarGroupLabel>
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton
+                isActive={pathname === "/dashboard"}
                 className="cursor-pointer"
                 onClick={() => navigate("/dashboard")}
               >
@@ -53,13 +56,9 @@ export function AppSidebar() {
                 <span>Dashboard</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Transactions</SidebarGroupLabel>
-          <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton
+                isActive={pathname === "/dashboard/expenses"}
                 className="cursor-pointer"
                 onClick={() => navigate("/dashboard/expenses")}
               >
@@ -69,20 +68,12 @@ export function AppSidebar() {
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton
+                isActive={pathname === "/dashboard/income"}
                 className="cursor-pointer"
                 onClick={() => navigate("/dashboard/income")}
               >
                 <BanknoteArrowUp />
                 <span>Income</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton
-                className="cursor-pointer"
-                onClick={() => navigate("/dashboard/savings")}
-              >
-                <PiggyBank />
-                <span>Savings</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
@@ -92,6 +83,7 @@ export function AppSidebar() {
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton
+                isActive={pathname === "/dashboard/goals"}
                 className="cursor-pointer"
                 onClick={() => navigate("/dashboard/goals")}
               >
@@ -101,6 +93,17 @@ export function AppSidebar() {
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton
+                isActive={pathname === "/dashboard/savings"}
+                className="cursor-pointer"
+                onClick={() => navigate("/dashboard/savings")}
+              >
+                <PiggyBank />
+                <span>Savings</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                isActive={pathname === "/dashboard/wallet"}
                 className="cursor-pointer"
                 onClick={() => navigate("/dashboard/wallet")}
               >
@@ -115,6 +118,7 @@ export function AppSidebar() {
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton
+                isActive={pathname === "/dashboard/settings"}
                 className="cursor-pointer"
                 onClick={() => navigate("/dashboard/settings")}
               >
