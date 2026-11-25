@@ -17,8 +17,8 @@ type SettingsCardProps = {
   }[];
   type: AddSettingProps["type"];
   isPending: boolean;
-  onAdd: (data: CategoryData | PaymentMethodData) => Promise<void>;
-  onDelete: (id: number) => Promise<void>;
+  onAdd: (data: CategoryData | PaymentMethodData) => void;
+  onDelete: (id: number) => void;
 };
 
 export default function SettingsCard({

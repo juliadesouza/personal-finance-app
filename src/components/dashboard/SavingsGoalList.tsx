@@ -16,7 +16,7 @@ export function SavingsGoalList({ goals, isLoading }: SavingsGoalList) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-lg font-normal">Saving goals</CardTitle>
+        <CardTitle className="text-lg font-normal">Goals</CardTitle>
       </CardHeader>
       <CardContent>
         {isLoading ? (

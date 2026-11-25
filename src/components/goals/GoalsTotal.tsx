@@ -20,17 +20,17 @@ type GoalTotalProps = {
 };
 
 const GOAL_STATUS_ICON_CLASSES = {
-  NOT_STARTED: "size-6 text-warning",
-  IN_PROGRESS: "size-6 text-success",
-  CANCELLED: "size-6 text-destructive",
-  COMPLETED: "size-6 text-[#8055c7]",
+  NOT_STARTED: "size-5 text-warning",
+  IN_PROGRESS: "size-5 text-success",
+  CANCELLED: "size-5 text-destructive",
+  COMPLETED: "size-5 text-[#8055c7]",
 } as const;
 
 const GOAL_STATUS_CIRCLE = {
-  NOT_STARTED: "p-2  bg-[#fff0d6] rounded-full",
-  IN_PROGRESS: "p-2 bg-[#e2f0e4]  rounded-full",
-  CANCELLED: "p-2 bg-[#fce5e5]  rounded-full",
-  COMPLETED: "p-2 bg-[#eee5fa]  rounded-full",
+  NOT_STARTED: "p-1  bg-[#fff0d6] rounded-full",
+  IN_PROGRESS: "p-1 bg-[#e2f0e4]  rounded-full",
+  CANCELLED: "p-1 bg-[#fce5e5]  rounded-full",
+  COMPLETED: "p-1 bg-[#eee5fa]  rounded-full",
 } as const;
 
 const GOAL_STATUS_TEXT = {
@@ -46,9 +46,7 @@ export function GoalsTotal({ items, isLoading }: GoalTotalProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex justify-between items-center text-xl">
-          Total goals
-        </CardTitle>
+        <CardTitle>Total goals</CardTitle>
         <CardDescription className="text-2xl font-semibold text-black mt-4">
           {isLoading ? <Skeleton className="h-4 w-25" /> : total}
         </CardDescription>
@@ -61,7 +59,7 @@ export function GoalsTotal({ items, isLoading }: GoalTotalProps) {
               const textClassname = GOAL_STATUS_TEXT[item.status];
 
               return (
-                <div className="flex items-center gap-3 border rounded-full p-2">
+                <div className="flex items-center gap-3 border rounded-full p-1">
                   <div className={circleClassname}>
                     <StatusIcon className={iconClassname} />
                   </div>
@@ -69,7 +67,7 @@ export function GoalsTotal({ items, isLoading }: GoalTotalProps) {
                     <span className={textClassname}>
                       {GOAL_STATUS_VALUE_TO_TEXT[item.status]}
                     </span>
-                    <span className="text-lg font-semibold text-black">
+                    <span className="text-md font-semibold text-black">
                       {item.amount}
                     </span>
                   </div>

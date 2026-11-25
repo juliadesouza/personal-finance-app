@@ -60,7 +60,7 @@ export function MonthlyBudget({
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle className="text-lg font-normal">Monthly budget</CardTitle>
+        <CardTitle className="text-lg font-normal">Budget</CardTitle>
       </CardHeader>
 
       <CardContent className="flex flex-1 items-center justify-center pb-0">

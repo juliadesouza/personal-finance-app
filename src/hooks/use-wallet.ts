@@ -21,15 +21,17 @@ export function useWallet(
     enabled: options.enabled ?? true,
   });
 
-  const { data } = getWallet;
+  const { data, isPending } = getWallet;
 
   return {
-    getWallet,
+    isPending,
     overview: data?.overview,
-    savingsGoal: data?.savingsGoal,
-    flexibleBudget: data?.flexibleBudget,
+    savingsBudget: data?.savingsBudget,
+    essentialBudget: data?.essentialBudget,
+    discretionaryBudget: data?.discretionaryBudget,
+    educationBudget: data?.educationBudget,
     topExpenses: data?.topExpenses,
-    fixedExpenses: data?.fixedExpenses,
+    monthlyEssentialBudget: data?.monthlyEssentialBudget,
   };
 }
 

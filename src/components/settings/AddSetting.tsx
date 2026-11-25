@@ -20,17 +20,17 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export type AddSettingProps = {
-  type: "category" | "payment-method";
-  onAdd: (data: CategoryData | PaymentMethodData) => Promise<void>;
+  type: "expense-category" | "payment-method";
+  onAdd: (data: CategoryData | PaymentMethodData) => void;
 };
 
 const TYPES_MAP = {
-  category: "Category",
+  "expense-category": "Category",
   "payment-method": "Payment Method",
 };
 
 const PLACEHOLDERS_MAP = {
-  category: "Clothing...",
+  "expense-category": "Clothing...",
   "payment-method": "Credit card...",
 };
 

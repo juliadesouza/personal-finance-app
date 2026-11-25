@@ -50,15 +50,13 @@ export default function Expenses() {
   const expenses = getExpenses?.data?.items ?? [];
   const isPendingExpenses = getExpenses?.isPending ?? false;
 
-  const { overview, getWallet } = useWallet(
+  const { overview, isPending: isPendingWallet } = useWallet(
     {
       year: period.year === ALL ? undefined : Number(period.year),
       month: period.month === ALL ? undefined : Number(period.month),
     },
     { enabled: !!dates },
   );
-
-  const isPendingWallet = getWallet.isPending ?? false;
 
   const handlePeriodChange = (next: Period) => {
     setSelected(next);

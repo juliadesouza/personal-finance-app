@@ -5,7 +5,7 @@ import SettingsCard from "./SettingsCard";
 import { TagIcon } from "lucide-react";
 import type { CategoryData } from "@/types/setting";
 
-export default function CategoriesCard() {
+export function ExpenseCategoriesCard() {
   const { getCategories, createCategory, deleteCategory } = useCategories();
 
   const { isPending = false, isError = false } = getCategories;
@@ -15,54 +15,52 @@ export default function CategoriesCard() {
     if (isError) {
       toast.add({
         type: "error",
-        title: "The categories could not be loaded.",
+        title: "Unable to load categories.",
       });
     }
   }, [isError]);
 
-  const handleAdd = async (category: CategoryData) => {
+  const handleAdd = (category: CategoryData) => {
     createCategory.mutate(category, {
       onSuccess: () => {
         toast.add({
           type: "success",
-          description: "The income was created.",
+          description: "Category created successfully.",
         });
       },
       onError: () => {
         toast.add({
           type: "error",
-          description: "The income could not be created.",
+          description: "Unable to create category.",
         });
       },
     });
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = (id: number) => {
     deleteCategory.mutate(id, {
       onSuccess: () =>
         toast.add({
           type: "success",
-          description: "The category was deleted.",
+          description: "Category deleted successfully.",
         }),
       onError: () =>
         toast.add({
           type: "error",
-          description: "The category could not be deleted.",
+          description: "Unable to delete category.",
         }),
     });
   };
 
   return (
-    <>
-      <SettingsCard
-        title="Categories"
-        items={categories}
-        isPending={isPending}
-        icon={<TagIcon />}
-        type="category"
-        onAdd={handleAdd}
-        onDelete={handleDelete}
-      />
-    </>
+    <SettingsCard
+      title="Expense Categories"
+      items={categories}
+      isPending={isPending}
+      icon={<TagIcon />}
+      type="expense-category"
+      onAdd={handleAdd}
+      onDelete={handleDelete}
+    />
   );
 }

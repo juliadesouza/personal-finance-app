@@ -25,24 +25,24 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-type FixedExpensesProps = {
+type MonthlyEssentialBudgetProps = {
   expenses: { month: string; total: number }[];
   average: number;
   isLoading: boolean;
 };
 
-export function FixedExpenses({
+export function MonthlyEssentialBudget({
   expenses = [],
   average = 0,
   isLoading = false,
-}: FixedExpensesProps) {
+}: MonthlyEssentialBudgetProps) {
   const hasNoData = !isLoading && (!expenses || expenses.length === 0);
 
   return (
     <Card>
       <CardHeader>
         <CardTitle className="text-lg font-normal">
-          Fixed expenses by month
+          Essential budget by month
         </CardTitle>
       </CardHeader>
       <CardContent>

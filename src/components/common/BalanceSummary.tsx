@@ -25,15 +25,15 @@ export function BalanceSummary({
   return (
     <div className="grid grid-cols-4 gap-8 mb-8">
       <BalanceCard
-        title="Income"
-        value={income}
-        icon={<BanknoteArrowUp className="size-5 text-muted-foreground" />}
-        isLoading={isLoading}
-      />
-      <BalanceCard
         title="Balance"
         value={balance}
         icon={<Wallet className="size-5 text-muted-foreground" />}
+        isLoading={isLoading}
+      />
+      <BalanceCard
+        title="Income"
+        value={income}
+        icon={<BanknoteArrowUp className="size-5 text-muted-foreground" />}
         isLoading={isLoading}
       />
       <BalanceCard

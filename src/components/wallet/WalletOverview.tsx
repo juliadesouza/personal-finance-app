@@ -26,7 +26,7 @@ export function WalletOverview({
     : "Add income and expenses to see your progress";
 
   const savingsSubtitle = saving?.percentage
-    ? `${saving.percentage}% of income saved`
+    ? `${saving.percentage}% of your income`
     : "Add income and savings to see your progress";
 
   return (

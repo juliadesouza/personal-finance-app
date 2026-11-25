@@ -6,21 +6,29 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { FixedExpenses } from "@/components/wallet/FixedExpenses";
 import {
-  FlexibleBudget,
-  LoadingFlexibleBudget,
-} from "@/components/wallet/FlexibleBudget";
+  EssentialBudget,
+  LoadingEssentialBudget,
+} from "@/components/wallet/EssentialBudget";
+import { MonthlyEssentialBudget } from "@/components/wallet/MonthlyEssentialBudget";
 import {
-  SavingsGoal,
-  LoadingSavingsGoals,
-} from "@/components/wallet/SavingsGoal";
+  DiscretionaryBudget,
+  LoadingDiscretionaryBudget,
+} from "@/components/wallet/DiscretionaryBudget";
+import {
+  SavingsBudget,
+  LoadingSavingsBudget,
+} from "@/components/wallet/SavingsBudget";
 import { TopExpenses } from "@/components/wallet/TopExpenses";
 import { WalletOverview } from "@/components/wallet/WalletOverview";
 import { useWalletDates, useWallet } from "@/hooks/use-wallet";
 import type { Period, Date } from "@/types/date";
 import { getDefaultPeriod, getMonthLabel } from "@/utils/format";
 import { useState } from "react";
+import {
+  EducationBudget,
+  LoadingEducationBudget,
+} from "@/components/wallet/EducationBudget";
 
 export default function Wallet() {
   const [selected, setSelected] = useState<Period | null>(null);
@@ -32,12 +40,14 @@ export default function Wallet() {
   const months = dateOptions.find((d) => d.year === period.year)?.months ?? [];
 
   const {
-    overview,
-    savingsGoal,
-    flexibleBudget,
-    topExpenses,
-    fixedExpenses,
     isPending,
+    overview,
+    savingsBudget,
+    essentialBudget,
+    discretionaryBudget,
+    educationBudget,
+    topExpenses,
+    monthlyEssentialBudget,
   } = useWallet(
     {
       year: Number(period.year),
@@ -92,21 +102,31 @@ export default function Wallet() {
           <WalletOverview {...overview} isLoading={isPending} />
           <div className="grid grid-cols-2 gap-8">
             {isPending ? (
-              <LoadingSavingsGoals />
+              <LoadingSavingsBudget />
             ) : (
-              <SavingsGoal {...savingsGoal} />
+              <SavingsBudget {...savingsBudget} />
             )}
             {isPending ? (
-              <LoadingFlexibleBudget />
+              <LoadingEssentialBudget />
             ) : (
-              <FlexibleBudget {...flexibleBudget} />
+              <EssentialBudget {...essentialBudget} />
+            )}
+            {isPending ? (
+              <LoadingDiscretionaryBudget />
+            ) : (
+              <DiscretionaryBudget {...discretionaryBudget} />
+            )}
+            {isPending ? (
+              <LoadingEducationBudget />
+            ) : (
+              <EducationBudget {...educationBudget} />
             )}
           </div>
           <div className="grid grid-cols-2 gap-8">
             <TopExpenses expenses={topExpenses} isLoading={isPending} />
-            <FixedExpenses
-              expenses={fixedExpenses?.data}
-              average={fixedExpenses?.average}
+            <MonthlyEssentialBudget
+              expenses={monthlyEssentialBudget?.data}
+              average={monthlyEssentialBudget?.average}
               isLoading={isPending}
             />
           </div>

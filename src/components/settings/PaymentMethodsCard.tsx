@@ -1,58 +1,56 @@
 import { toast } from "@/components/ui/toast";
 import SettingsCard from "./SettingsCard";
-import { TagIcon } from "lucide-react";
+import { CreditCard } from "lucide-react";
 import type { PaymentMethodData } from "@/types/setting";
 import { usePayments } from "@/hooks/use-payments";
 
-export default function PaymentMethodsCard() {
+export function PaymentMethodsCard() {
   const { getPayments, createPayment, deletePayment } = usePayments();
 
   const data = getPayments?.data ?? [];
   const isPending = getPayments?.isPending;
 
-  const handleAdd = async (method: PaymentMethodData) => {
+  const handleAdd = (method: PaymentMethodData) => {
     createPayment.mutate(method, {
       onSuccess: () => {
         toast.add({
           type: "success",
-          description: "The payment method was created.",
+          description: "Payment method created successfully.",
         });
       },
       onError: () => {
         toast.add({
           type: "error",
-          description: "The payment method could not be created.",
+          description: "Unable to create payment method.",
         });
       },
     });
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = (id: number) => {
     deletePayment.mutate(id, {
       onSuccess: () =>
         toast.add({
           type: "success",
-          description: "The payment method was deleted.",
+          description: "Payment method deleted successfully.",
         }),
       onError: () =>
         toast.add({
           type: "error",
-          description: "The payment method could not be deleted.",
+          description: "Unable to delete payment method.",
         }),
     });
   };
 
   return (
-    <>
-      <SettingsCard
-        title="Payment Methods"
-        items={data}
-        isPending={isPending}
-        icon={<TagIcon />}
-        type="payment-method"
-        onAdd={handleAdd}
-        onDelete={handleDelete}
-      />
-    </>
+    <SettingsCard
+      title="Payment Methods"
+      items={data}
+      isPending={isPending}
+      icon={<CreditCard />}
+      type="payment-method"
+      onAdd={handleAdd}
+      onDelete={handleDelete}
+    />
   );
 }
