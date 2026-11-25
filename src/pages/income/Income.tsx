@@ -50,24 +50,24 @@ export default function Income() {
     setSearch(value);
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: number, title: string) => {
     deleteIncome.mutate(id, {
       onSuccess: () =>
         toast.add({
           type: "success",
-          description: "The income was deleted.",
+          description: `Income "${title}" deleted successfully.`,
         }),
       onError: () =>
         toast.add({
           type: "error",
-          description: "The income could not be deleted.",
+          description: "Couldn't delete income. Please try again.",
         }),
     });
   };
 
   return (
     <section className="w-full">
-      <PageHeader title="Income" description="Track your daily income." />
+      <PageHeader title="Income" description="Keep track of your income." />
       <main>
         <BalanceSummary {...overview} isLoading={isPending} />
         <IncomeFilter

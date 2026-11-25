@@ -21,7 +21,7 @@ import { SkeletonTable } from "../common/SkeletonTable";
 type IncomeTableProps = {
   income: Income[];
   onEdit: (income: Income) => void;
-  onDelete: (id: number) => void;
+  onDelete: (id: number, title: string) => void;
   isLoading: boolean;
 };
 export function IncomeTable({
@@ -75,7 +75,7 @@ export function IncomeTable({
                       <DropdownMenuItem
                         className="cursor-pointer"
                         variant="destructive"
-                        onClick={() => onDelete(income.id)}
+                        onClick={() => onDelete(income.id, income.title)}
                       >
                         Delete
                       </DropdownMenuItem>
