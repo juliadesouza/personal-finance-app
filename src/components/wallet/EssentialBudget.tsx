@@ -2,17 +2,17 @@ import { House } from "lucide-react";
 import { DetailedCard } from "./DetailedCard";
 import { formatCurrency } from "@/utils/format";
 
-interface EssentialBudgetProps  {
+interface EssentialBudgetProps {
   spent: number;
   target: number;
   remaining: number;
   progress: number;
   budgetPercentage: number;
-};
+}
 
-interface MessageProps = {
+interface MessageProps {
   remaining: number;
-};
+}
 
 const Message = ({ remaining }: MessageProps) => {
   if (remaining > 0) {
