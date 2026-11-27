@@ -18,12 +18,13 @@ import {
 } from "../ui/dropdown-menu";
 import { SkeletonTable } from "../common/SkeletonTable";
 
-type IncomeTableProps = {
+interface IncomeTableProps {
   income: Income[];
   onEdit: (income: Income) => void;
   onDelete: (id: number, title: string) => void;
   isLoading: boolean;
-};
+}
+
 export function IncomeTable({
   income,
   onEdit,

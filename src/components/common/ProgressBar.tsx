@@ -1,13 +1,13 @@
 import { cn } from "@/utils/clsx";
 
-type ProgressBarProps = {
+interface ProgressBarProps {
   progress: number;
   className?: string;
   showPercentage?: boolean;
   height?: number;
   progressColor?: string;
   backgroundColor?: string;
-};
+}
 
 export function ProgressBar({
   progress,

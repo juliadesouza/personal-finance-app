@@ -11,13 +11,13 @@ import {
 import { AddGoal } from "./AddGoal";
 import type { Date, Period } from "@/types/date";
 
-type GoalsFilterProps = {
+interface GoalsFilterProps {
   dateOptions: Date[];
   period: Period;
   status: GoalStatus | null;
   onPeriodChange: (period: Period) => void;
   onStatusChange: (status: GoalStatus | null) => void;
-};
+}
 
 export default function GoalsFilter({
   dateOptions,

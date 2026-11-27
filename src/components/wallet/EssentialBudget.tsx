@@ -2,7 +2,7 @@ import { House } from "lucide-react";
 import { DetailedCard } from "./DetailedCard";
 import { formatCurrency } from "@/utils/format";
 
-type EssentialBudgetProps = {
+interface EssentialBudgetProps  {
   spent: number;
   target: number;
   remaining: number;
@@ -10,7 +10,7 @@ type EssentialBudgetProps = {
   budgetPercentage: number;
 };
 
-type MessageProps = {
+interface MessageProps = {
   remaining: number;
 };
 

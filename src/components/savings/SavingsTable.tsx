@@ -29,7 +29,7 @@ type Pagination = {
   pageSize: number;
 };
 
-type SavingsTableProps = {
+interface SavingsTableProps {
   savings: Saving[];
   sort: Sort;
   pagination: Pagination;
@@ -38,7 +38,7 @@ type SavingsTableProps = {
   onEdit: (saving: Saving) => void;
   onDelete: (id: number) => void;
   isLoading: boolean;
-};
+}
 
 export function SavingsTable({
   savings,

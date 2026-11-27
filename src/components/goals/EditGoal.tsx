@@ -32,7 +32,7 @@ import {
   SelectValue,
 } from "../ui/select";
 
-type EditGoalProps = {
+interface EditGoalProps {
   id: number;
   title: string;
   currentAmount: number;
@@ -42,7 +42,7 @@ type EditGoalProps = {
   status: GoalStatus;
   open: boolean;
   onOpenChange: () => void;
-};
+}
 
 const goalSchema = z.object({
   title: z.string().trim().min(1, "Title is required"),

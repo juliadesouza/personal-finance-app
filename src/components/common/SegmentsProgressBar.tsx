@@ -1,15 +1,15 @@
 import { cn } from "@/utils/clsx";
 
-type ProgressSegment = {
+interface ProgressSegment {
   label: string;
   percentage: number;
   color: string;
-};
+}
 
-type SegmentsProgressBarProps = {
+interface SegmentsProgressBarProps {
   segments: ProgressSegment[];
   className?: string;
-};
+}
 
 export function SegmentsProgressBar({
   segments = [],

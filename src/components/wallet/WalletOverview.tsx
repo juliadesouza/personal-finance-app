@@ -1,6 +1,6 @@
 import { WalletOverviewCard } from "./WalletOverviewCard";
 
-type WalletOverviewProps = {
+interface WalletOverviewProps {
   balance: number;
   income: number;
   expense: {
@@ -12,7 +12,7 @@ type WalletOverviewProps = {
     percentage: number;
   };
   isLoading: boolean;
-};
+}
 
 export function WalletOverview({
   balance,

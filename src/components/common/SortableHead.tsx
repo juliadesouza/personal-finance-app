@@ -3,13 +3,13 @@ import { TableHead } from "@/components/ui/table";
 
 export type SortOrder = "asc" | "desc";
 
-type Props<T extends string> = {
+interface Props<T extends string> {
   field: T;
   label: string;
   activeField: T;
   order: SortOrder;
   onSort: (field: T) => void;
-};
+}
 
 export function SortableHead<T extends string>({
   field,

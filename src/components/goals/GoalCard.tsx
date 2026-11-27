@@ -29,7 +29,7 @@ const GOAL_STATUS: Record<string, CSSProperties> = {
   COMPLETED: { borderColor: "#8055c7" },
 };
 
-type GoalCardProps = {
+interface GoalCardProps {
   id: number;
   title: string;
   currentAmount: number;
@@ -41,7 +41,7 @@ type GoalCardProps = {
   dueDate: string;
   isLoading?: boolean;
   status: GoalStatus;
-};
+}
 
 export function LoadingGoalCard() {
   return (

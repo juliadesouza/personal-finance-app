@@ -15,13 +15,13 @@ import {
 import { AddExpense } from "./AddExpense";
 import type { Period, Date } from "@/types/date";
 
-type ExpensesFilterProps = {
+interface ExpensesFilterProps {
   dateOptions: Date[];
   period: Period;
   search: string;
   onPeriodChange: (period: Period) => void;
   onSearchChange: (value: string) => void;
-};
+}
 
 export default function ExpensesFilter({
   dateOptions,

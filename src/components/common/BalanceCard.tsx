@@ -9,12 +9,12 @@ import {
 import type { ReactNode } from "react";
 import { Skeleton } from "../ui/skeleton";
 
-type SummaryCardProps = {
+interface SummaryCardProps {
   title: string;
   value: number;
   icon: ReactNode;
   isLoading: boolean;
-};
+}
 
 export function BalanceCard({
   title,

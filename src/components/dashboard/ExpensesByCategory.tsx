@@ -18,17 +18,17 @@ import {
 import { formatCurrency } from "@/utils/format";
 import { Skeleton } from "../ui/skeleton";
 
-type ExpenseCategory = {
+interface ExpenseCategory {
   amount: number;
   title: string;
   fill: string;
   id: number;
-};
+}
 
-type ExpensesByCategoryProps = {
+interface ExpensesByCategoryProps {
   expenses?: ExpenseCategory[];
   isLoading: boolean;
-};
+}
 
 export function ExpensesByCategory({
   expenses = [],

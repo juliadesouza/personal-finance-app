@@ -9,10 +9,10 @@ import {
 import { useGoals } from "@/hooks/use-goals";
 import type { Goal } from "@/types/goal";
 
-type SelectGoalProps = {
+interface SelectGoalProps {
   value: string;
   onChange: (value: string) => void;
-};
+}
 
 export function SelectGoal({ value, onChange }: SelectGoalProps) {
   const { getGoals } = useGoals();

@@ -14,24 +14,30 @@ import { Label } from "@/components/ui/label";
 import { Field, FieldGroup } from "@/components/ui/field";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
-import type { CategoryData, PaymentMethodData } from "@/types/setting";
+import type {
+  CategoryData,
+  PaymentMethodData,
+  SettingsType,
+} from "@/types/setting";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-export type AddSettingProps = {
-  type: "expense-category" | "payment-method";
+export interface AddSettingProps {
+  type: SettingsType;
   onAdd: (data: CategoryData | PaymentMethodData) => void;
-};
+}
 
 const TYPES_MAP = {
-  "expense-category": "Category",
+  "expense-category": "Expense Category",
   "payment-method": "Payment Method",
+  "expense-type": "Expense Type",
 };
 
 const PLACEHOLDERS_MAP = {
   "expense-category": "Clothing...",
   "payment-method": "Credit card...",
+  "expense-type": "Investment...",
 };
 
 const settingSchema = z.object({ title: z.string().min(3), color: z.string() });

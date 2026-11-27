@@ -6,15 +6,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { Type } from "@/types/setting";
-import { useTypes } from "@/hooks/use-types";
+import { useExpenseTypes } from "@/hooks/use-expense-types";
 
-type SelectTypeProps = {
+interface SelectTypeProps {
   value: string;
   onChange: (value: string) => void;
-};
+}
 
 export function SelectType({ value, onChange }: SelectTypeProps) {
-  const { getTypes } = useTypes();
+  const { getTypes } = useExpenseTypes();
 
   const types = getTypes?.data ?? [];
 

@@ -2,16 +2,16 @@ import { PiggyBank } from "lucide-react";
 import { DetailedCard } from "./DetailedCard";
 import { formatCurrency } from "@/utils/format";
 
-type SavingsBudgetProps = {
+interface SavingsBudgetProps {
   saved: number;
   target: number;
   remaining: number;
   progress: number;
-};
+}
 
-type MessageProps = {
+interface MessageProps {
   remaining: number;
-};
+}
 
 const Message = ({ remaining }: MessageProps) => {
   if (remaining > 0) {

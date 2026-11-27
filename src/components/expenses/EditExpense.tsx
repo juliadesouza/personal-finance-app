@@ -25,7 +25,7 @@ import { formatDateForInput } from "@/utils/format";
 import { Checkbox } from "../ui/checkbox";
 import { Spinner } from "../ui/spinner";
 
-type EditExpenseProps = {
+interface EditExpenseProps {
   id: number;
   title: string;
   amount: number;
@@ -36,7 +36,7 @@ type EditExpenseProps = {
   open: boolean;
   onOpenChange: () => void;
   isSimulation: boolean;
-};
+}
 
 const expenseSchema = z.object({
   title: z.string().trim().min(1, "Title is required"),

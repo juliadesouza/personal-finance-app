@@ -8,10 +8,10 @@ import {
 import type { Category } from "@/types/setting";
 import { useCategories } from "@/hooks/use-categories";
 
-type SelectCategoryProps = {
+interface SelectCategoryProps {
   value?: string;
   onChange: (value: string) => void;
-};
+}
 
 export function SelectCategory({ value, onChange }: SelectCategoryProps) {
   const { getCategories } = useCategories();

@@ -10,7 +10,7 @@ import {
 import type { ReactNode } from "react";
 import { Skeleton } from "../ui/skeleton";
 
-type DetailedCardProps = {
+interface DetailedCardProps {
   isLoading?: boolean;
   title: string;
   description?: string;
@@ -19,7 +19,7 @@ type DetailedCardProps = {
   progress: number;
   message?: ReactNode;
   icon: ReactNode;
-};
+}
 export function DetailedCard({
   title,
   description,

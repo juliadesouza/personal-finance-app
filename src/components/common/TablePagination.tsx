@@ -8,20 +8,21 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { getPageItems } from "@/utils/format";
-type Props = {
+
+interface TablePaginationProps {
   page: number;
   totalPages: number;
   total: number;
   pageSize: number;
   onPageChange: (page: number) => void;
-};
+}
 
 export function TablePagination({
   page,
   totalPages,
   total,
   onPageChange,
-}: Props) {
+}: TablePaginationProps) {
   if (total === 0) return null;
 
   return (

@@ -26,3 +26,16 @@ export type Type = {
   color: string;
   percentage: number;
 };
+
+export const SETTINGS_TYPES = {
+  EXPENSE_CATEGORY: "expense-category",
+  PAYMENT_METHOD: "payment-method",
+  EXPENSE_TYPE: "expense-type",
+} as const;
+
+export type SettingsType = (typeof SETTINGS_TYPES)[keyof typeof SETTINGS_TYPES];
+
+export type AddableSettingType = Exclude<
+  SettingsType,
+  typeof SETTINGS_TYPES.EXPENSE_TYPE
+>;

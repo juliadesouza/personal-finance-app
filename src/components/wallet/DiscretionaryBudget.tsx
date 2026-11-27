@@ -2,17 +2,17 @@ import { Gift } from "lucide-react";
 import { DetailedCard } from "./DetailedCard";
 import { formatCurrency } from "@/utils/format";
 
-type DiscretionaryBudgetProps = {
+interface DiscretionaryBudgetProps {
   spent: number;
   target: number;
   remaining: number;
   progress: number;
   budgetPercentage: number;
-};
+}
 
-type MessageProps = {
+interface MessageProps {
   remaining: number;
-};
+}
 
 const Message = ({ remaining }: MessageProps) => {
   if (remaining > 0) {
