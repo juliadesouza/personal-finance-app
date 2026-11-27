@@ -77,12 +77,12 @@ export default function Savings() {
       onSuccess: () =>
         toast.add({
           type: "success",
-          description: "The saving was deleted.",
+          description: "Saving  deleted successfully.",
         }),
       onError: () =>
         toast.add({
           type: "error",
-          description: "The saving could not be deleted.",
+          description: "Couldn't delete saving. Please try again.",
         }),
     });
   };

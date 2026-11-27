@@ -36,7 +36,7 @@ type ExpensesTableProps = {
   onSort: (field: ExpenseSortField) => void;
   onPageChange: (page: number) => void;
   onEdit: (expense: Expense) => void;
-  onDelete: (id: number) => void;
+  onDelete: (id: number, title: string) => void;
   isLoading: boolean;
 };
 
@@ -143,7 +143,7 @@ export default function ExpensesTable({
                       <DropdownMenuItem
                         className="cursor-pointer"
                         variant="destructive"
-                        onClick={() => onDelete(expense.id)}
+                        onClick={() => onDelete(expense.id, expense.title)}
                       >
                         Delete
                       </DropdownMenuItem>

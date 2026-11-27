@@ -83,7 +83,7 @@ export default function ExpensesFilter({
 
         <InputGroup className="flex-1">
           <InputGroupInput
-            placeholder="Search by title, category or payment method..."
+            placeholder="Search expenses by title, category, or payment method..."
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
           />

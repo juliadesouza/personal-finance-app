@@ -90,14 +90,14 @@ export function AddExpense() {
       onSuccess: () => {
         toast.add({
           type: "success",
-          description: "The expense was created.",
+          description: "Your expense has been added successfully.",
         });
         setOpen(false);
       },
       onError: () => {
         toast.add({
           type: "error",
-          description: "The expense could not be created.",
+          description: "We couldn't add your expense. Please try again.",
         });
         setOpen(false);
       },
@@ -120,7 +120,7 @@ export function AddExpense() {
               New expense
             </DialogTitle>
             <DialogDescription>
-              Fill in the details of the expense to add it to your records.
+              Add the details below to keep your spending organized.
             </DialogDescription>
           </DialogHeader>
           <FieldGroup className="mt-8 mb-8">

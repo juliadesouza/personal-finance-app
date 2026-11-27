@@ -77,24 +77,27 @@ export default function Expenses() {
     setPage(1);
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: number, title: string) => {
     deleteExpense.mutate(id, {
       onSuccess: () =>
         toast.add({
           type: "success",
-          description: "The expense was deleted.",
+          description: `Expense "${title}" deleted successfully.`,
         }),
       onError: () =>
         toast.add({
           type: "error",
-          description: "The expense could not be deleted.",
+          description: "Couldn't delete expense. Please try again.",
         }),
     });
   };
 
   return (
     <section className="w-full">
-      <PageHeader title="Expenses" description="Track your daily expenses." />
+      <PageHeader
+        title="Expenses"
+        description="Know where your money goes, every day."
+      />
       <main>
         <BalanceSummary {...overview} isLoading={isPendingWallet} />
         <ExpensesFilter

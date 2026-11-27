@@ -66,14 +66,14 @@ export function AddIncome() {
       onSuccess: () => {
         toast.add({
           type: "success",
-          description: "The income was created.",
+          description: "Your income has been added successfully.",
         });
         setOpen(false);
       },
       onError: () => {
         toast.add({
           type: "error",
-          description: "The income could not be created.",
+          description: "We couldn't add your income. Please try again.",
         });
         setOpen(false);
       },
@@ -96,7 +96,7 @@ export function AddIncome() {
               New Income
             </DialogTitle>
             <DialogDescription>
-              Fill in the details of the income to add it to your records.
+              Add the details below to keep your income records up to date.
             </DialogDescription>
           </DialogHeader>
           <FieldGroup className="mt-8 mb-8">

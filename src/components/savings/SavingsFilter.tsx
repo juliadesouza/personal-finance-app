@@ -83,7 +83,7 @@ export function SavingsFilter({
 
         <InputGroup className="flex-1">
           <InputGroupInput
-            placeholder="Search by goal..."
+            placeholder="Search savings goals..."
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
           />

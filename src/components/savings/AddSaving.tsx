@@ -68,14 +68,14 @@ export function AddSaving() {
       onSuccess: () => {
         toast.add({
           type: "success",
-          description: "The saving was created.",
+          description: "Savings has been added successfully.",
         });
         setOpen(false);
       },
       onError: () => {
         toast.add({
           type: "error",
-          description: "The saving could not be created.",
+          description: "We couldn't add to savings. Please try again.",
         });
         setOpen(false);
       },
@@ -87,7 +87,7 @@ export function AddSaving() {
       <DialogTrigger
         render={
           <Button className="cursor-pointer">
-            <PlusIcon /> Add Saving
+            <PlusIcon /> Add to savings
           </Button>
         }
       />
@@ -95,10 +95,10 @@ export function AddSaving() {
         <form onSubmit={handleSubmit(handleAdd)}>
           <DialogHeader>
             <DialogTitle className="text-lg font-medium">
-              Add saving
+              Add to savings
             </DialogTitle>
             <DialogDescription className="mb-4">
-              Fill in the value of the saving.
+              Enter the amount you'd like to add to your savings.
             </DialogDescription>
           </DialogHeader>
           <FieldGroup>
