@@ -32,15 +32,15 @@ export function WalletOverview({
   return (
     <div className="grid grid-cols-4 gap-8">
       <WalletOverviewCard
-        title="Income"
-        subtitle="Received this month"
-        value={income}
-        isLoading={isLoading}
-      />
-      <WalletOverviewCard
         title="Balance"
         subtitle="Available to spend"
         value={balance}
+        isLoading={isLoading}
+      />
+      <WalletOverviewCard
+        title="Income"
+        subtitle="Received this month"
+        value={income}
         isLoading={isLoading}
       />
       <WalletOverviewCard
