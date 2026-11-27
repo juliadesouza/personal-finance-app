@@ -11,10 +11,10 @@ import { Calendar } from "lucide-react";
 import { ProgressBar } from "../common/ProgressBar";
 import { Skeleton } from "../ui/skeleton";
 
-type GoalsSummaryProps = {
+interface GoalsSummaryProps {
   goals: Goal[];
   isLoading: boolean;
-};
+}
 
 export function LoadingGoalsSummary() {
   return (

@@ -4,16 +4,16 @@ import { ShoppingBag } from "lucide-react";
 import type { ExpenseOverview } from "@/types/wallet";
 import { SegmentsProgressBar } from "../common/SegmentsProgressBar";
 
-type ExpenseOverviewProps = {
+interface ExpenseOverviewProps {
   expenses: Array<ExpenseOverview>;
-};
+}
 
-type ExpenseBannerType = {
+interface ExpenseBannerType {
   title: string;
   amount: number;
   percentage: number;
   color: string;
-};
+}
 
 const COLORS = ["#9675B5", "#D99555"];
 

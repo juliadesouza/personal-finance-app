@@ -20,16 +20,19 @@ import {
 import { TablePagination } from "../common/TablePagination";
 import type { SortOrder } from "../common/SortableHead";
 
-type Sort = { sortBy: ExpenseSortField; order: SortOrder };
+interface Sort {
+  sortBy: ExpenseSortField;
+  order: SortOrder;
+}
 
-type Pagination = {
+interface Pagination {
   page: number;
   totalPages: number;
   total: number;
   pageSize: number;
-};
+}
 
-type ExpensesTableProps = {
+interface ExpensesTableProps {
   expenses: Expense[];
   sort: Sort;
   pagination?: Pagination;
@@ -38,7 +41,7 @@ type ExpensesTableProps = {
   onEdit: (expense: Expense) => void;
   onDelete: (id: number, title: string) => void;
   isLoading: boolean;
-};
+}
 
 import { SkeletonTable } from "../common/SkeletonTable";
 

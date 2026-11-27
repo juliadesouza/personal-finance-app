@@ -1,7 +1,7 @@
 import { BanknoteArrowUp, PiggyBank, ReceiptText, Wallet } from "lucide-react";
 import { BalanceCard } from "./BalanceCard";
 
-type WalletSummaryProps = {
+interface WalletSummaryProps {
   balance: number;
   income: number;
   expense: {
@@ -13,7 +13,7 @@ type WalletSummaryProps = {
     percentage: number;
   };
   isLoading: boolean;
-};
+}
 
 export function BalanceSummary({
   balance,

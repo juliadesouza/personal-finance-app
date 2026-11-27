@@ -36,14 +36,14 @@ const savingSchema = z.object({
 type SavingFormInput = z.input<typeof savingSchema>;
 type SavingSchema = z.output<typeof savingSchema>;
 
-type EditExpenseProps = {
+interface EditExpenseProps {
   id: number;
   amount: number;
   date: string;
   goalId: number;
   open: boolean;
   onOpenChange: () => void;
-};
+}
 
 export function EditSaving({
   id,

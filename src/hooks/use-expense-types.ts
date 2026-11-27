@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { getTypes as getTypesService } from "@/services/settings-service";
 
-export function useTypes() {
+export function useExpenseTypes() {
   const getTypes = useQuery({
-    queryKey: ["types"],
+    queryKey: ["expense-types"],
     queryFn: getTypesService,
   });
 

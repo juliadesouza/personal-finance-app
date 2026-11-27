@@ -31,10 +31,10 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-type TopExpensesProps = {
+interface TopExpensesProps {
   expenses: Expense[];
   isLoading: boolean;
-};
+}
 
 export function TopExpenses({
   expenses = [],

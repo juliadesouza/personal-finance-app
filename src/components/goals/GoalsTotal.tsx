@@ -9,15 +9,15 @@ import { GOAL_STATUS_VALUE_TO_TEXT, type GoalStatus } from "@/types/goal";
 import { GOAL_STATUS_ICON } from "./GoalStatus";
 import { Skeleton } from "../ui/skeleton";
 
-type Item = {
+interface Item {
   status: GoalStatus;
   amount: number;
-};
+}
 
-type GoalTotalProps = {
+interface GoalTotalProps {
   items: Item[];
   isLoading: boolean;
-};
+}
 
 const GOAL_STATUS_ICON_CLASSES = {
   NOT_STARTED: "size-5 text-warning",

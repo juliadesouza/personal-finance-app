@@ -15,13 +15,13 @@ import {
 import { AddIncome } from "./AddIncome";
 import type { Period, Date } from "@/types/date";
 
-type IncomeFilterProps = {
+interface IncomeFilterProps {
   dateOptions: Date[];
   period: Period;
   search: string;
   onPeriodChange: (period: Period) => void;
   onSearchChange: (value: string) => void;
-};
+}
 
 export default function IncomeFilter({
   dateOptions,

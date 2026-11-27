@@ -5,10 +5,10 @@ import { ProgressBar } from "../common/ProgressBar";
 import { Skeleton } from "../ui/skeleton";
 import { GOAL_STATUS_ICON } from "../goals/GoalStatus";
 
-type SavingsGoalList = {
+interface SavingsGoalList {
   goals: Goal[];
   isLoading: boolean;
-};
+}
 
 export function SavingsGoalList({ goals, isLoading }: SavingsGoalList) {
   const hasNoData = !goals || goals.length === 0;

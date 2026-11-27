@@ -25,11 +25,11 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-type MonthlyEssentialBudgetProps = {
+interface MonthlyEssentialBudgetProps {
   expenses: { month: string; total: number }[];
   average: number;
   isLoading: boolean;
-};
+}
 
 export function MonthlyEssentialBudget({
   expenses = [],

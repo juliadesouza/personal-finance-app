@@ -15,13 +15,13 @@ import {
 import { AddSaving } from "./AddSaving";
 import type { Period, Date } from "@/types/date";
 
-type SavingFilterProps = {
+interface SavingFilterProps {
   dateOptions: Date[];
   period: Period;
   search: string;
   onPeriodChange: (period: Period) => void;
   onSearchChange: (value: string) => void;
-};
+}
 
 export function SavingsFilter({
   dateOptions,

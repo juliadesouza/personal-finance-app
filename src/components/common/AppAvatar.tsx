@@ -10,9 +10,9 @@ import { useAuth } from "@/providers/auth/auth-context";
 import { cn } from "@/utils/clsx";
 import { handleLogout } from "@/services/auth-service";
 
-type AppAvatarProps = {
+interface AppAvatarProps {
   collapsed: boolean;
-};
+}
 
 export function AppAvatar({ collapsed }: AppAvatarProps) {
   const { user } = useAuth();
